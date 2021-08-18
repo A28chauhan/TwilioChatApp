@@ -1,0 +1,275 @@
+{
+  "project_info": {
+    "project_number": "487089977642",
+    "firebase_url": "https://chatingapp-eb0f9.firebaseio.com",
+    "project_id": "chatingapp-eb0f9",
+    "storage_bucket": "chatingapp-eb0f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487089977642:android:b3ddec3f0fa53bd6ccc653",
+        "android_client_info": {
+          "package_name": "com.carematix.chatApplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487089977642-bvuo7pv06u7vh09viaa4tt6aaesn2t38.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.carematix.chatApplication",
+            "certificate_hash": "87f47e122967a42d7ccfd7ba3427699fc05075d7"
+          }
+        },
+        {
+          "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMJ_WK0Sq-dD32Ul8DOO2-Ujy5L6cpI98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "487089977642-49o18mkf813rrgl9l1gnq9jvhv97lr1a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.carematix.chatdemo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487089977642:android:d6fd7261170722eaccc653",
+        "android_client_info": {
+          "package_name": "com.carematix.twiliochatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487089977642-ldofd0nei83bj7ihog8m5ppao0pd8437.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.carematix.twiliochatapp",
+            "certificate_hash": "87f47e122967a42d7ccfd7ba3427699fc05075d7"
+          }
+        },
+        {
+          "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMJ_WK0Sq-dD32Ul8DOO2-Ujy5L6cpI98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "487089977642-49o18mkf813rrgl9l1gnq9jvhv97lr1a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.carematix.chatdemo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487089977642:android:d7db4979aa9d9a09ccc653",
+        "android_client_info": {
+          "package_name": "com.twilio.chat.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487089977642-edr71k055limkp3jn397f75k67pno4n4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.twilio.chat.demo",
+            "certificate_hash": "87f47e122967a42d7ccfd7ba3427699fc05075d7"
+          }
+        },
+        {
+          "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMJ_WK0Sq-dD32Ul8DOO2-Ujy5L6cpI98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "487089977642-49o18mkf813rrgl9l1gnq9jvhv97lr1a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.carematix.chatdemo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487089977642:android:8129374606c454b1ccc653",
+        "android_client_info": {
+          "package_name": "com.twilio.chat.demo.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487089977642-6ik82k4tu06721b9jecms2ejc0csggbb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.twilio.chat.demo.debug",
+            "certificate_hash": "87f47e122967a42d7ccfd7ba3427699fc05075d7"
+          }
+        },
+        {
+          "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMJ_WK0Sq-dD32Ul8DOO2-Ujy5L6cpI98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "487089977642-49o18mkf813rrgl9l1gnq9jvhv97lr1a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.carematix.chatdemo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487089977642:android:f44050fca4e96caaccc653",
+        "android_client_info": {
+          "package_name": "com.twilio.conversations.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487089977642-tonq9vap5o0n395em21depnk84ethdbo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.twilio.conversations.app",
+            "certificate_hash": "87f47e122967a42d7ccfd7ba3427699fc05075d7"
+          }
+        },
+        {
+          "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMJ_WK0Sq-dD32Ul8DOO2-Ujy5L6cpI98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "487089977642-49o18mkf813rrgl9l1gnq9jvhv97lr1a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.carematix.chatdemo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487089977642:android:f0c7fc3708211473ccc653",
+        "android_client_info": {
+          "package_name": "com.twilio.conversations.app.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487089977642-0d9r2fqqilf30cgfrvsrddh6e4fg8b4t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.twilio.conversations.app.debug",
+            "certificate_hash": "87f47e122967a42d7ccfd7ba3427699fc05075d7"
+          }
+        },
+        {
+          "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMJ_WK0Sq-dD32Ul8DOO2-Ujy5L6cpI98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "487089977642-49o18mkf813rrgl9l1gnq9jvhv97lr1a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.carematix.chatdemo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

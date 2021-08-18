@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">TwilioChat</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >=8 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="not_found">No user found</string>
+
+    <string name="app_sign_in">Sign In Using Email</string>
+    <string name="title_activity_main">Chat Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="default_channel_name">General Channel</string>
+    <string name="default_channel_unique_name">general</string>
+
+    <string name="loading_channels_message">Loading channel information</string>
+
+    <!-- MainActivity menu-->
+    <string name="action_leave">Leave</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_create">New Channel created</string>
+
+    <string name="default_notification_channel_id">123456</string>
+
+
+    <string name="invite_member">Invite Member</string>
+    <string name="channel_invite">Channel Invite</string>
+    <string name="channel_invite_message">You got a Channel Invite. Join it?</string>
+    <string name="join">Join</string>
+    <string name="decline">Decline</string>
+
+    <string name="leave_msg">Leave</string>
+    <string name="leave_msg_details">Are you sure you want to leave? </string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+</resources>

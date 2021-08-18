@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">487089977642-l0fa7grcj1rplhksjvq3stm3de122lmc.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://chatingapp-eb0f9.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">487089977642</string>
+    <string name="google_api_key" translatable="false">AIzaSyCMJ_WK0Sq-dD32Ul8DOO2-Ujy5L6cpI98</string>
+    <string name="google_app_id" translatable="false">1:487089977642:android:d6fd7261170722eaccc653</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCMJ_WK0Sq-dD32Ul8DOO2-Ujy5L6cpI98</string>
+    <string name="google_storage_bucket" translatable="false">chatingapp-eb0f9.appspot.com</string>
+    <string name="project_id" translatable="false">chatingapp-eb0f9</string>
+</resources>

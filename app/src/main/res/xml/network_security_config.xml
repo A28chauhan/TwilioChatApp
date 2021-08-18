@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">104.209.168.184:3000</domain>
+        <domain includeSubdomains="true">104.209.168.184</domain>
+        <domain includeSubdomains="true">https://octopus.carematix.com/</domain>
+        <domain includeSubdomains="true">octopus.carematix.com</domain>
+        <domain includeSubdomains="true">https://jellyfish.carematix.com</domain>
+        <domain includeSubdomains="true">jellyfish.carematix.com</domain>
+        <trust-anchors>
+            <certificates src="user" />
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+    <base-config>
+        <trust-anchors>
+            <certificates src="user" />
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

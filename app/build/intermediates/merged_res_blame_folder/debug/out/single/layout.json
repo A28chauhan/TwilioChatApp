@@ -1,0 +1,50 @@
+[
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_main.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\chat_fragment.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\chat_fragment.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\left_chat_item.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\left_chat_item.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_splash.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_splash.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\fragment_dashboard.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\fragment_dashboard.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_chat.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_chat.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_login.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\fragment_notifications.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\fragment_notifications.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\user_list_item.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\user_list_item.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\fragment_home.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\fragment_home.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\right_chat_item.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\right_chat_item.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\center_chat_item.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\center_chat_item.xml"
+    }
+]

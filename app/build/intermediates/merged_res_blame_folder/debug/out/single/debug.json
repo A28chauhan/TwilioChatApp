@@ -1,0 +1,206 @@
+[
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_activity_login.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_notifications_black_24dp.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_notifications_black_24dp.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\xml_network_security_config.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\xml\\network_security_config.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_double_tick_nsend_indicator.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_double_tick_nsend_indicator.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_right_message.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\right_message.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_account_circle_24.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_account_circle_24.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\menu_bottom_nav_menu.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\menu\\bottom_nav_menu.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\menu_chat_menu.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\menu\\chat_menu.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\font_roboto.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\font\\roboto.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_left_chat_item.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\left_chat_item.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_home_black_24dp.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_home_black_24dp.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout-w1240dp_activity_login.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout-w1240dp\\activity_login.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_launcher_background.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_fragment_home.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\fragment_home.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_my_message.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\my_message.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_user_list_item.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\user_list_item.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_center_chat_item.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\center_chat_item.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_btn_shape.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\btn_shape.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_corner_background.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\corner_background.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_activity_splash.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_splash.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable-v24\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_fragment_notifications.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\fragment_notifications.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_right_chat_item.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\right_chat_item.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_activity_main.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout-w936dp_activity_login.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout-w936dp\\activity_login.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_double_tick_indicator.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_double_tick_indicator.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_lock_24.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_lock_24.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_edit_text_background.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\edit_text_background.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_send_24.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_send_24.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_activity_chat.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_chat.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_fragment_dashboard.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\fragment_dashboard.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\menu_menu_main.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\menu\\menu_main.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_arrow_back_24.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_arrow_back_24.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_btn_shape_fade.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\btn_shape_fade.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_chat_fragment.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\chat_fragment.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_dashboard_black_24dp.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_dashboard_black_24dp.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_person_24.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_person_24.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_baseline_circle_24.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_baseline_circle_24.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\navigation_mobile_navigation.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\navigation\\mobile_navigation.xml"
+    }
+]
