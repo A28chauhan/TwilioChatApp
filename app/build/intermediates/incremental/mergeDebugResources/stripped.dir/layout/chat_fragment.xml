@@ -43,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:layout_marginLeft="5dp"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/white"
                 android:textStyle="normal"
@@ -94,11 +95,11 @@
         android:id="@+id/date_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
         android:background="@drawable/corner_background"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="10dp"
         android:paddingStart="12dp"
-        android:layout_marginTop="16dp"
         android:paddingEnd="12dp"
         android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -106,12 +107,12 @@
         android:textIsSelectable="true"
         android:textStyle="bold"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView2"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView2"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07000002" />
-
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.008" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
@@ -119,20 +120,21 @@
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/margin_bottom_chat"
         android:isScrollContainer="true"
+        app:stackFromEnd="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
         app:layout_constraintVertical_bias="0.0"
-        app:stackFromEnd="true"
         tools:listitem="@layout/center_chat_item"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingLeft="@dimen/padding"
         android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -142,46 +144,79 @@
         app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
         app:layout_constraintVertical_bias="0.93">
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.6"
-            android:background="@drawable/edit_text_background"
-            android:cursorVisible="true"
-            android:ems="10"
-            android:gravity="top"
-            android:hint="Enter text"
-            android:imeOptions="actionNext"
-            android:inputType="textShortMessage|textMultiLine"
-            android:isScrollContainer="true"
-            android:maxLines="6"
-            android:padding="@dimen/padding"
-            android:scrollbars="vertical"
-            android:textColorHint="@color/select"
-            android:textIsSelectable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
 
-        <Button
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:scaleType="center"
-            android:src="@drawable/ic_send_24"
-            android:text="Send"
-            android:textAllCaps="false"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/select"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/typingIndicatorNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginLeft="5dp"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/black"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
+                app:layout_constraintEnd_toStartOf="@+id/recyclerView2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.6"
+                android:background="@drawable/edit_text_background"
+                android:cursorVisible="true"
+                android:ems="10"
+                android:gravity="top"
+                android:hint="Enter text"
+                android:imeOptions="actionNext"
+                android:inputType="textShortMessage|textMultiLine"
+                android:isScrollContainer="true"
+                android:maxLines="6"
+                android:padding="@dimen/padding"
+                android:focusableInTouchMode="true"
+                android:scrollbars="vertical"
+                android:textColorHint="@color/select"
+                android:textIsSelectable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+
+            <Button
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:scaleType="center"
+                android:src="@drawable/ic_send_24"
+                android:text="Send"
+                android:textAllCaps="false"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/select"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+
+        </LinearLayout>
 
 
     </LinearLayout>

@@ -41,6 +41,10 @@ class UserChannelRepository {
         return channelListDao.getChannelDetails(programUserId,attendeeProgramUserID);
     }
 
+    public LiveData<List<ChannelList>> getChannelList(String programUserId){
+        return channelListDao.getChannelList(programUserId);
+    }
+
     public UserChannelRepository(ChannelListDao channelListDao){
         channelListDao.deleteAll();
     }

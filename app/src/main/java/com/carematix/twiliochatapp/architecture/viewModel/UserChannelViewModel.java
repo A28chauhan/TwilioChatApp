@@ -35,4 +35,9 @@ class UserChannelViewModel extends AndroidViewModel {
     }
 
 
+    public LiveData<List<ChannelList>> getChannelList(String programUserId){
+        return userChannelRepository.getChannelList(programUserId);
+    }
+
+
 }

@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,12 @@ import com.carematix.twiliochatapp.helper.Utils;
 import com.carematix.twiliochatapp.preference.PrefConstants;
 import com.carematix.twiliochatapp.preference.PrefManager;
 import com.carematix.twiliochatapp.twilio.MessageItem;
+import com.twilio.chat.CallbackListener;
+import com.twilio.chat.Channel;
+import com.twilio.chat.Member;
+import com.twilio.chat.Members;
+import com.twilio.chat.Message;
+import com.twilio.chat.Messages;
 
 import java.util.Calendar;
 import java.util.List;
@@ -32,28 +39,30 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_TYPE_CENTER_ITEM = 2;
 
     Context context;
-    List<MessageItem> hashMapHashMap;
+    List<MessageItem> messageItemList;
 
     long unConsumedCount=0;
     public static int unConsumed =0;
 
     LinearLayoutManager linearLayoutManager;
+    Channel channel;
 
-    public LeftChatAdapter(Context mContext, List<MessageItem> arrayList, LinearLayoutManager linearLayoutManager, RecyclerView recyclerView ){
+    public LeftChatAdapter(Context mContext, List<MessageItem> arrayList, LinearLayoutManager linearLayoutManager, RecyclerView recyclerView,Channel mChannel ){
         this.context=mContext;
-        this.hashMapHashMap = arrayList;
+        this.messageItemList = arrayList;
         this.linearLayoutManager = linearLayoutManager;
+        this.channel =mChannel;
     }
 
     @Override
     public int getItemCount() {
-        return hashMapHashMap.size() == 0 ? 0 : hashMapHashMap.size();
+        return messageItemList.size() == 0 ? 0 : messageItemList.size();
     }
 
 
     public void addItem(List<MessageItem>  hashMapHashMap){
         try {
-            this.hashMapHashMap = hashMapHashMap;
+            this.messageItemList = hashMapHashMap;
             notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,139 +77,140 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     public void clear(){
-        hashMapHashMap.clear();
+        messageItemList.clear();
         notifyDataSetChanged();
     }
 
 
+    public static String dateType="";
+    String currentDate="";
     @Override
     public int getItemViewType(int position) {
-        MessageItem messageItem =hashMapHashMap.get(position);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String userName = sharedPreferences.getString("userName", null);
+        MessageItem messageItem =messageItemList.get(position);
         PrefManager prefManager=new PrefManager(context);
         String programUser = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
 
-       // Calendar calendar = Calendar.getInstance();
-       // String todayDate = Utils.getDateTime(calendar.getTimeInMillis());
         currentDate = Utils.setDateTime(messageItem.getMessage().getDateCreatedAsDate());
-
-        /*try {
-            if(!date.equals("")){
-                if(!date.equals(currentDate)){
-                    date =currentDate;
-                    return VIEW_TYPE_CENTER_ITEM;
-                }else{
-
+        try {
+            if(dateType.equals("")){
+                dateType =currentDate;
+                return VIEW_TYPE_CENTER_ITEM;
+            }else if(currentDate.equals(dateType)){
+                if(!messageItem.getMessage().getAuthor().contains(programUser)){
+                    return  VIEW_TYPE_LEFT_ITEM;
+                }else if(messageItem.getMessage().getAuthor().contains(programUser)){
+                    return VIEW_TYPE_RIGHT_ITEM;
                 }
             }else{
-                date =currentDate;
+                return VIEW_TYPE_CENTER_ITEM;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
-            date =currentDate;
-        }*/
-
-        if(!messageItem.getMessage().getAuthor().contains(programUser)){
-            return  VIEW_TYPE_LEFT_ITEM;
-        }else if(messageItem.getMessage().getAuthor().contains(programUser)){
-            return VIEW_TYPE_RIGHT_ITEM;
+            dateType = currentDate;
         }
-
         return VIEW_TYPE_CENTER_ITEM;
     }
 
 
-    String date="",currentDate="";
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         // holder.textView.setT
-        MessageItem hashMap =hashMapHashMap.get(position);
-        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        //String userName = sharedPreferences.getString("userName", null);
+        MessageItem messageItem =messageItemList.get(position);
+        long index = messageItem.getMessage().getMessageIndex();
+        Logs.d("chat adpater 3"," messages index:"+index);
+
+
+        channel.getMessages().setLastConsumedMessageIndexWithResult(index, new CallbackListener<Long>() {
+            @Override
+            public void onSuccess(Long aLong) {
+                try {
+                    Logs.d("chat adpater 4"," messages index:"+aLong);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         if(viewHolder instanceof RightViewHolder){
             RightViewHolder userViewHolder = (RightViewHolder) viewHolder;
 
-            userViewHolder.textView.setText(" " + hashMap.getMessage().getMessageBody().toString());
-            userViewHolder.textTime.setText(Utils.setTime(hashMap.getMessage().getDateCreatedAsDate()));
+            userViewHolder.textView.setText(" " + messageItem.getMessage().getMessageBody().toString());
+            userViewHolder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
+
+            updateMemberMessageReadStatus(userViewHolder,messageItem,position);
 
 
-            /*Calendar calendar = Calendar.getInstance();
-            String todayDate = Utils.getDateTime(calendar.getTimeInMillis());
-            currentDate = Utils.setDateTime(hashMap.getMessage().getDateCreatedAsDate());
-
-            if(todayDate.compareTo(currentDate) == 0){
-                userViewHolder.textTimeFull.setText("Today");
-                userViewHolder.textTimeFull.setVisibility(View.VISIBLE);
-            }else if(todayDate.compareTo(currentDate) > 0){
-
-                int check = Integer.parseInt(Utils.getDateC1(hashMap.getMessage().getDateCreatedAsDate()));
-                int today = Integer.parseInt(Utils.getDateC(calendar.getTimeInMillis()));
-                if(check == (today-1)){
-                    userViewHolder.textTimeFull.setText("Yesterday");
-                    userViewHolder.textTimeFull.setVisibility(View.VISIBLE);
-                }else{
-                    userViewHolder.textTimeFull.setText(currentDate);
-                    userViewHolder.textTimeFull.setVisibility(View.VISIBLE);
-
-                }
-            }*/
-
-
-            try {
-             //   Member member = hashMap.getMembers().getMember(userName);
-             //   updateMemberMessageReadStatus(member.getIdentity(),member.getLastConsumedMessageIndex(),member.getLastConsumptionTimestamp());
-             //   Message message =hashMap.getMessage();
-              //  message.getMessageIndex();
-                if(unConsumed <= unConsumedCount){
-                    userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_nsend_indicator, 0);
+            /*try {
+                int count =userViewHolder.getAdapterPosition();
+                if(unConsumedCount != 0){
+                    if(unConsumed <= unConsumedCount){
+                        userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_indicator, 0);
+                    }else{
+                         }
                     unConsumed++;
                 }else{
-                    userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_indicator, 0);
+                    userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_nsend_indicator, 0);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
 
+        }else if(viewHolder instanceof LeftViewHolder){
+            LeftViewHolder userViewHolder = (LeftViewHolder) viewHolder;
+
+            userViewHolder.textView.setText(" " + messageItem.getMessage().getMessageBody().toString());
+            userViewHolder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
+
+           // channel.getCreatedBy()
+
+        }else if(viewHolder instanceof CenterViewHolder){
+
+            CenterViewHolder userViewHolder = (CenterViewHolder) viewHolder;
+            try {
+                userViewHolder.linearLayoutLeft.setVisibility(View.VISIBLE);
+                userViewHolder.linearLayoutRight.setVisibility(View.VISIBLE);
+                PrefManager prefManager=new PrefManager(context);
+                String programUser = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
+                if(!messageItem.getMessage().getAuthor().contains(programUser)){
+                    userViewHolder.linearLayoutLeft.setVisibility(View.VISIBLE);
+                    userViewHolder.textLeftTime.setText(" " + messageItem.getMessage().getMessageBody().toString());
+                    userViewHolder.textLeftTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
+                }else if(messageItem.getMessage().getAuthor().contains(programUser)){
+                    userViewHolder.linearLayoutRight.setVisibility(View.VISIBLE);
+                    userViewHolder.textRightTime.setText(" " + messageItem.getMessage().getMessageBody().toString());
+                    userViewHolder.textRightTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            // }
-        }else if(viewHolder instanceof LeftViewHolder){
-            LeftViewHolder userViewHolder = (LeftViewHolder) viewHolder;
-
-            userViewHolder.textView.setText(" " + hashMap.getMessage().getMessageBody().toString());
-            userViewHolder.textTime.setText(Utils.setTime(hashMap.getMessage().getDateCreatedAsDate()));
-
-        }else if(viewHolder instanceof CenterViewHolder){
-            CenterViewHolder userViewHolder = (CenterViewHolder) viewHolder;
-            Calendar calendar = Calendar.getInstance();
-            String todayDate = Utils.getDateTime(calendar.getTimeInMillis());
-
-            currentDate = Utils.setDateTime(hashMap.getMessage().getDateCreatedAsDate());
-            if(todayDate.compareTo(currentDate) == 0){
-                userViewHolder.textTimeFull.setText("Today");
-                userViewHolder.textTimeFull.setVisibility(View.VISIBLE);
-            }else if(todayDate.compareTo(currentDate) > 0){
-
-                int check = Integer.parseInt(Utils.getDateC1(hashMap.getMessage().getDateCreatedAsDate()));
-                int today = Integer.parseInt(Utils.getDateC(calendar.getTimeInMillis()));
-                if(check == (today-1)){
-                    userViewHolder.textTimeFull.setText("Yesterday");
+            try {
+                Calendar calendar = Calendar.getInstance();
+                String todayDate = Utils.getDateTime(calendar.getTimeInMillis());
+                currentDate = Utils.setDateTime(messageItem.getMessage().getDateCreatedAsDate());
+                if(todayDate.compareTo(currentDate) == 0){
+                    userViewHolder.textTimeFull.setText("Today");
                     userViewHolder.textTimeFull.setVisibility(View.VISIBLE);
-                }else{
-                    userViewHolder.textTimeFull.setText(currentDate);
-                    userViewHolder.textTimeFull.setVisibility(View.VISIBLE);
-                    /*if(!date.equals(currentDate)){
-                        date =currentDate;
-                        userViewHolder.textTimeFull.setText(currentDate);
+                }else if(todayDate.compareTo(currentDate) > 0){
+
+                    int check = Integer.parseInt(Utils.getDateC1(messageItem.getMessage().getDateCreatedAsDate()));
+                    int today = Integer.parseInt(Utils.getDateC(calendar.getTimeInMillis()));
+                    if(check == (today-1)){
+                        userViewHolder.textTimeFull.setText("Yesterday");
                         userViewHolder.textTimeFull.setVisibility(View.VISIBLE);
                     }else{
-                        date =currentDate;
-                    }*/
+                        userViewHolder.textTimeFull.setText(currentDate);
+                        userViewHolder.textTimeFull.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    userViewHolder.textTimeFull.setText(currentDate);
+                    userViewHolder.textTimeFull.setVisibility(View.GONE);
                 }
-            }else{
-                userViewHolder.textTimeFull.setText(currentDate);
-                userViewHolder.textTimeFull.setVisibility(View.GONE);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
 
         }else{
@@ -212,13 +222,90 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
-    public void updateMemberMessageReadStatus(String identity,Long lastmessage,String date ){
+    public void updateMemberMessageReadStatus(RightViewHolder userViewHolder,MessageItem messageItem,int post){
 
-        Logs.d("member ",identity+""+lastmessage+" "+date);
         /*if(member.getLastConsumedMessageIndex() != null && member.getLastConsumedMessageIndex() == hashMap.getMessage().getMessageIndex()){
             userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_nsend_indicator, 0);
         }else{
             userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_indicator, 0);
+        }*/
+
+        long index = 0;
+        try {
+            index = messageItem.getMessage().getMessageIndex();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        channel.getMessages().advanceLastConsumedMessageIndexWithResult(index, new CallbackListener<Long>() {
+            @Override
+            public void onSuccess(Long aLong) {
+                try {
+                    if(aLong != null){
+                        if(aLong == 0){
+                            userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_indicator, 0);
+                        }else{
+                            userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_nsend_indicator, 0);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        channel.getMessages().setLastConsumedMessageIndexWithResult(index, new CallbackListener<Long>() {
+            @Override
+            public void onSuccess(Long aLong) {
+                try {
+                    if(aLong != null){
+                        if(aLong == 0){
+                            userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_indicator, 0);
+                        }else{
+                            userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_nsend_indicator, 0);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        channel.getMessages().setAllMessagesConsumedWithResult(new CallbackListener<Long>() {
+            @Override
+            public void onSuccess(Long aLong) {
+                try {
+                    if(aLong != null){
+                        if(aLong == 0){
+                            userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_indicator, 0);
+                        }else{
+                            userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_nsend_indicator, 0);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        long inn = 0;
+        long ind = 0;
+        try {
+            inn = messageItem.getMessage().getMember().getLastConsumedMessageIndex();
+            ind = messageItem.getMessage().getMessageIndex();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Logs.d("chat adpater 0"," memeber index :"+post+" :"+inn);
+        Logs.d("chat adpater 0"," memeber index :"+post+" :"+ind);
+        /*for(Member member: channel.getMembers().getMembersList()){
+            Logs.d("chat adpater 0"," memeber :"+member.getIdentity());
+            Logs.d("chat adpater 1"," memeber :"+member.getLastConsumedMessageIndex());
+            Logs.d("chat adpater 2"," memeber :"+channel.getMessages().getLastConsumedMessageIndex());
+            if(member.getLastConsumedMessageIndex() != null && member.getLastConsumedMessageIndex() == messageItem.getMessage().getMessageIndex()){
+                userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_indicator, 0);
+                //userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_nsend_indicator, 0);
+            }else{
+                userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_nsend_indicator, 0);
+            }
+
         }*/
     }
 
@@ -246,8 +333,8 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public TextView textView,textTime,textTimeFull;
         public RightViewHolder(View view){
             super(view);
-            textView=(TextView)view.findViewById(R.id.chat_text);
-            textTime=(TextView)view.findViewById(R.id.text_time);
+            textView=(TextView)view.findViewById(R.id.chat_text_right);
+            textTime=(TextView)view.findViewById(R.id.text_time_right);
             textTimeFull=(TextView)view.findViewById(R.id.textfullDate);
 
             textView.setOnClickListener(new View.OnClickListener() {
@@ -271,19 +358,16 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public TextView textView,textTime,textTimeFull;
         public LeftViewHolder(View view){
             super(view);
-            textView=(TextView)view.findViewById(R.id.chat_text);
-            textTime=(TextView)view.findViewById(R.id.text_time);
+            textView=(TextView)view.findViewById(R.id.chat_text_left);
+            textTime=(TextView)view.findViewById(R.id.text_time_left);
             textTimeFull=(TextView)view.findViewById(R.id.textfullDate);
 
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos=getAdapterPosition();
-
                     Logs.d("left chat adapter","position :"+pos);
-                  //  Intent intent =new Intent(context, ChatActivity.class);
-                  //  context.startActivity(intent);
-                    //context.finish();
+
                 }
             });
         }
@@ -295,144 +379,24 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     public class CenterViewHolder extends RecyclerView.ViewHolder{
-        public TextView textTimeFull;
+        public TextView textTimeFull,textLeftView,textLeftTime,textRightView,textRightTime;
+        LinearLayout linearLayoutLeft,linearLayoutRight;
         public CenterViewHolder(View view){
             super(view);
             textTimeFull=(TextView)view.findViewById(R.id.textfullDate);
+            textLeftView=(TextView)view.findViewById(R.id.chat_text_left);
+            textLeftTime=(TextView)view.findViewById(R.id.text_time_left);
+            textRightView=(TextView)view.findViewById(R.id.chat_text_right);
+            textRightTime=(TextView)view.findViewById(R.id.text_time_right);
+            linearLayoutLeft=(LinearLayout)view.findViewById(R.id.left_layout);
+            linearLayoutRight=(LinearLayout)view.findViewById(R.id.right_layout);
+            linearLayoutLeft.setVisibility(View.VISIBLE);
+            linearLayoutRight.setVisibility(View.VISIBLE);
         }
 
         public TextView getTextView() {
             return textTimeFull;
         }
     }
-
-
-   /* private final int VIEW_TYPE_LEFT_ITEM = 0;
-    private final int VIEW_TYPE_RIGHT_ITEM = 1;
-
-    Context context;
-    HashMap<Integer, HashMap<String,String>> hashMapHashMap;
-    *//*ArrayList<String> arrayList;
-    public LeftChatAdapter(Context mContext, ArrayList<String> arrayList){
-        this.context=mContext;
-        this.arrayList = arrayList;
-    }*//*
-
-    public LeftChatAdapter(Context mContext, HashMap<Integer, HashMap<String,String>> arrayList){
-        this.context=mContext;
-        this.hashMapHashMap = arrayList;
-    }
-
-    @Override
-    public int getItemCount() {
-        return hashMapHashMap.size();
-    }
-
-
-    public void addItem(HashMap<Integer, HashMap<String,String>>  hashMapHashMap){
-        this.hashMapHashMap= hashMapHashMap;
-        notifyDataSetChanged();
-    }
-
-
-    @Override
-    public int getItemViewType(int position) {
-        HashMap<String,String> hashMap =hashMapHashMap.get(position);
-        //Map.Entry<String,String> e = hashMap.entrySet();
-        Log.e("tag",""+hashMap.keySet());
-        if(hashMap.keySet().contains("LEFT")){
-            return  VIEW_TYPE_LEFT_ITEM;
-        }else if(hashMap.keySet().contains("RIGHT")){
-            return VIEW_TYPE_RIGHT_ITEM;
-        }
-        return VIEW_TYPE_LEFT_ITEM;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-       // holder.textView.setT
-        HashMap<String,String> hashMap =hashMapHashMap.get(position);
-        if(viewHolder instanceof RightViewHolder){
-            RightViewHolder userViewHolder = (RightViewHolder) viewHolder;
-            for(Map.Entry m : hashMap.entrySet()) {
-                userViewHolder.textView.setText(" " + m.getValue());
-                userViewHolder.textTime.setText(Utils.setTime(System.currentTimeMillis()));
-            }
-        }else if(viewHolder instanceof LeftViewHolder){
-            LeftViewHolder userViewHolder = (LeftViewHolder) viewHolder;
-            for(Map.Entry m : hashMap.entrySet()) {
-                userViewHolder.textView.setText(" " + m.getValue());
-                userViewHolder.textTime.setText(Utils.setTime(System.currentTimeMillis()));
-            }
-        }else{
-            throw new RuntimeException("Unknown view type in onBindViewHolder");
-        }
-
-    }
-
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = null;
-        if(viewType == VIEW_TYPE_LEFT_ITEM){
-            itemView  = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.left_chat_item, parent, false);
-            return new LeftViewHolder(itemView);
-        }else if(viewType == VIEW_TYPE_RIGHT_ITEM){
-            itemView  = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.right_chat_item, parent, false);
-            return new RightViewHolder(itemView);
-        }
-        return null;
-    }
-
-    public class RightViewHolder extends RecyclerView.ViewHolder{
-        public TextView textView,textTime;
-        public RightViewHolder(View view){
-            super(view);
-            textView=(TextView)view.findViewById(R.id.chat_text);
-            textTime=(TextView)view.findViewById(R.id.text_time);
-
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos=getAdapterPosition();
-
-                    Intent intent =new Intent(context, ChatActivity.class);
-                    context.startActivity(intent);
-                    //context.finish();
-                }
-            });
-        }
-
-        public TextView getTextView() {
-            return textView;
-        }
-    }
-
-    public class LeftViewHolder extends RecyclerView.ViewHolder{
-        public TextView textView,textTime;
-        public LeftViewHolder(View view){
-            super(view);
-            textView=(TextView)view.findViewById(R.id.chat_text);
-            textTime=(TextView)view.findViewById(R.id.text_time);
-
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos=getAdapterPosition();
-
-                    Intent intent =new Intent(context, ChatActivity.class);
-                    context.startActivity(intent);
-                    //context.finish();
-                }
-            });
-        }
-
-        public TextView getTextView() {
-            return textView;
-        }
-    }*/
-
 
 }

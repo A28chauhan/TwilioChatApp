@@ -4,6 +4,7 @@ package com.carematix.twiliochatapp.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,11 +21,46 @@ public final class CenterChatItemBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
+  public final TextView chatTextLeft;
+
+  @NonNull
+  public final TextView chatTextRight;
+
+  @NonNull
+  public final LinearLayout leftLayout;
+
+  @NonNull
+  public final LinearLayout linearLayout;
+
+  @NonNull
+  public final LinearLayout linearLayout2;
+
+  @NonNull
+  public final LinearLayout rightLayout;
+
+  @NonNull
+  public final TextView textTimeLeft;
+
+  @NonNull
+  public final TextView textTimeRight;
+
+  @NonNull
   public final TextView textfullDate;
 
-  private CenterChatItemBinding(@NonNull ConstraintLayout rootView,
-      @NonNull TextView textfullDate) {
+  private CenterChatItemBinding(@NonNull ConstraintLayout rootView, @NonNull TextView chatTextLeft,
+      @NonNull TextView chatTextRight, @NonNull LinearLayout leftLayout,
+      @NonNull LinearLayout linearLayout, @NonNull LinearLayout linearLayout2,
+      @NonNull LinearLayout rightLayout, @NonNull TextView textTimeLeft,
+      @NonNull TextView textTimeRight, @NonNull TextView textfullDate) {
     this.rootView = rootView;
+    this.chatTextLeft = chatTextLeft;
+    this.chatTextRight = chatTextRight;
+    this.leftLayout = leftLayout;
+    this.linearLayout = linearLayout;
+    this.linearLayout2 = linearLayout2;
+    this.rightLayout = rightLayout;
+    this.textTimeLeft = textTimeLeft;
+    this.textTimeRight = textTimeRight;
     this.textfullDate = textfullDate;
   }
 
@@ -55,13 +91,63 @@ public final class CenterChatItemBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.chat_text_left;
+      TextView chatTextLeft = ViewBindings.findChildViewById(rootView, id);
+      if (chatTextLeft == null) {
+        break missingId;
+      }
+
+      id = R.id.chat_text_right;
+      TextView chatTextRight = ViewBindings.findChildViewById(rootView, id);
+      if (chatTextRight == null) {
+        break missingId;
+      }
+
+      id = R.id.left_layout;
+      LinearLayout leftLayout = ViewBindings.findChildViewById(rootView, id);
+      if (leftLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.linearLayout;
+      LinearLayout linearLayout = ViewBindings.findChildViewById(rootView, id);
+      if (linearLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.linearLayout2;
+      LinearLayout linearLayout2 = ViewBindings.findChildViewById(rootView, id);
+      if (linearLayout2 == null) {
+        break missingId;
+      }
+
+      id = R.id.right_layout;
+      LinearLayout rightLayout = ViewBindings.findChildViewById(rootView, id);
+      if (rightLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.text_time_left;
+      TextView textTimeLeft = ViewBindings.findChildViewById(rootView, id);
+      if (textTimeLeft == null) {
+        break missingId;
+      }
+
+      id = R.id.text_time_right;
+      TextView textTimeRight = ViewBindings.findChildViewById(rootView, id);
+      if (textTimeRight == null) {
+        break missingId;
+      }
+
       id = R.id.textfullDate;
       TextView textfullDate = ViewBindings.findChildViewById(rootView, id);
       if (textfullDate == null) {
         break missingId;
       }
 
-      return new CenterChatItemBinding((ConstraintLayout) rootView, textfullDate);
+      return new CenterChatItemBinding((ConstraintLayout) rootView, chatTextLeft, chatTextRight,
+          leftLayout, linearLayout, linearLayout2, rightLayout, textTimeLeft, textTimeRight,
+          textfullDate);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

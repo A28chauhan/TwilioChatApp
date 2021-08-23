@@ -63,12 +63,12 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:testOnly="true"
         android:theme="@style/Theme.TwilioChatApp" >
         <activity
             android:name="com.carematix.twiliochatapp.SplashActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.TwilioChatApp.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -80,13 +80,16 @@
         <activity
             android:name="com.carematix.twiliochatapp.MainActivity"
             android:exported="true"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:launchMode="singleInstance" />
         <activity
             android:name="com.carematix.twiliochatapp.ui.login.LoginActivity"
             android:exported="true"
-            android:label="@string/app_sign_in" />
+            android:label="@string/app_sign_in"
+            android:launchMode="singleInstance" />
         <activity
             android:name="com.carematix.twiliochatapp.ChatActivity"
+            android:launchMode="singleInstance"
             android:noHistory="true"
             android:parentActivityName="com.carematix.twiliochatapp.MainActivity"
             android:theme="@style/Theme.TwilioChatApp.NoActionBar"
@@ -176,21 +179,6 @@
                 android:value="com.google.firebase.components.ComponentRegistrar" />
         </service>
 
-        <activity
-            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!--
-            Service handling Google Sign-In user revocation. For apps that do not integrate with
-            Google Sign-In, this service will never be started.
-        -->
-        <service
-            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
-            android:exported="true"
-            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
-            android:visibleToInstantApps="true" />
-
         <receiver
             android:name="com.google.firebase.messaging.directboot.FirebaseMessagingDirectBootReceiver"
             android:directBootAware="true"
@@ -220,6 +208,21 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--
+            Service handling Google Sign-In user revocation. For apps that do not integrate with
+            Google Sign-In, this service will never be started.
+        -->
+        <service
+            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+            android:visibleToInstantApps="true" />
 
         <receiver
             android:name="com.google.android.gms.measurement.AppMeasurementReceiver"

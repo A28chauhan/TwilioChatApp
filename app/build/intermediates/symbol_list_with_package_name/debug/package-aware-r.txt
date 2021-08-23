@@ -708,6 +708,7 @@ attr navigationMode
 attr navigationRailStyle
 attr navigationViewStyle
 attr nestedScrollFlags
+attr nestedScrollViewStyle
 attr nestedScrollable
 attr nullable
 attr number
@@ -765,6 +766,7 @@ attr progressBarPadding
 attr progressBarStyle
 attr queryBackground
 attr queryHint
+attr queryPatterns
 attr radioButtonStyle
 attr rangeFillColor
 attr ratingBarStyle
@@ -797,6 +799,7 @@ attr shapeAppearanceLargeComponent
 attr shapeAppearanceMediumComponent
 attr shapeAppearanceOverlay
 attr shapeAppearanceSmallComponent
+attr shortcutMatchRequired
 attr showAnimationBehavior
 attr showAsAction
 attr showDelay
@@ -1995,7 +1998,8 @@ id center_horizontal
 id center_vertical
 id chain
 id chains
-id chat_text
+id chat_text_left
+id chat_text_right
 id checkbox
 id checked
 id chip
@@ -2117,6 +2121,7 @@ id labeled
 id layout
 id left
 id leftToRight
+id left_layout
 id light
 id line1
 id line3
@@ -2124,6 +2129,7 @@ id linear
 id linearLayout
 id linearLayout2
 id linearLayout3
+id linearLayout4
 id linear_email
 id linear_password
 id listMode
@@ -2240,6 +2246,7 @@ id reverseSawtooth
 id right
 id rightToLeft
 id right_icon
+id right_layout
 id right_side
 id rounded
 id row_index_key
@@ -2336,7 +2343,8 @@ id text_input_error_icon
 id text_input_start_icon
 id text_notifications
 id text_password
-id text_time
+id text_time_left
+id text_time_right
 id text_user
 id text_user_1
 id textfullDate
@@ -2363,6 +2371,7 @@ id transition_scene_layoutid_cache
 id transition_transform
 id triangle
 id typingIndicator
+id typingIndicatorNote
 id unchecked
 id uniform
 id unlabeled
@@ -2572,6 +2581,7 @@ mipmap ic_launcher_round
 navigation mobile_navigation
 plurals mtrl_badge_content_description
 raw rootcert
+string Error
 string abc_action_bar_home_description
 string abc_action_bar_up_description
 string abc_action_menu_overflow_description
@@ -2638,6 +2648,7 @@ string common_google_play_services_wear_update_text
 string common_open_on_phone
 string common_signin_button_text
 string common_signin_button_text_long
+string data_load
 string decline
 string default_channel_name
 string default_channel_unique_name
@@ -2662,6 +2673,7 @@ string invite_member
 string item_view_role_description
 string join
 string leave_msg
+string leave_msg_details
 string loading_channels_message
 string login_failed
 string material_clock_display_divider
@@ -3509,6 +3521,7 @@ styleable BottomAppBar backgroundTint elevation fabAlignmentMode fabAnimationMod
 styleable BottomNavigationView itemHorizontalTranslationEnabled
 styleable BottomSheetBehavior_Layout android_maxWidth android_elevation backgroundTint behavior_draggable behavior_expandedOffset behavior_fitToContents behavior_halfExpandedRatio behavior_hideable behavior_peekHeight behavior_saveFlags behavior_skipCollapsed gestureInsetBottomIgnored paddingBottomSystemWindowInsets paddingLeftSystemWindowInsets paddingRightSystemWindowInsets paddingTopSystemWindowInsets shapeAppearance shapeAppearanceOverlay
 styleable ButtonBarLayout allowStacking
+styleable Capability queryPatterns shortcutMatchRequired
 styleable CardView android_minWidth android_minHeight cardBackgroundColor cardCornerRadius cardElevation cardMaxElevation cardPreventCornerOverlap cardUseCompatPadding contentPadding contentPaddingBottom contentPaddingLeft contentPaddingRight contentPaddingTop
 styleable Chip android_textAppearance android_textSize android_textColor android_ellipsize android_maxWidth android_text android_checkable checkedIcon checkedIconEnabled checkedIconTint checkedIconVisible chipBackgroundColor chipCornerRadius chipEndPadding chipIcon chipIconEnabled chipIconSize chipIconTint chipIconVisible chipMinHeight chipMinTouchTargetSize chipStartPadding chipStrokeColor chipStrokeWidth chipSurfaceColor closeIcon closeIconEnabled closeIconEndPadding closeIconSize closeIconStartPadding closeIconTint closeIconVisible ensureMinTouchTargetSize hideMotionSpec iconEndPadding iconStartPadding rippleColor shapeAppearance shapeAppearanceOverlay showMotionSpec textEndPadding textStartPadding
 styleable ChipGroup checkedChip chipSpacing chipSpacingHorizontal chipSpacingVertical selectionRequired singleLine singleSelection

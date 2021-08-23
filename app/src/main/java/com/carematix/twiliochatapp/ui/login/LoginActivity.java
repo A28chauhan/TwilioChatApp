@@ -21,6 +21,7 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -63,6 +64,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.textfield.TextInputLayout;
 import com.twilio.messaging.internal.Logger;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -84,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -91,6 +94,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         String userName = sharedPreferences.getString("userName", "TestUser");
 
         prefManager =new PrefManager(this);
+        prefManager.setBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE,true);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 
         if(prefManager.getBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN)){
@@ -265,6 +269,8 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                         .putString("ttl", "3000").commit();
 
                 attemptLogin();
+                // by pass with nurse login
+                //loginWithNurse();
 
             }
         });
@@ -290,6 +296,95 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             e.printStackTrace();
         }
 
+    }
+
+    public void loginWithNurse(){
+
+        fetchUserDetails(null);
+        /*String email =binding.username.getText().toString();
+        String password = binding.password.getText().toString();
+        apiService =null;
+        apiService = ApiClient.getClient1().create(ApiInterface.class);
+        Call<JSONObject> call = apiService.loginHCM(email,password,Constants.X_DRO_SOURCE);
+
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                // return new Result.Success<>(fakeUser);
+                try {
+                    int code = response.raw().code();
+                    if (code<= Constants.BAD_REQUEST) {
+                        fetchUserDetails(response.body().toString());
+                    }else if(code == Constants.INTERNAL_SERVER_ERROR){
+                        //login(user);
+                        unloadProgress();
+                        Utils.showToast("Error : "+code,LoginActivity.this);
+                    }else{
+                        unloadProgress();
+                        Utils.showToast("Error : "+code,LoginActivity.this);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+                Utils.showToast(t.getMessage(),LoginActivity.this);
+                unloadProgress();
+            }
+        });*/
+
+
+    }
+
+    /*public void fetchUserDetails(String msg){
+        String arr[] = msg.split(",");
+        prefManager = new PrefManager(LoginActivity.this);
+        prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf(arr[0]));
+        //prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf("689"));
+        prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf(arr[8]));
+        //prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf("2282"));
+
+        sharedPreferences.edit().putString("userName", arr[2]).commit();
+        prefManager.setStringValue(PrefConstants.USER_NAME,arr[1]);
+        prefManager.setStringValue(PrefConstants.USER_FIRST_NAME,arr[2]);
+        prefManager.setStringValue(PrefConstants.USER_LAST_NAME,arr[3]);
+        prefManager.setStringValue(PrefConstants.USER_IMAGE,"");
+
+        prefManager.setStringValue(PrefConstants.PROGRAM_ID,String.valueOf(arr[7]));
+         prefManager.setStringValue(PrefConstants.ORGANIZATION_NAME,arr[6]);
+         prefManager.setStringValue(PrefConstants.PROGRAM_NAME,arr[9]);
+        prefManager.setStringValue(PrefConstants.LOGO_URL,"");
+
+        prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,false);
+
+        fetchUser();
+    }*/
+
+
+    public void fetchUserDetails(String msg){
+        //String arr[] = msg.split(",");
+        prefManager = new PrefManager(LoginActivity.this);
+        prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf("624"));
+        //prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf("689"));
+        prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf("2131"));
+        //prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf("2282"));
+
+        sharedPreferences.edit().putString("userName", "schandra@carematix.com").commit();
+        prefManager.setStringValue(PrefConstants.USER_NAME,"Sushil HCM");
+        prefManager.setStringValue(PrefConstants.USER_FIRST_NAME,"Sushil");
+        prefManager.setStringValue(PrefConstants.USER_LAST_NAME,"HCM");
+        prefManager.setStringValue(PrefConstants.USER_IMAGE,"");
+
+        prefManager.setStringValue(PrefConstants.PROGRAM_ID,String.valueOf("139"));
+        prefManager.setStringValue(PrefConstants.ORGANIZATION_NAME,"Care-QA");
+        prefManager.setStringValue(PrefConstants.PROGRAM_NAME,"Scheduled Program Test");
+        prefManager.setStringValue(PrefConstants.LOGO_URL,"");
+
+        prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,false);
+
+        fetchUser();
     }
 
     // FCM
@@ -343,8 +438,10 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
     private final String USERNAME_FORM_FIELD = "username";
     public void callMain(){
+        unloadProgress();
         SessionManager.getInstance().createLoginSession(prefManager.getStringValue(PrefConstants.USER_NAME));
         prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,true);
+        prefManager.setBooleanValue(PrefConstants.PREFERENCE_LOGIN_CHECK,true);
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         LoginActivity.this.finish();
     }

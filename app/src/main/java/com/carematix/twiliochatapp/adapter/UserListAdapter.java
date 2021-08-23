@@ -89,11 +89,6 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
         try {
             //channels.clear();
             this.channels = channels1;
-            try {
-              //  getConsumedDataSet(attendeeProgramId,mHolder,mHolder.getAdapterPosition());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,15 +146,12 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                                 .stream().filter(  channelModel -> channelModel.getValue().getSid().equals(channelList.getChannelSid()))
                                 .map(Map.Entry::getValue)
                                 .collect(Collectors.toMap(ChannelModel::getSid, channelModel -> channelModel));
-                        //.collect(Collectors.toMap(ChannelModel::getSid,channelModel -> channelModel));
-                        //.collect(Collector.of(channelModel -> channels.entrySet() , channelModel -> channels.values()));
 
                         for(final ChannelModel channelModel: result.values()){
                             Logs.d("onclick1","channel name : "+channelModel.getSid() +" : channel "+channelModel.getSid()+" "+channelModel.getFriendlyName());
                             // Logs.d("onclick2","channel name : "+channelModel.getSid() +" : channel "+channelList.getChannelSid()+" "+channelList.getOrganizerProgramUserId())+" "+channelList.getAttendeeProgramUserId());
                             if(channelModel != null){
                                 if(channelModel.getSid() != null)
-                                    //if(channelModel.getSid().equals(channelList.getSid()))
                                     if(channelModel.getStatus() == Channel.ChannelStatus.JOINED){
                                         new Handler().postDelayed(new Runnable() {
                                             @Override
@@ -176,14 +168,14 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                                                                         if(aLong != null){
                                                                             if(aLong == 0){
                                                                                 holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                                holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                                                                holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
                                                                             }else{
                                                                                 holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
                                                                                 holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
                                                                             }
                                                                         }else{
                                                                             holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                            holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                                                            holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
                                                                         }
 
                                                                     } catch (Exception e) {
@@ -246,14 +238,14 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                                                                         if(aLong != null){
                                                                             if(aLong == 0){
                                                                                 holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                                holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                                                                holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
                                                                             }else{
                                                                                 holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
                                                                                 holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
                                                                             }
                                                                         }else{
                                                                             holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                            holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                                                            holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
                                                                         }
                                                                     } catch (Exception e) {
                                                                         e.printStackTrace();
@@ -325,14 +317,14 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                                                                             if(aLong != null){
                                                                                 if(aLong == 0){
                                                                                     holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                                    holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                                                                    holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
                                                                                 }else{
                                                                                     holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
                                                                                     holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
                                                                                 }
                                                                             }else{
                                                                                 holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                                holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                                                                holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
                                                                             }
 
                                                                         } catch (Exception e) {

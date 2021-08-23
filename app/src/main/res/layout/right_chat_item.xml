@@ -61,7 +61,7 @@
 
 
             <TextView
-                android:id="@+id/chat_text"
+                android:id="@+id/chat_text_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -87,12 +87,11 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/text_time"
+            android:id="@+id/text_time_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:drawableRight="@drawable/ic_double_tick_nsend_indicator"
             android:fontFamily="sans-serif"
             android:layout_gravity="center|right"
             android:gravity="center|right"

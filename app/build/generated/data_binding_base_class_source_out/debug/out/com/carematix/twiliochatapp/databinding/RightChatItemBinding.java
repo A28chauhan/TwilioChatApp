@@ -21,24 +21,24 @@ public final class RightChatItemBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
-  public final TextView chatText;
+  public final TextView chatTextRight;
 
   @NonNull
   public final LinearLayout linearLayout2;
 
   @NonNull
-  public final TextView textTime;
+  public final TextView textTimeRight;
 
   @NonNull
   public final TextView textfullDate;
 
-  private RightChatItemBinding(@NonNull ConstraintLayout rootView, @NonNull TextView chatText,
-      @NonNull LinearLayout linearLayout2, @NonNull TextView textTime,
+  private RightChatItemBinding(@NonNull ConstraintLayout rootView, @NonNull TextView chatTextRight,
+      @NonNull LinearLayout linearLayout2, @NonNull TextView textTimeRight,
       @NonNull TextView textfullDate) {
     this.rootView = rootView;
-    this.chatText = chatText;
+    this.chatTextRight = chatTextRight;
     this.linearLayout2 = linearLayout2;
-    this.textTime = textTime;
+    this.textTimeRight = textTimeRight;
     this.textfullDate = textfullDate;
   }
 
@@ -69,9 +69,9 @@ public final class RightChatItemBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.chat_text;
-      TextView chatText = ViewBindings.findChildViewById(rootView, id);
-      if (chatText == null) {
+      id = R.id.chat_text_right;
+      TextView chatTextRight = ViewBindings.findChildViewById(rootView, id);
+      if (chatTextRight == null) {
         break missingId;
       }
 
@@ -81,9 +81,9 @@ public final class RightChatItemBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.text_time;
-      TextView textTime = ViewBindings.findChildViewById(rootView, id);
-      if (textTime == null) {
+      id = R.id.text_time_right;
+      TextView textTimeRight = ViewBindings.findChildViewById(rootView, id);
+      if (textTimeRight == null) {
         break missingId;
       }
 
@@ -93,8 +93,8 @@ public final class RightChatItemBinding implements ViewBinding {
         break missingId;
       }
 
-      return new RightChatItemBinding((ConstraintLayout) rootView, chatText, linearLayout2,
-          textTime, textfullDate);
+      return new RightChatItemBinding((ConstraintLayout) rootView, chatTextRight, linearLayout2,
+          textTimeRight, textfullDate);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

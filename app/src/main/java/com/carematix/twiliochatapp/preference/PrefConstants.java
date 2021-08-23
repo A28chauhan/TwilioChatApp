@@ -17,6 +17,7 @@ class PrefConstants {
     public static final String TN_TOKEN ="tn_token";
 
     public static String WHICH_SCREEN="which_screen";
+    public static String SCREEN="screen";
 
     // user details
     public static final String USER_ID ="user_id";

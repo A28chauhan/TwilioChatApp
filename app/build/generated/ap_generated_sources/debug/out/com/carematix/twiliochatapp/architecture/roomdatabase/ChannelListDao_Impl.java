@@ -179,4 +179,49 @@ public final class ChannelListDao_Impl implements ChannelListDao {
       }
     });
   }
+
+  @Override
+  public LiveData<List<ChannelList>> getChannelList(final String programUserID) {
+    final String _sql = "SELECT * FROM User_Channel_List WHERE organizerProgramUserId IN (?)  ORDER BY id ASC ";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (programUserID == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, programUserID);
+    }
+    return __db.getInvalidationTracker().createLiveData(new String[]{"User_Channel_List"}, false, new Callable<List<ChannelList>>() {
+      @Override
+      public List<ChannelList> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfOrganizerProgramUserId = CursorUtil.getColumnIndexOrThrow(_cursor, "organizerProgramUserId");
+          final int _cursorIndexOfAttendeeProgramUserId = CursorUtil.getColumnIndexOrThrow(_cursor, "attendeeProgramUserId");
+          final int _cursorIndexOfChannelSid = CursorUtil.getColumnIndexOrThrow(_cursor, "channelSid");
+          final List<ChannelList> _result = new ArrayList<ChannelList>(_cursor.getCount());
+          while(_cursor.moveToNext()) {
+            final ChannelList _item;
+            final String _tmpOrganizerProgramUserId;
+            _tmpOrganizerProgramUserId = _cursor.getString(_cursorIndexOfOrganizerProgramUserId);
+            final String _tmpAttendeeProgramUserId;
+            _tmpAttendeeProgramUserId = _cursor.getString(_cursorIndexOfAttendeeProgramUserId);
+            final String _tmpChannelSid;
+            _tmpChannelSid = _cursor.getString(_cursorIndexOfChannelSid);
+            _item = new ChannelList(_tmpOrganizerProgramUserId,_tmpAttendeeProgramUserId,_tmpChannelSid);
+            _item.id = _cursor.getInt(_cursorIndexOfId);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
+  }
 }

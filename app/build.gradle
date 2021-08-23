@@ -107,6 +107,9 @@ dependencies {
     //implementation 'com.twilio:chat-android:6.2.0'
     implementation 'com.twilio:chat-android:7.0.0'
 
+    // show notification in
+    implementation 'androidx.core:core:1.6.0'
+
     // Room database
     def room_version = "2.2.6"
     implementation "androidx.room:room-runtime:$room_version"

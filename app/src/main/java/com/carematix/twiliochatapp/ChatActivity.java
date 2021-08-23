@@ -1,9 +1,11 @@
 package com.carematix.twiliochatapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -58,7 +60,10 @@ class ChatActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+
     }
+
+
 
 
     @Override

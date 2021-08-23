@@ -29,4 +29,8 @@ interface ChannelListDao {
 
     @Query("SELECT * FROM User_Channel_List WHERE organizerProgramUserId IN (:programUserID) AND attendeeProgramUserId IN (:attendeeProgramUserId) ORDER BY id ASC " )
     LiveData<List<ChannelList>> getChannelDetails(String programUserID ,String attendeeProgramUserId);
+
+
+    @Query("SELECT * FROM User_Channel_List WHERE organizerProgramUserId IN (:programUserID)  ORDER BY id ASC " )
+    LiveData<List<ChannelList>> getChannelList(String programUserID);
 }

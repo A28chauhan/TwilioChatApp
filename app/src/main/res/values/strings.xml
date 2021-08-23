@@ -3,7 +3,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
@@ -20,7 +20,8 @@
     <string name="default_channel_name">General Channel</string>
     <string name="default_channel_unique_name">general</string>
 
-    <string name="loading_channels_message">Loading channel information</string>
+    <string name="loading_channels_message">Loading ...</string>
+    <string name="data_load">Fetching ...</string>
 
     <!-- MainActivity menu-->
     <string name="action_leave">Leave</string>
@@ -37,6 +38,7 @@
     <string name="join">Join</string>
     <string name="decline">Decline</string>
 
+    <string name="Error">Error</string>
     <string name="leave_msg">Leave</string>
     <string name="leave_msg_details">Are you sure you want to leave? </string>
     <string name="ok">Ok</string>

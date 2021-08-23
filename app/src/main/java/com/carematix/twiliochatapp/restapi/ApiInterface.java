@@ -9,6 +9,9 @@ import com.carematix.twiliochatapp.bean.login.DroLanguage;
 import com.carematix.twiliochatapp.bean.login.UserResult;
 import com.carematix.twiliochatapp.bean.userList.UserDetails;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -50,6 +53,11 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST(ApiConstants.LEAVE_CHANNEL)
     Call<LeaveChannel> leaveChannel(@Field("programUserId") String programUserId, @Field("channelId") String channelId, @Field("device") String device);
+
+
+    @FormUrlEncoded
+    @POST(ApiConstants.LOGIN_HCM)
+    Call<JSONObject> loginHCM(@Field("username") String userName, @Field("password") String password, @Field("device") String device);
 
 
 

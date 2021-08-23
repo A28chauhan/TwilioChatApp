@@ -46,15 +46,22 @@ public final class ChatFragmentBinding implements ViewBinding {
   public final LinearLayout linearLayout3;
 
   @NonNull
+  public final LinearLayout linearLayout4;
+
+  @NonNull
   public final RecyclerView recyclerView2;
 
   @NonNull
   public final TextView typingIndicator;
 
+  @NonNull
+  public final TextView typingIndicatorNote;
+
   private ChatFragmentBinding(@NonNull ConstraintLayout rootView, @NonNull TextView actionLeave,
       @NonNull TextView dateLabel, @NonNull EditText editText, @NonNull ImageView imageBack,
       @NonNull Button imageButton, @NonNull TextView isOnline, @NonNull LinearLayout linearLayout3,
-      @NonNull RecyclerView recyclerView2, @NonNull TextView typingIndicator) {
+      @NonNull LinearLayout linearLayout4, @NonNull RecyclerView recyclerView2,
+      @NonNull TextView typingIndicator, @NonNull TextView typingIndicatorNote) {
     this.rootView = rootView;
     this.actionLeave = actionLeave;
     this.dateLabel = dateLabel;
@@ -63,8 +70,10 @@ public final class ChatFragmentBinding implements ViewBinding {
     this.imageButton = imageButton;
     this.isOnline = isOnline;
     this.linearLayout3 = linearLayout3;
+    this.linearLayout4 = linearLayout4;
     this.recyclerView2 = recyclerView2;
     this.typingIndicator = typingIndicator;
+    this.typingIndicatorNote = typingIndicatorNote;
   }
 
   @Override
@@ -136,6 +145,12 @@ public final class ChatFragmentBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.linearLayout4;
+      LinearLayout linearLayout4 = ViewBindings.findChildViewById(rootView, id);
+      if (linearLayout4 == null) {
+        break missingId;
+      }
+
       id = R.id.recyclerView2;
       RecyclerView recyclerView2 = ViewBindings.findChildViewById(rootView, id);
       if (recyclerView2 == null) {
@@ -148,8 +163,15 @@ public final class ChatFragmentBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.typingIndicatorNote;
+      TextView typingIndicatorNote = ViewBindings.findChildViewById(rootView, id);
+      if (typingIndicatorNote == null) {
+        break missingId;
+      }
+
       return new ChatFragmentBinding((ConstraintLayout) rootView, actionLeave, dateLabel, editText,
-          imageBack, imageButton, isOnline, linearLayout3, recyclerView2, typingIndicator);
+          imageBack, imageButton, isOnline, linearLayout3, linearLayout4, recyclerView2,
+          typingIndicator, typingIndicatorNote);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
