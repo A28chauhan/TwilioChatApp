@@ -404,11 +404,11 @@ ADDED from F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:79:
 	android:parentActivityName
 		ADDED from F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:84:13-55
 	android:launchMode
-		ADDED from F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:82:13-48
+		ADDED from F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:82:13-55
 	android:windowSoftInputMode
 		ADDED from F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:85:13-54
 	android:noHistory
-		ADDED from F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:81:13-37
+		ADDED from F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:81:13-38
 	android:theme
 		ADDED from F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:83:13-67
 	android:name

@@ -57,7 +57,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(ApiConstants.LOGIN_HCM)
-    Call<JSONObject> loginHCM(@Field("username") String userName, @Field("password") String password, @Field("device") String device);
+    Call<UserResult> loginHCM(@Field("username") String userName, @Field("password") String password, @Field("device") String device);
 
 
 

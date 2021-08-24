@@ -23,6 +23,29 @@ public class ProgramInfo implements Serializable {
     @Expose
     String logoUrl;
 
+    @SerializedName("code")
+    @Expose
+    private String code;
+    @SerializedName("adhoc")
+    @Expose
+    private String adhoc;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getAdhoc() {
+        return adhoc;
+    }
+
+    public void setAdhoc(String adhoc) {
+        this.adhoc = adhoc;
+    }
+
     public long getProgramId() {
         return programId;
     }

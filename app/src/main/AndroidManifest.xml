@@ -78,8 +78,8 @@
 
         <activity
             android:name=".ChatActivity"
-            android:noHistory="true"
-            android:launchMode="singleInstance"
+            android:noHistory="false"
+            android:launchMode="singleInstancePerTask"
             android:theme="@style/Theme.TwilioChatApp.NoActionBar"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden">

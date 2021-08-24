@@ -74,7 +74,8 @@ class FCMListenerService extends FirebaseMessagingService {
 
             String body = remoteMessage.getData().get("twi_body");
             title = remoteMessage.getData().get("author");
-            handleNotification(remoteMessage.getData().values().toString(),body,title);
+            String chId = remoteMessage.getData().get("channel_id");
+            handleNotification(remoteMessage.getData().values().toString(),body,title,chId);
 
         }
 
@@ -86,7 +87,7 @@ class FCMListenerService extends FirebaseMessagingService {
     }
 
     //onDialogInterfaceListener onDialogInterfaceListener;
-    public void handleNotification(String msg,String body,String title){
+    public void handleNotification(String msg,String body,String title,String chId){
         try {
             PrefManager prefManager = new PrefManager(FCMListenerService.this);
             boolean isAppBackGround = Utils.isAppIsInBackground(getApplicationContext());
@@ -96,7 +97,7 @@ class FCMListenerService extends FirebaseMessagingService {
                     NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
                     notificationUtils.playNotificationSound();
                 }
-                showDialogCall(isAppBackGround);
+                showDialogCall(isAppBackGround,chId);
             }else{
                 // If the app is in background, firebase itself handles the notification
                 try {
@@ -185,7 +186,7 @@ class FCMListenerService extends FirebaseMessagingService {
 
     }
 
-    public void showDialogCall(boolean isAppBackground){
+    public void showDialogCall(boolean isAppBackground,String chId){
         if(!isAppBackground){
             PrefManager prefManager =new PrefManager(FCMListenerService.this);
 
@@ -195,7 +196,7 @@ class FCMListenerService extends FirebaseMessagingService {
                // onDialogInterfaceListener.onSuccess();
             }else{
                 OnDialogInterfaceListener onDialogInterfaceListener = MainActivity.onDialogInterfaceListener;
-                onDialogInterfaceListener.onSuccess();
+                onDialogInterfaceListener.onSuccess(chId);
             }
         }
     }

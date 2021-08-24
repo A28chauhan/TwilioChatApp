@@ -51,7 +51,7 @@ class TwilioApplication extends Application {
     }
 
     public void showToast(final String text, final int duration){
-        Log.d("TwilioApplication", text);
+        Logs.d("TwilioApplication", text);
         if(isVisible){
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override

@@ -268,9 +268,9 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                         .putString("realm", "us1")
                         .putString("ttl", "3000").commit();
 
-                attemptLogin();
+               // attemptLogin();
                 // by pass with nurse login
-                //loginWithNurse();
+                loginWithNurse();
 
             }
         });
@@ -300,18 +300,70 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     public void loginWithNurse(){
 
-        fetchUserDetails(null);
-        /*String email =binding.username.getText().toString();
+        //fetchUserDetails(null);
+        String email =binding.username.getText().toString();
         String password = binding.password.getText().toString();
         apiService =null;
         apiService = ApiClient.getClient1().create(ApiInterface.class);
-        Call<JSONObject> call = apiService.loginHCM(email,password,Constants.X_DRO_SOURCE);
+        Call<UserResult> call = apiService.loginHCM(email,password,Constants.X_DRO_SOURCE);
 
-        call.enqueue(new Callback<JSONObject>() {
+        call.enqueue(new Callback<UserResult>() {
             @Override
-            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+            public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                 // return new Result.Success<>(fakeUser);
                 try {
+                    int code = response.raw().code();
+                    if (code<= Constants.BAD_REQUEST) {
+                        if(response.body() != null){
+                           // String token = response.headers().get("x-dro-token");
+                           // prefManager.setStringValue(PrefConstants.TOKEN,token);
+                           // prefManager.setStringValue(PrefConstants.SET_PASSWORD,passwordEncrypt);
+                            UserResult userResult = response.body();
+                            if (userResult != null) {
+                                //surveyResultData(surveyResult);
+                                userResultData(userResult);
+                            }
+                        }else{
+                            try {
+                                unloadProgress();
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                String message = jObjError.getString("message");
+                                try {
+                                    if(message.equals("Invalid username/password")){
+                                        // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD);
+                                    }else if(message.contains("Invalid username/password. Your")){
+                                        // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD_ACCOUNT_LOCK);
+                                    }else if(message.contains("User Account Locked")){
+                                        // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_LOCKED);
+                                    }else if(message.contains("User Account Disabled")){
+                                        // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_DISABLED);
+                                    }else{
+                                        // message =message;
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                binding.textPassword.setError(message);
+                                // textInputEmailLayout.setError(message);
+                                focusView = binding.textPassword;
+                                cancel = true;
+                                focusView.requestFocus();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }else if(code == Constants.INTERNAL_SERVER_ERROR){
+                        //login(user);
+                        unloadProgress();
+                        Utils.showToast("Error : "+code,LoginActivity.this);
+                    }else{
+                        unloadProgress();
+                        Utils.showToast("Error : "+code,LoginActivity.this);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                /*try {
                     int code = response.raw().code();
                     if (code<= Constants.BAD_REQUEST) {
                         fetchUserDetails(response.body().toString());
@@ -325,15 +377,15 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
             }
 
             @Override
-            public void onFailure(Call<JSONObject> call, Throwable t) {
+            public void onFailure(Call<UserResult> call, Throwable t) {
                 Utils.showToast(t.getMessage(),LoginActivity.this);
                 unloadProgress();
             }
-        });*/
+        });
 
 
     }

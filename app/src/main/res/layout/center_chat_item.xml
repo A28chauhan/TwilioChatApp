@@ -132,6 +132,7 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center|right"
                 android:text="AM"
+                android:drawableRight="@drawable/ic_double_tick_nsend_indicator"
                 android:textAlignment="center"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@android:color/black"

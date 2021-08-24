@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.carematix.twiliochatapp.adapter.LeftChatAdapter;
 import com.carematix.twiliochatapp.adapter.UserListAdapter;
 import com.carematix.twiliochatapp.application.ChatClientManager;
 import com.carematix.twiliochatapp.application.SessionManager;
@@ -31,7 +30,6 @@ import com.carematix.twiliochatapp.architecture.viewModel.UserChannelListViewMod
 import com.carematix.twiliochatapp.architecture.viewModel.UserChannelViewModel;
 import com.carematix.twiliochatapp.architecture.viewModel.UserChatViewModel;
 import com.carematix.twiliochatapp.architecture.viewModel.UserListViewModel;
-import com.carematix.twiliochatapp.bean.accesstoken.TokenResponse;
 import com.carematix.twiliochatapp.bean.fetchChannel.ChannelDetails;
 import com.carematix.twiliochatapp.bean.userList.Data;
 import com.carematix.twiliochatapp.bean.userList.User;
@@ -48,11 +46,8 @@ import com.carematix.twiliochatapp.preference.PrefManager;
 import com.carematix.twiliochatapp.restapi.ApiClient;
 import com.carematix.twiliochatapp.restapi.ApiInterface;
 import com.carematix.twiliochatapp.twilio.ChannelManager;
-import com.carematix.twiliochatapp.twilio.ChannelModel;
-import com.carematix.twiliochatapp.twilio.CustomChannelComparator;
 import com.carematix.twiliochatapp.twilio.ToastStatusListener;
 import com.carematix.twiliochatapp.ui.login.LoginActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,10 +55,6 @@ import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,20 +64,13 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.twilio.chat.CallbackListener;
 import com.twilio.chat.Channel;
-import com.twilio.chat.ChannelDescriptor;
 import com.twilio.chat.Channels;
 import com.twilio.chat.ChatClient;
 import com.twilio.chat.ChatClientListener;
 import com.twilio.chat.ErrorInfo;
-import com.twilio.chat.Paginator;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,13 +81,12 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
     private ActivityMainBinding binding;
     public PrefManager prefManager;
 
-    public static int val=0;
     RecyclerView mRecyclerView;
     private ChatClientManager chatClientManager;
 
-    private Map<String, ChannelModel> channels = new HashMap<String,ChannelModel>();
     Channels channelsObject;
     private ChannelManager channelManager;
+    Channel channel=null;
 
     private static MainActivity mainActivity = null;
     SharedPreferences sharedPreferences=null;
@@ -114,23 +97,24 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
 
     public static OnDialogInterfaceListener onDialogInterfaceListener=new OnDialogInterfaceListener() {
         @Override
-        public void onSuccess() {
-            mainActivity.onClickSyncListener.onSyncSuccess();
+        public void onSuccess(String channelId) {
+            mainActivity.onClickSyncListener.onSyncSuccess(channelId);
         }
     };
 
     OnClickSyncListener onClickSyncListener = new OnClickSyncListener() {
         @Override
-        public void onSyncSuccess() {
-            loadLastMessagesIndex();
+        public void onSyncSuccess(String channelId) {
+            loadLastMessagesIndex(channelId);
         }
     };
-    public void loadLastMessagesIndex(){
-            getChannels();
+    public void loadLastMessagesIndex(String channelId){
+           // getChannels();
+        getChannels(channelId);
     }
 
     public interface OnClickSyncListener {
-        void onSyncSuccess();
+        void onSyncSuccess(String channelId);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,8 +141,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
 
             FirebaseMessaging.getInstance().setAutoInitEnabled(true);
             //setAnalyticsCollectionEnabled(true);
-            LeftChatAdapter.unConsumed = 0;
-            val =0;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -208,95 +191,43 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            getChannels();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     // allViewModel,channelViewModel,userChannelViewModel
     @Override
-    public void onClick(int attendeeProgramUserId, String programUserId, int pos, final Map<String, ChannelModel> channels1,String UserName) {
+    public void onClick(int attendeeProgramUserId, String programUserId, int pos, final Channel channels1,String UserName) {
 
         try {
             String name = UserName;
             String type1= String.valueOf(attendeeProgramUserId);
 
-            channelViewModel.getChannelDetails(programUserId,String.valueOf(attendeeProgramUserId)).observe(this,channelLists -> {
-            if(channelLists.size() > 0){
-                ChannelList channelList=channelLists.get(channelLists.size()-1);
+            if(channels1 !=  null){
 
-                Map<String, ChannelModel> result = new HashMap<String, ChannelModel>();
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    result = channels1.entrySet()
-                            .stream().filter(channelModel -> channelModel.getValue().getSid().equals(channelList.getChannelSid()))
-                            .map(Map.Entry::getValue)
-                            .collect(Collectors.toMap(ChannelModel::getSid, channelModel -> channelModel));
-                }else{
-                    // android version is less or less then <= 23
-                    for( ChannelModel channelModel: channels1.values()){
-                        if(channelModel.getSid().equals(channelList.getChannelSid())){
-                            result.putAll(channels1);
-                            break;
-                        }
+                if(channels1.getSid() != null)
+                    if(channels1.getStatus() == Channel.ChannelStatus.JOINED){
+                        Intent intent =new Intent(MainActivity.this, ChatActivity.class);
+                        intent.putExtra(Constants.EXTRA_ID,channels1.getSid());
+                        intent.putExtra(Constants.EXTRA_CHANNEL, (Parcelable)channels1);
+                        intent.putExtra(Constants.EXTRA_NAME,name);
+                        intent.putExtra(Constants.EXTRA_TYPE,type1);
+                        MainActivity.this.startActivity(intent);
+                        MainActivity.this.finish();
+
+                    }else{
+                        channels1.join(new ToastStatusListener("Successfully joined channel","Failed to join channel"){
+                        });
+                        Intent intent =new Intent(MainActivity.this, ChatActivity.class);
+                        intent.putExtra(Constants.EXTRA_ID,channels1.getSid());
+                        intent.putExtra(Constants.EXTRA_CHANNEL, (Parcelable)channels1);
+                        intent.putExtra(Constants.EXTRA_NAME,name);
+                        intent.putExtra(Constants.EXTRA_TYPE,type1);
+                        MainActivity.this.startActivity(intent);
+                        MainActivity.this.finish();
                     }
-                }
-                if(result.values().size() > 0){
-                    for(ChannelModel  channelModel: result.values()){
-                        if(channelModel.getSid() != null)
-                            if(channelModel.getStatus() == Channel.ChannelStatus.JOINED){
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        channelModel.getChannel(new CallbackListener<Channel>() {
-                                            @Override
-                                            public void onSuccess(Channel channel) {
-                                                Intent intent =new Intent(MainActivity.this, ChatActivity.class);
-                                                intent.putExtra(Constants.EXTRA_ID,channelModel.getSid());
-                                                intent.putExtra(Constants.EXTRA_CHANNEL, (Parcelable)channel);
-                                                intent.putExtra(Constants.EXTRA_NAME,name);
-                                                intent.putExtra(Constants.EXTRA_TYPE,type1);
-                                                MainActivity.this.startActivity(intent);
-                                                MainActivity.this.finish();
-
-                                            }
-                                        });
-                                    }
-                                },0);
-                            }else{
-                                channelModel.join(new ToastStatusListener("Successfully joined channel","Failed to join channel"){
-                                });
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        channelModel.getChannel(new CallbackListener<Channel>() {
-                                            @Override
-                                            public void onSuccess(Channel channel) {
-                                                Intent intent =new Intent(MainActivity.this, ChatActivity.class);
-                                                intent.putExtra(Constants.EXTRA_ID,channelModel.getSid());
-                                                intent.putExtra(Constants.EXTRA_CHANNEL, (Parcelable)channel);
-                                                intent.putExtra(Constants.EXTRA_NAME,name);
-                                                intent.putExtra(Constants.EXTRA_TYPE,type1);
-                                                MainActivity.this.startActivity(intent);
-                                                MainActivity.this.finish();
-
-                                            }
-                                        });
-                                    }
-                                },100);
-                            }
-                    }
-                }
-                else{
-                    Utils.showToast("Channel not found",this);
-                }
 
             }else{
                 Utils.showToast("Channel not found",this);
             }
-
-            });
         } catch (Exception e) {
             e.printStackTrace();
             Utils.showToast("Channel not found",this);
@@ -305,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
     }
 
     @Override
-    public void onLongClickListener(int attendeeProgramUserId, String programUserId, final Map<String, ChannelModel> channels1,String UserName) {
+    public void onLongClickListener(int attendeeProgramUserId, String programUserId, final Channel channels1,String UserName) {
 
     }
 
@@ -329,10 +260,9 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
     @Override
     protected void onResume() {
         try {
-            setData();
+            //setData();
             setupListView();
             getUserListDetails();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -343,7 +273,6 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         allViewModel.getAllList().observe(this,userAllLists -> {
             if(userAllLists.size() > 0){
                 userListAdapter.addItem(userAllLists);
-                //arrayList.addAll(userAllLists);
             }
         });
     }
@@ -358,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         try {
 
-            userListAdapter=new UserListAdapter(this,arrayList,this,channels);
+            userListAdapter=new UserListAdapter(this,arrayList,this,channel);
             mRecyclerView.setAdapter(userListAdapter);
             userListAdapter.notifyDataSetChanged();
 
@@ -369,6 +298,8 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
     }
     ApiInterface apiServiceUser=null,apiServiceChannel=null;
     public void getAllUserListCall(){
+
+        apiServiceUser =null;
         showProgressDialog1();
         String roleId = prefManager.getStringValue(PrefConstants.TWILIO_ROLE_ID);
         String programUserId = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
@@ -435,22 +366,26 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
     }
 
     public void setAllChannel(Response<ChannelDetails> response,int attendProgramUserId){
-
+        String sid="";
         try {
             String programUserId = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
             com.carematix.twiliochatapp.bean.fetchChannel.Data data=  response.body().getData();
-            String sid=data.getChannelSid();
+            sid=data.getChannelSid();
 
             ChannelList channelList=new ChannelList(programUserId,String.valueOf(attendProgramUserId),sid);
             channelViewModel.insert(channelList);
 
         } catch (Exception e) {
             e.printStackTrace();
+            sid="";
         }
 
         try {
             Logs.d("call channel ","call channel list");
-            getChannels();
+            if(!sid.equals("")){
+                getChannels(sid);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -459,6 +394,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
 
     public void getChannelList(final int attendeeProgramUserId){
 
+        apiServiceChannel=null;
         String programUserId = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
         apiServiceChannel = ApiClient.getClient1().create(ApiInterface.class);
         Call<ChannelDetails> call = apiServiceChannel.fetchChannel(programUserId,String.valueOf(attendeeProgramUserId), Constants.X_DRO_SOURCE);
@@ -519,7 +455,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
             if (chatClientManager.getChatClient() == null) {
                 initializeClient();
             } else {
-                getChannels();
+                //setData();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -536,7 +472,9 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         chatClientManager.connectClient(new TaskCompletionListener<Void, String>() {
             @Override
             public void onSuccess(Void aVoid) {
-                getChannels();
+                //getChannels();
+                setData();
+                //stopActivityIndicator();
             }
 
             @Override
@@ -546,7 +484,50 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         });
     }
 
-    public void getChannels(){
+
+    public void getChannels(String sid){
+        //  stopActivityIndicator();
+
+        try {
+            //if (channelsObject == null) return;
+            if (chatClientManager == null || chatClientManager.getChatClient() == null) return;
+
+            Logs.d("get channel call","channel call details.");
+            if (channelsObject == null){
+                channelsObject = chatClientManager.getChatClient().getChannels();
+            }
+
+
+            channelsObject.getChannel(sid, new CallbackListener<Channel>() {
+                @Override
+                public void onSuccess(Channel channel) {
+                    refreshChannel(channel);
+                }
+            });
+            channelManager.setChannelListener(MainActivity.this);
+
+           // refreshChannel(channel);
+
+            try {
+                setFCMToken();
+                stopActivityIndicator();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                showDialog1(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+   /* public void getChannels(){
       //  stopActivityIndicator();
 
         try {
@@ -574,7 +555,8 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
             channelManager.setChannelListener(MainActivity.this);
 
 
-           /* try {
+
+           *//* try {
                 ChatClient chatClient=chatClientManager.getChatClient();
                 chatClient.getChannels().getPublicChannelsList(new CallbackListener<Paginator<ChannelDescriptor>>() {
                     @Override
@@ -594,15 +576,15 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
                 });
             } catch (Exception e) {
                 e.printStackTrace();
-            }*/
+            }*//*
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
-    private void getChannelsPage(Paginator<ChannelDescriptor> paginator) {
+   /* private void getChannelsPage(Paginator<ChannelDescriptor> paginator) {
         try {
             for (ChannelDescriptor cd : paginator.getItems()) {
                 Logs.e("HASNEXTPAGE","Adding channel descriptor for sid|"+cd.getSid()+"| friendlyName "+cd.getFriendlyName());
@@ -610,9 +592,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
             }
 
             if (paginator.hasNextPage()) {
-
                 Logs.e("HASNEXTPAGE","Pagginator call..");
-
                 paginator.requestNextPage(new CallbackListener<Paginator<ChannelDescriptor>>() {
                     @Override
                     public void onSuccess(Paginator<ChannelDescriptor> channelDescriptorPaginator) {
@@ -651,7 +631,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void setFCMToken(){
         try {
@@ -663,7 +643,38 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         }
     }
 
-    public void refreshChannelList(){
+    public void refreshChannel(Channel channel){
+
+        try {
+            if(channel !=  null){
+                userChannelViewModel.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Logs.d("reftreshChannelList","channels: "+channel.getSid()+" Name :"+channel.getFriendlyName());
+            channel.getSid();
+            UserChannelList userChannelList=new UserChannelList();
+            userChannelList.setSid(channel.getSid());
+            userChannelList.setFriendlyName(channel.getFriendlyName());
+            userChannelViewModel.insert(userChannelList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Logs.d("adapter call","channels: "+channel.getSid()+" Name :"+channel.getFriendlyName());
+                userListAdapter.addItem(channel);
+                userListAdapter.notifyDataSetChanged();
+            }
+        });
+
+    }
+   /* public void refreshChannelList(){
         try {
 
             List list = new LinkedList(channels.values());
@@ -696,7 +707,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @WorkerThread
     private void showProgressDialog1(){
@@ -772,8 +783,8 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
                                                         public void onSuccess()
                                                         {
                                                             super.onSuccess();
-                                                            channels.put(channel.getSid(), new ChannelModel(channel));
-                                                            refreshChannelList();
+                                                            //channels.put(channel.getSid(), new ChannelModel(channel));
+                                                            refreshChannel(channel);
                                                         }
                                                     });
                                                     incomingChannelInvite = null;
@@ -877,40 +888,48 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
     @Override
     public void onChannelJoined(Channel channel) {
         Log.d("JoinChannel ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-        channels.put(channel.getSid(), new ChannelModel(channel));
-        refreshChannelList();
+        //channels.put(channel.getSid(), new ChannelModel(channel));
+        refreshChannel(channel);
         //refreshChannels();
     }
     @Override
     public void onChannelInvited(Channel channel) {
         Log.d("JoinChannel ","Received onChannelInvited callback for channel |" + channel.getFriendlyName() + "|");
-        channels.put(channel.getSid(), new ChannelModel(channel));
-        refreshChannelList();
+        //channels.put(channel.getSid(), new ChannelModel(channel));
+        refreshChannel(channel);
         //refreshChannels();
         showIncomingInvite(channel);
     }
     @Override
     public void onChannelAdded(Channel channel) {
-        Log.d("ChannelAdded ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-        channels.put(channel.getSid(),new ChannelModel(channel));
-        refreshChannelList();
+        try {
+            Log.d("ChannelAdded ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
+            //channels.put(channel.getSid(),new ChannelModel(channel));
+            getChannels(channel.getSid());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void onChannelUpdated(Channel channel, Channel.UpdateReason updateReason) {
         Log.d("ChannelUpdated ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-        channels.put(channel.getSid(),new ChannelModel(channel));
-        refreshChannelList();
+        //channels.put(channel.getSid(),new ChannelModel(channel));
+        getChannels(channel.getSid());
     }
     @Override
     public void onChannelDeleted(Channel channel) {
-        Log.d("ChannelDeleted ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-        channels.remove(channel.getSid());
-        refreshChannelList();
+        try {
+            Log.d("ChannelDeleted ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
+            //channel.remove(channel.getSid());
+            setData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void onChannelSynchronizationChange(Channel channel) {
         Log.d("ChannelSyncChange ","onChannelSynchronizationChange |" + channel.getFriendlyName() + "|");
-        refreshChannelList();
+        getChannels(channel.getSid());
     }
     @Override
     public void onError(ErrorInfo errorInfo) {
@@ -976,34 +995,4 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         MainActivity.this.finish();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-/*    BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController); */

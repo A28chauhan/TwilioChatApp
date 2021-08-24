@@ -12,7 +12,7 @@
 
     <dimen name="padding">10dp</dimen>
 
-    <dimen name="margin_bottom_chat">60dp</dimen>
+    <dimen name="margin_bottom_chat">72dp</dimen>
 
 
     <dimen name="margin_left_chat">60dp</dimen>

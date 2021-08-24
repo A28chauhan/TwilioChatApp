@@ -58,13 +58,12 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
     PrefManager prefManager;
 
     Channel channel;
-    private Map<String, ChannelModel> channels = new HashMap<String,ChannelModel>();
 
-    public UserListAdapter(Context mContext, ArrayList<UserAllList> arrayList, OnclickListener onclickListener,Map<String, ChannelModel> channelList){
+    public UserListAdapter(Context mContext, ArrayList<UserAllList> arrayList, OnclickListener onclickListener,Channel channelList){
         this.context=mContext;
         this.arrayList = arrayList;
         this.onclickListener =onclickListener;
-        this.channels=channelList;
+        this.channel=channelList;
         prefManager=new PrefManager(context);
         try {
             userListviewModel =new ViewModelProvider((MainActivity)mContext).get(UserListViewModel.class);
@@ -85,10 +84,20 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
         }
     }
 
-    public void addItem(Map<String, ChannelModel> channels1){
+    /*public void addItem(Map<String, ChannelModel> channels1){
         try {
             //channels.clear();
-            this.channels = channels1;
+            //this.channels = channels1;
+            //notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
+
+    public void addItem(Channel channels1){
+        try {
+            this.channel = channels1;
+            //getConsumedDataSet(mHolder,mHolder.getAdapterPosition());
             notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,7 +124,8 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
         holder.textView.setText(name+" "+lastName);
         attendeeProgramId = arrayList.get(position).getDroProgramUserId();
         try {
-            getConsumedDataSet(attendeeProgramId,holder,position);
+            //getConsumedDataSet(attendeeProgramId,holder,position);
+            getConsumedDataSet(holder,position);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,7 +136,215 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
     Channel cc;
     String programUserID="",attendeeProgramUserID="";
     String name="";
-    public void getConsumedDataSet(final int attendeeProgramId,final ViewHolder holder,int position){
+
+   // public void getConsumedDataSet(final int attendeeProgramId,final ViewHolder holder,int position){
+    public void getConsumedDataSet(final ViewHolder holder,int position){
+        name ="";
+        if(arrayList.size() > 0){
+            name = arrayList.get(position).getFirstName();
+        }
+            if(channel != null){
+                if(channel.getSid() != null)
+                    if(channel.getStatus() == Channel.ChannelStatus.JOINED){
+                        try {
+                            cc =channel;
+                            cc.getUnconsumedMessagesCount(new CallbackListener<Long>() {
+                                @Override
+                                public void onSuccess(Long aLong) {
+                                    try {
+                                        if(aLong != null){
+                                            if(aLong == 0){
+                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                            }else{
+                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
+                                                holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                            }
+                                        }else{
+                                            holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                            holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                        }
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                        holder.textUnconsumedMessageCount.setVisibility(View.GONE);
+                                    }
+
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            final Messages messagesObject = cc.getMessages();
+                            if (messagesObject != null) {
+                                messagesObject.getLastMessages(1, new CallbackListener<List<Message>>() {
+                                    @Override
+                                    public void onSuccess(List<Message> messages) {
+                                        try {
+                                            messageItemList.clear();
+                                            Members members = cc.getMembers();
+                                            if (messages.size() > 0) {
+                                                messageItemList.add(new MessageItem(messages.get(0), members, name));
+                                                MessageItem messageItem=messageItemList.get(0);
+                                                holder.textView1.setText(messageItem.getMessage().getMessageBody().toString());
+                                                holder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
+                                                holder.textView1.setVisibility(View.VISIBLE);
+
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        cc= channel;
+                        try {
+                            cc.getUnconsumedMessagesCount(new CallbackListener<Long>() {
+                                @Override
+                                public void onSuccess(Long aLong) {
+                                    try {
+                                        if(aLong != null){
+                                            if(aLong == 0){
+                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                            }else{
+                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
+                                                holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                            }
+                                        }else{
+                                            holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                            holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                        holder.textUnconsumedMessageCount.setVisibility(View.GONE);
+                                    }
+
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            final Messages messagesObject = cc.getMessages();
+                            if (messagesObject != null) {
+                                messagesObject.getLastMessages(1, new CallbackListener<List<Message>>() {
+                                    @Override
+                                    public void onSuccess(List<Message> messages) {
+                                        try {
+                                            messageItemList.clear();
+                                            Members members = cc.getMembers();
+                                            if (messages.size() > 0) {
+                                                messageItemList.add(new MessageItem(messages.get(0), members, name));
+                                                MessageItem messageItem=messageItemList.get(0);
+                                                holder.textView1.setText(messageItem.getMessage().getMessageBody().toString());
+                                                holder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
+                                                holder.textView1.setVisibility(View.VISIBLE);
+
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+            }
+
+      //  holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+       // holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+        /*userChannelViewModel.getChannelDetails(programUserID,attendeeProgramUserID).observe((MainActivity)context,channelLists -> {
+                if(channelLists.size() > 0){
+                    ChannelList channelList=channelLists.get(channelLists.size()-1);
+
+                    if(channel != null){
+                        if(channel.getSid() != null)
+                            if(channel.getSid().equals(channelList.getChannelSid())){
+                                if(channel.getStatus() == Channel.ChannelStatus.JOINED){
+
+                                    cc= channel;
+                                    try {
+                                        cc.getUnconsumedMessagesCount(new CallbackListener<Long>() {
+                                            @Override
+                                            public void onSuccess(Long aLong) {
+                                                try {
+                                                    if(aLong != null){
+                                                        if(aLong == 0){
+                                                            holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                            holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                                        }else{
+                                                            holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
+                                                            holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                                        }
+                                                    }else{
+                                                        holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                        holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                                    }
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                    holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                    holder.textUnconsumedMessageCount.setVisibility(View.GONE);
+                                                }
+
+                                            }
+                                        });
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                    try {
+                                        final Messages messagesObject = cc.getMessages();
+                                        if (messagesObject != null) {
+                                            messagesObject.getLastMessages(1, new CallbackListener<List<Message>>() {
+                                                @Override
+                                                public void onSuccess(List<Message> messages) {
+                                                    try {
+                                                        messageItemList.clear();
+                                                        Members members = cc.getMembers();
+                                                        if (messages.size() > 0) {
+                                                            messageItemList.add(new MessageItem(messages.get(0), members, name));
+                                                            MessageItem messageItem=messageItemList.get(0);
+                                                            holder.textView1.setText(messageItem.getMessage().getMessageBody().toString());
+                                                            holder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
+                                                            holder.textView1.setVisibility(View.VISIBLE);
+
+                                                        }
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                    }
+
+                }
+            });*/
+
+
+    }
+
+
+    /*public void getConsumedDataSet(final int attendeeProgramId,final ViewHolder holder,int position){
         name ="";
         if(arrayList.size() > 0){
             name = arrayList.get(position).getFirstName();
@@ -134,6 +352,7 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
 
         programUserID = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
         attendeeProgramUserID= String.valueOf(attendeeProgramId);
+        if(channels.size() > 0)
         userChannelViewModel.getChannelDetails(programUserID,attendeeProgramUserID).observe((MainActivity)context,channelLists -> {
             if(channelLists.size() > 0){
                 ChannelList channelList=channelLists.get(channelLists.size()-1);
@@ -153,144 +372,147 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                             if(channelModel != null){
                                 if(channelModel.getSid() != null)
                                     if(channelModel.getStatus() == Channel.ChannelStatus.JOINED){
-                                        new Handler().postDelayed(new Runnable() {
+                                        channelModel.getChannel(new CallbackListener<Channel>() {
+                                            @Override
+                                            public void onSuccess(Channel channel1) {
+                                                cc= channel1;
+                                                try {
+                                                    cc.getUnconsumedMessagesCount(new CallbackListener<Long>() {
+                                                        @Override
+                                                        public void onSuccess(Long aLong) {
+                                                            try {
+                                                                if(aLong != null){
+                                                                    if(aLong == 0){
+                                                                        holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                                        holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                                                    }else{
+                                                                        holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
+                                                                        holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                                                    }
+                                                                }else{
+                                                                    holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                                    holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                                                }
+
+                                                            } catch (Exception e) {
+                                                                e.printStackTrace();
+                                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                                holder.textUnconsumedMessageCount.setVisibility(View.GONE);
+                                                            }
+
+                                                        }
+                                                    });
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                                try {
+                                                    final Messages messagesObject = cc.getMessages();
+                                                    if (messagesObject != null) {
+                                                        messagesObject.getLastMessages(1, new CallbackListener<List<Message>>() {
+                                                            @Override
+                                                            public void onSuccess(List<Message> messages) {
+                                                                try {
+                                                                    messageItemList.clear();
+                                                                    Members members = cc.getMembers();
+                                                                    if (messages.size() > 0) {
+                                                                        messageItemList.add(new MessageItem(messages.get(0), members, name));
+                                                                        MessageItem messageItem=messageItemList.get(0);
+                                                                        holder.textView1.setText(messageItem.getMessage().getMessageBody().toString());
+                                                                        holder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
+                                                                        holder.textView1.setVisibility(View.VISIBLE);
+
+                                                                    }
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                        *//*new Handler().postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                channelModel.getChannel(new CallbackListener<Channel>() {
-                                                    @Override
-                                                    public void onSuccess(Channel channel1) {
-                                                        cc= channel1;
-                                                        try {
-                                                            cc.getUnconsumedMessagesCount(new CallbackListener<Long>() {
-                                                                @Override
-                                                                public void onSuccess(Long aLong) {
-                                                                    try {
-                                                                        if(aLong != null){
-                                                                            if(aLong == 0){
-                                                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                                holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
-                                                                            }else{
-                                                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
-                                                                                holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
-                                                                            }
-                                                                        }else{
-                                                                            holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                            holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
-                                                                        }
 
-                                                                    } catch (Exception e) {
-                                                                        e.printStackTrace();
-                                                                        holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                        holder.textUnconsumedMessageCount.setVisibility(View.GONE);
-                                                                    }
-
-                                                                }
-                                                            });
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-
-                                                        try {
-                                                            final Messages messagesObject = cc.getMessages();
-                                                            if (messagesObject != null) {
-                                                                messagesObject.getLastMessages(1, new CallbackListener<List<Message>>() {
-                                                                    @Override
-                                                                    public void onSuccess(List<Message> messages) {
-                                                                        try {
-                                                                            messageItemList.clear();
-                                                                            Members members = cc.getMembers();
-                                                                            if (messages.size() > 0) {
-                                                                                messageItemList.add(new MessageItem(messages.get(0), members, name));
-                                                                                MessageItem messageItem=messageItemList.get(0);
-                                                                                holder.textView1.setText(messageItem.getMessage().getMessageBody().toString());
-                                                                                holder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
-                                                                                holder.textView1.setVisibility(View.VISIBLE);
-
-                                                                            }
-                                                                        } catch (Exception e) {
-                                                                            e.printStackTrace();
-                                                                        }
-                                                                    }
-                                                                });
-                                                            }
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
-                                                });
                                             }
-                                        },0);
+                                        },0);*//*
                                     }else{
                                         // channelModel.join(new ToastStatusListener("Successfully joined channel","Failed to join channel"){});
-                                        new Handler().postDelayed(new Runnable() {
+                                        *//*new Handler().postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                channelModel.getChannel(new CallbackListener<Channel>() {
-                                                    @Override
-                                                    public void onSuccess(Channel channel1) {
 
-                                                        cc= channel1;
-                                                        try {
-                                                            cc.getUnconsumedMessagesCount(new CallbackListener<Long>() {
-                                                                @Override
-                                                                public void onSuccess(Long aLong) {
-                                                                    try {
-                                                                        if(aLong != null){
-                                                                            if(aLong == 0){
-                                                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                                holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
-                                                                            }else{
-                                                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
-                                                                                holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
-                                                                            }
-                                                                        }else{
-                                                                            holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                            holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
-                                                                        }
-                                                                    } catch (Exception e) {
-                                                                        e.printStackTrace();
-                                                                        holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                        holder.textUnconsumedMessageCount.setVisibility(View.GONE);
-                                                                    }
-
-                                                                }
-                                                            });
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-
-                                                        try {
-                                                            final Messages messagesObject = cc.getMessages();
-                                                            if (messagesObject != null) {
-                                                                messagesObject.getLastMessages(1, new CallbackListener<List<Message>>() {
-                                                                    @Override
-                                                                    public void onSuccess(List<Message> messages) {
-                                                                        try {
-                                                                            messageItemList.clear();
-                                                                            Members members = cc.getMembers();
-                                                                            if (messages.size() > 0) {
-                                                                                messageItemList.add(new MessageItem(messages.get(0), members, name));
-                                                                                MessageItem messageItem=messageItemList.get(0);
-                                                                                holder.textView1.setText(messageItem.getMessage().getMessageBody().toString());
-                                                                                holder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
-                                                                                holder.textView1.setVisibility(View.VISIBLE);
-
-                                                                            }
-                                                                        } catch (Exception e) {
-                                                                            e.printStackTrace();
-                                                                        }
-                                                                    }
-                                                                });
-                                                            }
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-
-                                                    }
-                                                });
                                             }
-                                        },100);
+                                        },100);*//*
+                                        channelModel.getChannel(new CallbackListener<Channel>() {
+                                            @Override
+                                            public void onSuccess(Channel channel1) {
+
+                                                cc= channel1;
+                                                try {
+                                                    cc.getUnconsumedMessagesCount(new CallbackListener<Long>() {
+                                                        @Override
+                                                        public void onSuccess(Long aLong) {
+                                                            try {
+                                                                if(aLong != null){
+                                                                    if(aLong == 0){
+                                                                        holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                                        holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                                                    }else{
+                                                                        holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
+                                                                        holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                                                    }
+                                                                }else{
+                                                                    holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                                    holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                                                }
+                                                            } catch (Exception e) {
+                                                                e.printStackTrace();
+                                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                                holder.textUnconsumedMessageCount.setVisibility(View.GONE);
+                                                            }
+
+                                                        }
+                                                    });
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                try {
+                                                    final Messages messagesObject = cc.getMessages();
+                                                    if (messagesObject != null) {
+                                                        messagesObject.getLastMessages(1, new CallbackListener<List<Message>>() {
+                                                            @Override
+                                                            public void onSuccess(List<Message> messages) {
+                                                                try {
+                                                                    messageItemList.clear();
+                                                                    Members members = cc.getMembers();
+                                                                    if (messages.size() > 0) {
+                                                                        messageItemList.add(new MessageItem(messages.get(0), members, name));
+                                                                        MessageItem messageItem=messageItemList.get(0);
+                                                                        holder.textView1.setText(messageItem.getMessage().getMessageBody().toString());
+                                                                        holder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
+                                                                        holder.textView1.setVisibility(View.VISIBLE);
+
+                                                                    }
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                            }
+                                        });
                                     }
+
                             }
                         }
                     }else{
@@ -302,65 +524,64 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                                 if(channelModel.getSid() != null)
                                     if(channelModel.getSid().equals(channelList.getChannelSid())){
                                         if(channelModel.getStatus() == Channel.ChannelStatus.JOINED){
-                                            new Handler().postDelayed(new Runnable() {
+                                            channelModel.getChannel(new CallbackListener<Channel>() {
+                                                @Override
+                                                public void onSuccess(Channel channel1) {
+                                                    cc= channel1;
+                                                    try {
+                                                        cc.getUnconsumedMessagesCount(new CallbackListener<Long>() {
+                                                            @Override
+                                                            public void onSuccess(Long aLong) {
+                                                                try {
+                                                                    if(aLong != null){
+                                                                        if(aLong == 0){
+                                                                            holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                                            holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                                                        }else{
+                                                                            holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
+                                                                            holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                                                        }
+                                                                    }else{
+                                                                        holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                                        holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                                                    }
+
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                    holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                                                    holder.textUnconsumedMessageCount.setVisibility(View.GONE);
+                                                                }
+
+                                                            }
+                                                        });
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                            *//*new Handler().postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    channelModel.getChannel(new CallbackListener<Channel>() {
+
+                                                }
+                                            },0);*//*
+
+                                            try {
+                                                final Messages messagesObject = cc.getMessages();
+                                                if (messagesObject != null) {
+                                                    messagesObject.getLastMessages(1, new CallbackListener<List<Message>>() {
                                                         @Override
-                                                        public void onSuccess(Channel channel1) {
-                                                            cc= channel1;
+                                                        public void onSuccess(List<Message> messages) {
                                                             try {
-                                                                cc.getUnconsumedMessagesCount(new CallbackListener<Long>() {
-                                                                    @Override
-                                                                    public void onSuccess(Long aLong) {
-                                                                        try {
-                                                                            if(aLong != null){
-                                                                                if(aLong == 0){
-                                                                                    holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                                    holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
-                                                                                }else{
-                                                                                    holder.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
-                                                                                    holder.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
-                                                                                }
-                                                                            }else{
-                                                                                holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                                holder.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
-                                                                            }
+                                                                messageItemList.clear();
+                                                                Members members = cc.getMembers();
+                                                                if (messages.size() > 0) {
+                                                                    messageItemList.add(new MessageItem(messages.get(0), members, name));
+                                                                    MessageItem messageItem=messageItemList.get(0);
+                                                                    holder.textView1.setText(messageItem.getMessage().getMessageBody().toString());
+                                                                    holder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
+                                                                    holder.textView1.setVisibility(View.VISIBLE);
 
-                                                                        } catch (Exception e) {
-                                                                            e.printStackTrace();
-                                                                            holder.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                                                            holder.textUnconsumedMessageCount.setVisibility(View.GONE);
-                                                                        }
-
-                                                                    }
-                                                                });
-                                                            } catch (Exception e) {
-                                                                e.printStackTrace();
-                                                            }
-
-                                                            try {
-                                                                final Messages messagesObject = cc.getMessages();
-                                                                if (messagesObject != null) {
-                                                                    messagesObject.getLastMessages(1, new CallbackListener<List<Message>>() {
-                                                                        @Override
-                                                                        public void onSuccess(List<Message> messages) {
-                                                                            try {
-                                                                                messageItemList.clear();
-                                                                                Members members = cc.getMembers();
-                                                                                if (messages.size() > 0) {
-                                                                                    messageItemList.add(new MessageItem(messages.get(0), members, name));
-                                                                                    MessageItem messageItem=messageItemList.get(0);
-                                                                                    holder.textView1.setText(messageItem.getMessage().getMessageBody().toString());
-                                                                                    holder.textTime.setText(Utils.setTime(messageItem.getMessage().getDateCreatedAsDate()));
-                                                                                    holder.textView1.setVisibility(View.VISIBLE);
-
-                                                                                }
-                                                                            } catch (Exception e) {
-                                                                                e.printStackTrace();
-                                                                            }
-                                                                        }
-                                                                    });
                                                                 }
                                                             } catch (Exception e) {
                                                                 e.printStackTrace();
@@ -368,9 +589,11 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                                                         }
                                                     });
                                                 }
-                                            },0);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                         }
-                                        break;
+                                       // break;
                                     }
                             }
 
@@ -382,7 +605,7 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
         });
 
 
-    }
+    }*/
 
     @NonNull
     @Override
@@ -414,7 +637,7 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                     int attendeeProgramUserId = arrayList.get(pos).getDroProgramUserId();
                     String programUserId= prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
                    // String type = arrayList.get(pos).getUserType();
-                    onclickListener.onClick(attendeeProgramUserId,programUserId,pos,channels,name);
+                    onclickListener.onClick(attendeeProgramUserId,programUserId,pos,channel,name);
                     //context.finish();
                 }
             });
@@ -429,7 +652,7 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
 
                    // String name = arrayList.get(pos).getFirstName();
                    // String type = arrayList.get(pos).getUserType();
-                    onclickListener.onClick(attendeeProgramUserId,programUserId,pos,channels,name);
+                    onclickListener.onClick(attendeeProgramUserId,programUserId,pos,channel,name);
                     //context.finish();
                 }
             });
@@ -444,7 +667,7 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                     String programUserId= prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
 
                     // String name = arrayList.get(pos).getFirstName();
-                    onclickListener.onLongClickListener(attendeeProgramUserId,programUserId,channels,name);
+                    onclickListener.onLongClickListener(attendeeProgramUserId,programUserId,channel,name);
                     return false;
                 }
             });
@@ -458,7 +681,7 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                     int attendeeProgramUserId = arrayList.get(pos).getDroProgramUserId();
                     String programUserId= prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
 
-                    onclickListener.onLongClickListener(attendeeProgramUserId,programUserId,channels,name);
+                    onclickListener.onLongClickListener(attendeeProgramUserId,programUserId,channel,name);
                     return false;
                 }
             });
