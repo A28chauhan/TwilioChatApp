@@ -1838,6 +1838,7 @@ int drawable ic_mtrl_chip_close_circle 0x7f08008f
 int drawable ic_notifications_black_24dp 0x7f080090
 int drawable ic_person_24 0x7f080091
 int drawable ic_send_24 0x7f080092
+int drawable ic_single_tick_24 0x7f0800bb
 int drawable image_placeholder 0x7f080093
 int drawable material_cursor_drawable 0x7f080094
 int drawable material_ic_calendar_black_24dp 0x7f080095

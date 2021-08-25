@@ -148,14 +148,13 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
 
         try {
             channelManager = ChannelManager.getInstance();
-
-            String roleId = prefManager.getStringValue(PrefConstants.TWILIO_ROLE_ID);
+           /* String roleId = prefManager.getStringValue(PrefConstants.TWILIO_ROLE_ID);
             ActionBar actionBar =getSupportActionBar();
             if(roleId.equals("1")){
                 actionBar.setTitle("Nurse");
             }else{
                 actionBar.setTitle("Patient");
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -455,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
             if (chatClientManager.getChatClient() == null) {
                 initializeClient();
             } else {
-                //setData();
+                setData();
             }
         } catch (Exception e) {
             e.printStackTrace();

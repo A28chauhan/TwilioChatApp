@@ -12,7 +12,9 @@
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/ic_baseline_send_24.xml" value="0.13148148148148148" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.13148148148148148" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/ic_double_tick_indicator.xml" value="0.28125" />
+        <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/ic_double_tick_nsend_indicator.xml" value="0.1925925925925926" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/ic_person_24.xml" value="0.32916666666666666" />
+        <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/ic_single_tick_24.xml" value="0.1925925925925926" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/my_message.xml" value="0.1574074074074074" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/right_message.xml" value="0.1574074074074074" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/layout/activity_chat.xml" value="0.26510416666666664" />

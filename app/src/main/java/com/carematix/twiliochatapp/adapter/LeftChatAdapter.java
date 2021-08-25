@@ -200,10 +200,10 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Logs.d("chat adapter "," member index :"+member.getLastConsumedMessageIndex()+" message index :"+messageItem.getMessageIndex());
 
             if(member.getLastConsumedMessageIndex() == null){
-                userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_nsend_indicator, 0);
+                userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_single_tick_24, 0);
             }else{
                 if(member.getLastConsumedMessageIndex() != null && member.getLastConsumedMessageIndex() <= messageItem.getMessageIndex()){
-                    userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_nsend_indicator, 0);
+                    userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_single_tick_24, 0);
                 }else{
                     userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_indicator, 0);
                 }

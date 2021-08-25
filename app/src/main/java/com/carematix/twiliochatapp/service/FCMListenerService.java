@@ -94,8 +94,8 @@ class FCMListenerService extends FirebaseMessagingService {
             if (!isAppBackGround) {
                 if(prefManager.getBooleanValue(PrefConstants.PREFERENCE_LOGIN_CHECK)) {
                     // play notification sound
-                    NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
-                    notificationUtils.playNotificationSound();
+                   // NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
+                   // notificationUtils.playNotificationSound();
                 }
                 showDialogCall(isAppBackGround,chId);
             }else{
