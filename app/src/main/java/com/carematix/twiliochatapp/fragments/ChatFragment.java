@@ -317,12 +317,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     Handler handler1 = new Handler();
-    Handler handler = new Handler();
-    Runnable runnable1,runnable;
-    int delay1 = 5000,delay = 5000;
+    Runnable runnable1;
+    int delay1 = 5000;
 
     String currentDate="";
     public void setDateLabel(Message messageItem){
@@ -350,6 +350,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager)chatFragmentBinding.recyclerView2.getLayoutManager();
         return linearLayoutManager.findFirstVisibleItemPosition();
     }
+
+
 
     public ChannelListener channelListener =new ChannelListener() {
         @Override
@@ -548,7 +550,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
     public void updateBar(){
 
         try {
+
             chatFragmentBinding.typingIndicator.setText(userName);
+
 
             if(type != null){
                 chatClientManager.getChatClient().getUsers().getAndSubscribeUser(type, new CallbackListener<User>() {
@@ -868,7 +872,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                     chatAdapter.notifyDataSetChanged();
                     scrollDown();
                     try {
-                        setAllConsumedMessages((messages.get(messages.size()-1).getMessageIndex()));
+                        if(messageItemList.size() > 0){
+                            setAllConsumedMessages((messages.get(messages.size()-1).getMessageIndex()));
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -902,6 +908,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(R.string.leave_msg_details)
                     .setTitle(R.string.leave_msg);
+            builder.setCancelable(false);
             builder.setPositiveButton(R.string.action_leave, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User clicked OK button
@@ -985,6 +992,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(msg)
                     .setTitle(R.string.leave_msg);
+            builder.setCancelable(false);
             builder.setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User clicked OK button

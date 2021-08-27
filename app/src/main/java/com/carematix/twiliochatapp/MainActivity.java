@@ -86,33 +86,8 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
     private ChannelManager channelManager;
     Channel channel=null;
 
-    private static MainActivity mainActivity = null;
     SharedPreferences sharedPreferences=null;
 
-    public MainActivity(){
-        mainActivity = MainActivity.this;
-    }
-
-    public static OnDialogInterfaceListener onDialogInterfaceListener=new OnDialogInterfaceListener() {
-        @Override
-        public void onSuccess(String channelId) {
-            mainActivity.onClickSyncListener.onSyncSuccess(channelId);
-        }
-    };
-
-    OnClickSyncListener onClickSyncListener = new OnClickSyncListener() {
-        @Override
-        public void onSyncSuccess(String channelId) {
-            loadLastMessagesIndex(channelId);
-        }
-    };
-    public void loadLastMessagesIndex(String channelId){
-           getChannels(channelId);
-    }
-
-    public interface OnClickSyncListener {
-        void onSyncSuccess(String channelId);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,14 +127,6 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
                 prefManager.setBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE,false);
             }else{
                 stopActivityIndicator();
-                /*allViewModel.getAllList().observe(this,userAllLists -> {
-                    if(userAllLists.size() > 0){
-                        for(UserAllList userAllList : userAllLists){
-
-                           // getActiveChannelList(userAllList.getDroProgramUserId());
-                        }
-                    }
-                });*/
             }
 
         } catch (Exception e) {
@@ -175,6 +142,8 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
 
             if(channels !=  null){
                 if(channels.getSid() != null){
+
+                    Logs.d("onCLick ", " onclicjk :"+channels.getStatus());
                     if(channels.getStatus() == Channel.ChannelStatus.JOINED){
 
                         callActivity(channels,name,type1);
@@ -189,10 +158,14 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
                             @Override
                             public void onError(ErrorInfo errorInfo) {
                                 super.onError(errorInfo);
+                                if(channels.getStatus() == Channel.ChannelStatus.NOT_PARTICIPATING){
+                                    fetchChannel(attendeeProgramUserId,programUserId,UserName);
+                                }
                             }
                         });
 
                     }
+
                 }else{
                     fetchChannel(attendeeProgramUserId,programUserId,UserName);
                 }
@@ -428,7 +401,6 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
                     UserAllList userAllList=new UserAllList(user.getDroUserId(),user.getDroUserRoleId(),
                             user.getFirstName(),user.getLastName(),user.getDroProgramUserId());
                     allViewModel.insert(userAllList);
-                   // getActiveChannelList(user.getDroProgramUserId());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -451,98 +423,6 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
 
 
     }
-
-    public void setAllChannel(Response<ChannelDetails> response,int attendProgramUserId){
-        String sid="";
-        try {
-            String programUserId = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
-            com.carematix.twiliochatapp.bean.fetchChannel.Data data=  response.body().getData();
-            sid=response.body().getData().getChannelSid();
-
-            if(sid != null){
-                if(!(sid.equals(""))){
-                    ChannelList channelList=new ChannelList(programUserId,String.valueOf(attendProgramUserId),sid);
-                    channelViewModel.insert(channelList);
-                }
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            sid="";
-        }
-
-        try {
-            Logs.d("call channel ","call channel list");
-            if(!sid.equals("")){
-                getChannels(sid);
-            }else{
-                stopActivityIndicator();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            stopActivityIndicator();
-        }
-
-    }
-
-    public void getActiveChannelList(final int attendeeProgramUserId){
-
-        apiServiceUser=null;
-        String programUserId = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
-        apiServiceUser = ApiClient.getClient1().create(ApiInterface.class);
-        Call<ChannelDetails> call = apiServiceUser.activeChannel(programUserId,String.valueOf(attendeeProgramUserId), Constants.X_DRO_SOURCE);
-        call.enqueue(new Callback<ChannelDetails>() {
-            @Override
-            public void onResponse(Call<ChannelDetails> call, Response<ChannelDetails> response) {
-                try {
-                    int code = response.code();
-                    if (code == 200) {
-                        setAllChannel(response,attendeeProgramUserId);
-                    }else{
-                        stopActivityIndicator();
-                        showException(String.valueOf(code));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ChannelDetails> call, Throwable t) {
-                stopActivityIndicator();
-                showException(t.getMessage().toString());
-            }
-        });
-
-
-    }
-
-    public void showException(String msg){
-
-        try {
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setMessage(msg)
-                    .setTitle(R.string.Error);
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    try {
-                        dialog.dismiss();
-                        setData();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
 
 
     public void checkTwilioClient(){
@@ -569,9 +449,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         chatClientManager.connectClient(new TaskCompletionListener<Void, String>() {
             @Override
             public void onSuccess(Void aVoid) {
-                //getChannels();
                 setData();
-                //stopActivityIndicator();
             }
 
             @Override
@@ -580,36 +458,6 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
             }
         });
     }
-
-
-    public void getChannels(String sid){
-        //  stopActivityIndicator();
-
-        try {
-            //if (channelsObject == null) return;
-            if (chatClientManager == null || chatClientManager.getChatClient() == null) return;
-
-            Logs.d("get channel call","channel call details.");
-            if (channelsObject == null){
-                channelsObject = chatClientManager.getChatClient().getChannels();
-            }
-
-
-            channelsObject.getChannel(sid, new CallbackListener<Channel>() {
-                @Override
-                public void onSuccess(Channel channel) {
-                    refreshChannel(channel);
-                }
-            });
-
-            channelManager.setChannelListener(this);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
 
     public void setFCMToken(){
         try {
@@ -621,35 +469,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         }
     }
 
-    public void refreshChannel(Channel channel){
 
-        try {
-            userChannelViewModel.insert(new UserChannelList(channel.getSid(),channel.getFriendlyName()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Logs.d("adapter call","channels: "+channel.getSid()+" Name :"+channel.getFriendlyName());
-                userListAdapter.addItem(channel);
-                userListAdapter.notifyDataSetChanged();
-            }
-        });
-
-        try {
-            setFCMToken();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            stopActivityIndicator();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
 
     public ProgressDialog progressDialog;
@@ -702,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
                                                         {
                                                             super.onSuccess();
                                                             //channels.put(channel.getSid(), new ChannelModel(channel));
-                                                            refreshChannel(channel);
+                                                            //refreshChannel(channel);
                                                         }
                                                     });
                                                     incomingChannelInvite = null;
@@ -807,91 +627,87 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
 
     @Override
     public void onChannelJoined(Channel channel) {
-        Logs.d("JoinChannel ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-        refreshChannel(channel);
+        Logs.d("MainActivity onChannelJoined","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
     }
+
     @Override
     public void onChannelInvited(Channel channel) {
-        Logs.d("JoinChannel ","Received onChannelInvited callback for channel |" + channel.getFriendlyName() + "|");
-        refreshChannel(channel);
+        Logs.d("MainActivity onChannelInvited ","Received onChannelInvited callback for channel |" + channel.getFriendlyName() + "|");
         showIncomingInvite(channel);
     }
     @Override
     public void onChannelAdded(Channel channel) {
         try {
-            Logs.d("ChannelAdded ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-            getChannels(channel.getSid());
+            Logs.d("MainActivity onChannelAdded ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     @Override
     public void onChannelUpdated(Channel channel, Channel.UpdateReason updateReason) {
-        Logs.d("ChannelUpdated ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-        getChannels(channel.getSid());
+        Logs.d("MainActivity onChannelUpdated ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
     }
     @Override
     public void onChannelDeleted(Channel channel) {
         try {
-            Logs.d("ChannelDeleted ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-            setData();
+            Logs.d("MainActivity ChannelDeleted ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
+            //setData();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     @Override
     public void onChannelSynchronizationChange(Channel channel) {
-        Logs.d("ChannelSyncChange ","onChannelSynchronizationChange |" + channel.getFriendlyName() + "|");
-        getChannels(channel.getSid());
+        Logs.d("MainActivity ChannelSyncChange ","onChannelSynchronizationChange |" + channel.getFriendlyName() + "|");
     }
     @Override
     public void onError(ErrorInfo errorInfo) {
-        TwilioApplication.get().showToast("Received onError : " , Toast.LENGTH_LONG);
+        TwilioApplication.get().showToast("MainActivity Received onError : " , Toast.LENGTH_LONG);
     }
     @Override
     public void onUserUpdated(com.twilio.chat.User user, com.twilio.chat.User.UpdateReason updateReason) {
-        Logs.d("UserUpdated ","onUserUpdated |" +updateReason.name() + "|");
+        Logs.d("MainActivity UserUpdated ","onUserUpdated |" +updateReason.name() + "|");
 
     }
     @Override
     public void onUserSubscribed(com.twilio.chat.User user) {
-        Logs.d("onUserSubscribed ","onUserSubscribed |" +user.getFriendlyName() + "|");
+        Logs.d("MainActivity onUserSubscribed ","onUserSubscribed |" +user.getFriendlyName() + "|");
     }
     @Override
     public void onUserUnsubscribed(com.twilio.chat.User user) {
-        Logs.d("onUserUnsubscribed ","onUserUnsubscribed |" +user.getFriendlyName() + "|");
+        Logs.d("MainActivity onUserUnsubscribed ","onUserUnsubscribed |" +user.getFriendlyName() + "|");
     }
     @Override
     public void onClientSynchronization(ChatClient.SynchronizationStatus synchronizationStatus) {
-        Logs.d("ChannelSync","Received onChannelJoined callback for channel |" + synchronizationStatus.getValue() + "|");
+        Logs.d("MainActivity ChannelSync","Received onChannelJoined callback for channel |" + synchronizationStatus.getValue() + "|");
     }
     @Override
     public void onNewMessageNotification(String s, String s1, long l) {
-        TwilioApplication.get().showToast("Received onNewMessage push notification : " , Toast.LENGTH_LONG);
+        TwilioApplication.get().showToast("MainActivity Received onNewMessage push notification : " , Toast.LENGTH_LONG);
     }
     @Override
     public void onAddedToChannelNotification(String s) {
-        TwilioApplication.get().showToast("Received onAddedToChannel push notification : " , Toast.LENGTH_LONG);
+        TwilioApplication.get().showToast("MainActivity Received onAddedToChannel push notification : " , Toast.LENGTH_LONG);
     }
     @Override
     public void onInvitedToChannelNotification(String s) {
-        TwilioApplication.get().showToast("Received onNewMessage push notification : " , Toast.LENGTH_LONG);
+        TwilioApplication.get().showToast("MainActivity Received onNewMessage push notification : " , Toast.LENGTH_LONG);
     }
     @Override
     public void onRemovedFromChannelNotification(String s) {
-        TwilioApplication.get().showToast("Received onRemovedFromChannel push notification : " , Toast.LENGTH_LONG);
+        TwilioApplication.get().showToast("MainActivity Received onRemovedFromChannel push notification : " , Toast.LENGTH_LONG);
     }
     @Override
     public void onNotificationSubscribed() {
-        TwilioApplication.get().showToast("Received onNotificationSubscribed push notification : " , Toast.LENGTH_LONG);
+        TwilioApplication.get().showToast("MainActivity Received onNotificationSubscribed push notification : " , Toast.LENGTH_LONG);
     }
     @Override
     public void onNotificationFailed(ErrorInfo errorInfo) {
-        TwilioApplication.get().showToast("Received onNotificationFailed push notification : " , Toast.LENGTH_LONG);
+        TwilioApplication.get().showToast("MainActivity Received onNotificationFailed push notification : " , Toast.LENGTH_LONG);
     }
     @Override
     public void onConnectionStateChange(ChatClient.ConnectionState connectionState) {
-        TwilioApplication.get().showToast("Received onConnectionStateChange push notification : " , Toast.LENGTH_LONG);
+        TwilioApplication.get().showToast("MainActivity Received onConnectionStateChange push notification : " , Toast.LENGTH_LONG);
     }
     @Override
     public void onTokenExpired() {

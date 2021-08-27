@@ -62,7 +62,6 @@ class FCMListenerService extends FirebaseMessagingService {
                     title = "Twilio: New Message";
                 if (type == NotificationPayload.Type.ADDED_TO_CHANNEL)
                     title = "Twilio: Added to Channel";
-                    addTheChannelList();
                 if (type == NotificationPayload.Type.INVITED_TO_CHANNEL)
                     title = "Twilio: Invited to Channel";
                 if (type == NotificationPayload.Type.REMOVED_FROM_CHANNEL)
@@ -92,12 +91,12 @@ class FCMListenerService extends FirebaseMessagingService {
             PrefManager prefManager = new PrefManager(FCMListenerService.this);
             boolean isAppBackGround = Utils.isAppIsInBackground(getApplicationContext());
             if (!isAppBackGround) {
-                if(prefManager.getBooleanValue(PrefConstants.PREFERENCE_LOGIN_CHECK)) {
+                //if(prefManager.getBooleanValue(PrefConstants.PREFERENCE_LOGIN_CHECK)) {
                     // play notification sound
                    // NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
                    // notificationUtils.playNotificationSound();
-                }
-                showDialogCall(isAppBackGround,chId);
+                //}
+                //showDialogCall(isAppBackGround,chId);
             }else{
                 // If the app is in background, firebase itself handles the notification
                 try {
@@ -124,11 +123,12 @@ class FCMListenerService extends FirebaseMessagingService {
         try {
             if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY );
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Constants.KEY_NOTIFICATIONS)
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setContentTitle(title)
+                        .setAutoCancel(true)
                         .setContentText(arr[1])
                         .setContentIntent(pendingIntent)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -139,13 +139,14 @@ class FCMListenerService extends FirebaseMessagingService {
             }else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY );
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Constants.KEY_NOTIFICATIONS)
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setContentTitle(title)
                         .setContentText(arr[1])
+                        .setAutoCancel(true)
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(""))
                         .setContentIntent(pendingIntent)
@@ -166,11 +167,12 @@ class FCMListenerService extends FirebaseMessagingService {
                 notificationManager1.notify(Constants.NOTIFICATION_ID_BIG_IMAGE,  builder.build());
             }else{
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY );
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this, Constants.KEY_NOTIFICATIONS)
                         .setSmallIcon(R.drawable.ic_launcher_background)
                         .setContentTitle(title)
+                        .setAutoCancel(true)
                         .setContentText(arr[1])
                         .setContentIntent(pendingIntent)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -183,25 +185,6 @@ class FCMListenerService extends FirebaseMessagingService {
             e.printStackTrace();
         }
 
-
     }
 
-    public void showDialogCall(boolean isAppBackground,String chId){
-        if(!isAppBackground){
-            PrefManager prefManager =new PrefManager(FCMListenerService.this);
-
-            String bb = prefManager.getStringValue(PrefConstants.WHICH_SCREEN);
-            if(bb.contains("chat")){
-              //  onDialogInterfaceListener = ChatFragment.onDialogInterfaceListener1;
-               // onDialogInterfaceListener.onSuccess();
-            }else{
-                OnDialogInterfaceListener onDialogInterfaceListener = MainActivity.onDialogInterfaceListener;
-                onDialogInterfaceListener.onSuccess(chId);
-            }
-        }
-    }
-
-    public void addTheChannelList(){
-
-    }
 }

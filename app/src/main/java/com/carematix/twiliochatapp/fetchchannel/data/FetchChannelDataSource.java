@@ -21,7 +21,7 @@ public
 class FetchChannelDataSource {
     Result<FetchInDetails> fetchInDetailsResult=null;
     ApiInterface apiService= null;
-    public Result<FetchInDetails> fetchChannel(String attendeeProgramUserId,String programUserId){
+    public Result<FetchInDetails> fetchChannel(final String attendeeProgramUserId,final String programUserId){
         // handle login
         try {
             apiService= null;

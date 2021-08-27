@@ -19,6 +19,11 @@ class FetchChannelView {
         this.userResultResponse = userResultResponse;
     }
 
+    public FetchChannelView(String channelSId, Response<ChannelDetails> userResultResponse) {
+        this.channelSId = channelSId;
+        this.userResultResponse = userResultResponse;
+    }
+
     public String getChannelSId() {
         return channelSId;
     }

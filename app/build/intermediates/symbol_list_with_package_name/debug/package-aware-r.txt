@@ -2749,6 +2749,7 @@ string prompt_email
 string prompt_password
 string search_menu_title
 string status_bar_notification_info_overflow
+string tap_to_start
 string title_activity_main
 string title_dashboard
 string title_home

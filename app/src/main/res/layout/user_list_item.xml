@@ -29,7 +29,7 @@
 
         <TextView
             android:id="@+id/text_user"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif"
@@ -38,11 +38,13 @@
             android:padding="@dimen/padding_text"
             android:text=""
             android:textColor="@android:color/black"
+            android:singleLine="true"
+            android:layout_marginRight="5dp"
             android:textAppearance="?android:textAppearanceMedium"
             android:textStyle="bold"
             android:typeface="sans"
+            app:layout_constraintEnd_toStartOf ="@+id/textView2"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.03"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +53,7 @@
 
         <TextView
             android:id="@+id/text_user_1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif"
@@ -62,6 +64,7 @@
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="@color/back_ground"
             android:typeface="normal"
+            app:layout_constraintEnd_toStartOf ="@+id/textUnconsumedMessageCount"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.03"

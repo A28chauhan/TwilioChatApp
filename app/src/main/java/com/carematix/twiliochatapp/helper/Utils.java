@@ -3,6 +3,7 @@ package com.carematix.twiliochatapp.helper;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -181,5 +182,11 @@ public class Utils {
             e.printStackTrace();
         }
         return timeConvert;
+    }
+
+
+    public static  String getStringResource(int id,Context context) {
+        Resources resources = context.getResources();
+        return resources.getString(id);
     }
 }

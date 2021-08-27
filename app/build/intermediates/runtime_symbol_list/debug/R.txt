@@ -2748,11 +2748,12 @@ int string prompt_email 0x7f1300a3
 int string prompt_password 0x7f1300a4
 int string search_menu_title 0x7f1300a5
 int string status_bar_notification_info_overflow 0x7f1300a6
-int string title_activity_main 0x7f1300a7
-int string title_dashboard 0x7f1300a8
-int string title_home 0x7f1300a9
-int string title_notifications 0x7f1300aa
-int string welcome 0x7f1300ab
+int string tap_to_start 0x7f1300a7
+int string title_activity_main 0x7f1300a8
+int string title_dashboard 0x7f1300a9
+int string title_home 0x7f1300aa
+int string title_notifications 0x7f1300ab
+int string welcome 0x7f1300ac
 int style AlertDialog_AppCompat 0x7f140000
 int style AlertDialog_AppCompat_Light 0x7f140001
 int style AndroidThemeColorAccentYellow 0x7f140002

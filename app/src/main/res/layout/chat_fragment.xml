@@ -40,15 +40,17 @@
 
             <TextView
                 android:id="@+id/typingIndicator"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.8"
                 android:text=""
                 android:layout_marginLeft="5dp"
-                android:textAppearance="?android:textAppearanceSmall"
+                android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white"
+                android:singleLine="true"
                 android:textStyle="normal"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
-                app:layout_constraintEnd_toStartOf="@+id/recyclerView2"
+                app:layout_constraintEnd_toStartOf="@+id/imageBack"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -56,11 +58,13 @@
 
             <TextView
                 android:id="@+id/isOnline"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 android:layout_marginLeft="10dp"
                 android:text=""
-                android:textAppearance="?android:textAppearanceSmall"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:singleLine="true"
                 android:textColor="@color/white"
                 android:textStyle="normal"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
@@ -82,7 +86,7 @@
             android:layout_marginRight="10dp"
             android:gravity="right|center"
             android:layout_gravity="right|center"
-            android:text="leave"
+            android:text="Leave"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/white"
             android:textStyle="normal" />

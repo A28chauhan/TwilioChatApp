@@ -41,7 +41,7 @@ public class FetchChannelViewModel extends ViewModel {
 
         if (result instanceof Result.Success) {
             FetchInDetails data = ((Result.Success<FetchInDetails>) result).getData();
-            fetchChannelResult.setValue(new FetchChannelResult(new FetchChannelView(data.getChannelDetailsResponse())));
+            fetchChannelResult.setValue(new FetchChannelResult(new FetchChannelView(data.getAttendeUserID(),data.getChannelDetailsResponse())));
         } else {
             fetchChannelResult.setValue(new FetchChannelResult(R.string.channel_not_found));
         }
