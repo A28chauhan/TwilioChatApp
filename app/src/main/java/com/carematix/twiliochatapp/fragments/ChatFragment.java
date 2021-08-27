@@ -1,13 +1,10 @@
 package com.carematix.twiliochatapp.fragments;
 
-import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -39,28 +36,26 @@ import com.carematix.twiliochatapp.R;
 import com.carematix.twiliochatapp.adapter.LeftChatAdapter;
 import com.carematix.twiliochatapp.application.ChatClientManager;
 import com.carematix.twiliochatapp.application.TwilioApplication;
-import com.carematix.twiliochatapp.architecture.table.UserAllList;
 import com.carematix.twiliochatapp.architecture.table.UserChat;
 import com.carematix.twiliochatapp.architecture.viewModel.UserChatViewModel;
 import com.carematix.twiliochatapp.architecture.viewModel.UserListViewModel;
 import com.carematix.twiliochatapp.bean.fetchChannel.LeaveChannel;
-import com.carematix.twiliochatapp.bean.userList.UserDetails;
 import com.carematix.twiliochatapp.databinding.ChatFragmentBinding;
 import com.carematix.twiliochatapp.helper.Constants;
 import com.carematix.twiliochatapp.helper.Logs;
 import com.carematix.twiliochatapp.helper.Utils;
-import com.carematix.twiliochatapp.listener.OnDialogInterfaceListener;
 import com.carematix.twiliochatapp.preference.PrefConstants;
 import com.carematix.twiliochatapp.preference.PrefManager;
 import com.carematix.twiliochatapp.restapi.ApiClient;
 import com.carematix.twiliochatapp.restapi.ApiInterface;
-import com.carematix.twiliochatapp.twilio.MessageItem;
 import com.twilio.chat.CallbackListener;
 import com.twilio.chat.Channel;
 import com.twilio.chat.ChannelListener;
 import com.twilio.chat.Channels;
+import com.twilio.chat.ChatClient;
+import com.twilio.chat.ChatClientListener;
+import com.twilio.chat.ErrorInfo;
 import com.twilio.chat.Member;
-import com.twilio.chat.Members;
 import com.twilio.chat.Message;
 import com.twilio.chat.Messages;
 import com.twilio.chat.User;
@@ -77,11 +72,11 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
 
     ChatFragmentBinding chatFragmentBinding;
     LeftChatAdapter chatAdapter;
-    public static ChatFragment newInstance() {
+    public ChatFragment newInstance() {
         return new ChatFragment();
     }
 
-    private static Channel channel;
+    private Channel channel;
 
     String userName="",sID="",type="";
     View view;
@@ -94,7 +89,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-      //  view = inflater.inflate(R.layout.chat_fragment, container, false);
         chatFragmentBinding =ChatFragmentBinding.inflate(getLayoutInflater());
         view = chatFragmentBinding.getRoot();
 
@@ -105,14 +99,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             prefManager.setBooleanValue(PrefConstants.SCREEN,false);
 
             Bundle bundle = getArguments();
-            try {
-                userName = bundle.getString(Constants.EXTRA_NAME, null);
-                sID = bundle.getString(Constants.EXTRA_ID,null);
-                type = bundle.getString(Constants.EXTRA_TYPE,null);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            userName = bundle.getString(Constants.EXTRA_NAME, null);
+            sID = bundle.getString(Constants.EXTRA_ID,null);
+            type = bundle.getString(Constants.EXTRA_TYPE,null);
             // Set title bar
             setHasOptionsMenu(true);
             try {
@@ -129,9 +118,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             chatFragmentBinding.imageButton.setEnabled(true);
             chatFragmentBinding.editText.setEnabled(true);
             chatFragmentBinding.editText.setFocusableInTouchMode(true);
-            try {
-                chatFragmentBinding.actionLeave.setVisibility(View.VISIBLE);
-                chatFragmentBinding.actionLeave.setOnClickListener(this);
+
+            chatFragmentBinding.actionLeave.setVisibility(View.VISIBLE);
+            chatFragmentBinding.actionLeave.setOnClickListener(this);
                 /*String roleId = prefManager.getStringValue(PrefConstants.TWILIO_ROLE_ID);
                 if(roleId.equals("1")){
                     chatFragmentBinding.actionLeave.setVisibility(View.GONE);
@@ -140,13 +129,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                     chatFragmentBinding.actionLeave.setOnClickListener(this);
                 }*/
 
-                String roleId = prefManager.getStringValue(PrefConstants.TWILIO_ROLE_ID);
-                if(roleId.equals("1")){
-                    //chatFragmentBinding.actionLeave.setVisibility(View.GONE);
-                    chatFragmentBinding.imageBack.setVisibility(View.GONE);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            String roleId = prefManager.getStringValue(PrefConstants.TWILIO_ROLE_ID);
+            if(roleId.equals("1")){
+                chatFragmentBinding.imageBack.setVisibility(View.GONE);
             }
             showKeyboard();
 
@@ -156,7 +141,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                     try {
                         if (hasFocus) {
                             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
                         }
                         chatFragmentBinding.recyclerView2.scrollToPosition(messageItemList.size()-1);
                         chatFragmentBinding.recyclerView2.smoothScrollToPosition(chatFragmentBinding.recyclerView2.getBottom());
@@ -167,22 +151,17 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             });
 
 
-            try {
-                allViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
-                allViewModel.getUserByID(type).observe(requireActivity(),userAllLists -> {
-                    if(userAllLists.size() > 0){
-                        try {
-                            createUiData();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+            allViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
+            allViewModel.getUserByID(type).observe(requireActivity(),userAllLists -> {
+                if(userAllLists.size() > 0){
+                    try {
+                        createUiData();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
+                }
+            });
 
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
             try {
                 loadSetListView();
@@ -204,16 +183,11 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                 chatFragmentBinding.recyclerView2.scrollToPosition(messageItemList.size()-1);
             }
 
-            handler.postDelayed(runnable = new Runnable() {
-                public void run() {
-                    handler.postDelayed(runnable, delay);
-                    updateBar();
-                }
-            }, delay);
-
-
-            String index1 = channel.getLastMessageIndex().toString();
-            Logs.d("chat onResume 3"," channel messages onResume index1:"+index1);
+            try {
+                setupListView(channel);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -232,9 +206,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
     public void leaveChannelLevel(Channel channel){
 
         try {
-            Logs.d("onSynchronizationChanged ","onSynchronizationStatus1 " + channel.getSynchronizationStatus());
-            Logs.d("onSynchronizationChanged ","onSynchronizationStatus2 " + channel.getStatus());
-
             if((channel.getSynchronizationStatus() == Channel.SynchronizationStatus.NONE) && (channel.getStatus()==Channel.ChannelStatus.NOT_PARTICIPATING)){
                 showAlertOnly(userName+" left the chat.You can't send the messages.");
             }
@@ -253,16 +224,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        // mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        chatAdapter=new LeftChatAdapter(getActivity(),messageItemList,linearLayoutManager,chatFragmentBinding.recyclerView2,channel);
+        chatAdapter=new LeftChatAdapter(getActivity(),messageItemList,linearLayoutManager,chatFragmentBinding.recyclerView2,channel,type);
         mRecyclerView.setAdapter(chatAdapter);
         chatAdapter.notifyDataSetChanged();
         if(messageItemList.size() > 2){
             mRecyclerView.scrollToPosition(messageItemList.size()-1);
         }
-        //mRecyclerView.setOnClickListener(getActivity());
         mRecyclerView.smoothScrollToPosition(mRecyclerView.getBottom());
-
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -292,7 +260,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                 if (newState == recyclerView.SCROLL_STATE_IDLE) {
                     if( y <= 0){
                         Logs.d("DERE", "onScrollStateChanged: y : "+y);
-
                     }else{
                         y=0;
                         chatFragmentBinding.dateLabel.setVisibility(View.INVISIBLE);
@@ -343,9 +310,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                 dialog.cancel();
                 dialog.dismiss();
             }
-            if ( progressDialog1!=null && progressDialog1.isShowing() ){
-                progressDialog1.cancel();
-                progressDialog1.dismiss();
+            if ( progressDialog!=null && progressDialog.isShowing() ){
+                progressDialog.cancel();
+                progressDialog.dismiss();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -357,8 +324,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
     Runnable runnable1,runnable;
     int delay1 = 5000,delay = 5000;
 
-    public static int var=0;
-    String currentDate="";String date="";
+    String currentDate="";
     public void setDateLabel(Message messageItem){
 
         Calendar calendar = Calendar.getInstance();
@@ -389,14 +355,16 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         @Override
         public void onMessageAdded(Message message) {
             try {
-                if (message != null){
-                    //messageItemList.add(new MessageItem(message,channel.getMembers() , identity));
-                    chatAdapter.addItem(message);
-                    chatAdapter.notifyDataSetChanged();
-                    setAllConsumedMessages(message);
-                    scrollDown();
-                    //setupListView(channel);
+                boolean isAppBackGround = Utils.isAppIsInBackground(getActivity());
+                if (!isAppBackGround) {
+                    if (message != null){
+                        chatAdapter.addItem(message);
+                        chatAdapter.notifyDataSetChanged();
+                        setAllConsumedMessages(message.getMessageIndex());
+                        scrollDown();
+                    }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -407,9 +375,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         public void onMessageUpdated(Message message, Message.UpdateReason updateReason) {
             if (message != null) {
                 TwilioApplication.get().showToast(message.getSid() + " changed");
-                setAllConsumedMessages(message);
+                setAllConsumedMessages(message.getMessageIndex());
                 scrollDown();
-                //setupListView(channel);
                 Logs.d("onMessageUpdated","Received onMessageUpdated for message sid|" + message.getSid() + "|");
             } else {
                 Logs.d("onMessageUpdated","Received onMessageUpdated");
@@ -430,7 +397,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         public void onMemberAdded(Member member) {
             if (member != null) {
                 TwilioApplication.get().showToast(member.getIdentity() + " onMemberAdded");
-                updateBar();
             }
         }
 
@@ -438,7 +404,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         public void onMemberUpdated(Member member, Member.UpdateReason updateReason) {
             if (member != null) {
                 TwilioApplication.get().showToast(member.getIdentity() + " onMemberUpdated");
-                updateBar();
+                //updateBar();
+                if(updateReason == Member.UpdateReason.LAST_CONSUMPTION_TIMESTAMP || updateReason == Member.UpdateReason.LAST_CONSUMED_MESSAGE_INDEX){
+                     chatAdapter.notifyDataSetChanged();
+                }
             }
         }
 
@@ -446,22 +415,18 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         public void onMemberDeleted(Member member) {
             if (member != null) {
                 TwilioApplication.get().showToast(member.getIdentity() + " onMemberDeleted");
-                //updateBar();
             }
         }
 
         @Override
         public void onTypingStarted(Channel channel, Member member) {
             if (channel != null) {
-                //TextView typingIndc = (TextView)getActivity().findViewById(R.id.typingIndicator);
-                String identity= member.getIdentity().toString();
                 String   text =  "is typing ...";
                 String identity1 = member.getIdentity();
                 if(!identity1.equals(prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID))){
                     chatFragmentBinding.typingIndicatorNote.setVisibility(View.VISIBLE);
                     chatFragmentBinding.typingIndicatorNote.setText(""+userName+ " "+text);
                 }
-
                 Logs.d("onTypingStarted ", " start typing"+text);
             }
         }
@@ -469,8 +434,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         @Override
         public void onTypingEnded(Channel channel, Member member) {
             if (channel != null) {
-                //  TextView typingIndc = (TextView)getActivity().findViewById(R.id.typingIndicator);
-                //  typingIndc.setText(null);
                 String   text =  " ended typing .....";
                 chatFragmentBinding.typingIndicatorNote.setText("");
                 chatFragmentBinding.typingIndicatorNote.setVisibility(View.INVISIBLE);
@@ -485,12 +448,82 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         }
     };
 
+
+    public ChatClientListener chatClientListener=new ChatClientListener() {
+        @Override
+        public void onChannelJoined(Channel channel) {}
+
+        @Override
+        public void onChannelInvited(Channel channel) {}
+
+        @Override
+        public void onChannelAdded(Channel channel) {}
+
+        @Override
+        public void onChannelUpdated(Channel channel, Channel.UpdateReason updateReason) {}
+
+        @Override
+        public void onChannelDeleted(Channel channel) {}
+
+        @Override
+        public void onChannelSynchronizationChange(Channel channel) {}
+
+        @Override
+        public void onError(ErrorInfo errorInfo) {}
+
+        @Override
+        public void onUserUpdated(User user, User.UpdateReason updateReason) {
+            if(updateReason == User.UpdateReason.REACHABILITY_ONLINE || updateReason == User.UpdateReason.REACHABILITY_NOTIFIABLE){
+                Logs.e("onUserUpdated","createUiData :"+updateReason);
+                updateBar();
+            }
+        }
+
+        @Override
+        public void onUserSubscribed(User user) {}
+
+        @Override
+        public void onUserUnsubscribed(User user) {}
+
+        @Override
+        public void onClientSynchronization(ChatClient.SynchronizationStatus synchronizationStatus) {}
+
+        @Override
+        public void onNewMessageNotification(String s, String s1, long l) {}
+
+        @Override
+        public void onAddedToChannelNotification(String s) {}
+
+        @Override
+        public void onInvitedToChannelNotification(String s) {}
+
+        @Override
+        public void onRemovedFromChannelNotification(String s) {}
+
+        @Override
+        public void onNotificationSubscribed() {}
+
+        @Override
+        public void onNotificationFailed(ErrorInfo errorInfo) {}
+
+        @Override
+        public void onConnectionStateChange(ChatClient.ConnectionState connectionState) {}
+
+        @Override
+        public void onTokenExpired() {}
+
+        @Override
+        public void onTokenAboutToExpire() {}
+    };
+
     private ChatClientManager chatClientManager;
     public void createUiData(){
         try {
             chatClientManager = TwilioApplication.get().getChatClientManager();
             identity = chatClientManager.getChatClient().getMyIdentity();
             Logs.d("chat fragmnet","identity : "+identity+" CHANNEL_ID : "+sID);
+
+            chatClientManager.getChatClient().addListener(chatClientListener);
 
             Channels channelsObject = chatClientManager.getChatClient().getChannels();
             channelsObject.getChannel(sID, new CallbackListener<Channel>() {
@@ -504,7 +537,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                 }
             });
 
-
             updateBar();
         } catch (Exception e) {
             e.printStackTrace();
@@ -514,8 +546,30 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
     }
 
     public void updateBar(){
+
         try {
-            if(!TwilioApplication.get().getChatClientManager().getChatClient().isReachabilityEnabled()){
+            chatFragmentBinding.typingIndicator.setText(userName);
+
+            if(type != null){
+                chatClientManager.getChatClient().getUsers().getAndSubscribeUser(type, new CallbackListener<User>() {
+                    @Override
+                    public void onSuccess(User user) {
+                        if(user.isOnline()){
+                            chatFragmentBinding.isOnline.setText("(online)");
+                        }else if(user.isNotifiable()){
+                            chatFragmentBinding.isOnline.setText("(offline)");
+                        }else{
+                            chatFragmentBinding.isOnline.setText("(offline)");
+                        }
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+           /* if(!TwilioApplication.get().getChatClientManager().getChatClient().isReachabilityEnabled()){
                 // chatFragmentBinding.isOnline.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_offline_circle_24, 0);
                 chatFragmentBinding.isOnline.setText("(offline)");
             }else{
@@ -555,10 +609,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                     chatFragmentBinding.isOnline.setText("(offline)");
                 }
 
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }*/
     }
 
     public void setupInput(){
@@ -595,54 +646,40 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
     public void sendMessage(){
 
         String text =chatFragmentBinding.editText.getText().toString();
+        text =text.trim();
         if (!text.equals("")) {
             sendMessage(text);
+        }else{
+            Utils.showToast("Please enter message",getActivity());
         }
+
     }
 
     private void sendMessage(final String text){
+        if(Utils.onNetworkChange(getActivity())){
         final Messages messagesObject = this.channel.getMessages();
+        Logs.e("messages object","messages"+channel.getSid());
         messagesObject.sendMessage(Message.options().withBody(text), new CallbackListener<Message>() {
             @Override
             public void onSuccess(Message message) {
                 TwilioApplication.get().showToast("Successfully sent message");
-              //  chatAdapter.notifyDataSetChanged();
                 setupListView(channel);
                 chatFragmentBinding.editText.setText("");
             }
         });
-    }
+        }else{
+            Utils.showToast("The Internet connection appears to be offline.",getActivity());
+        }
 
+    }
 
 
     UserChatViewModel viewModel;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         try {
-
             viewModel =new ViewModelProvider(requireActivity()).get(UserChatViewModel.class);
-            /*viewModel.getUserChatData(sID).observe(getViewLifecycleOwner(),userChats -> {
-                //chatAdapter.addItem();
-                try {
-                    if(userChats.size() > 0){
-                        for(UserChat userChat : userChats){
-                            *//*hashMap=new HashMap<>();
-                            hashMap.put(userChat.title,userChat.getChat_description());
-                            i++;
-                            arrayListHashMap.put(i,hashMap);*//*
-                        }
-                        chatFragmentBinding.recyclerView2.scrollToPosition(messageItemList.size()-1);
-                        chatFragmentBinding.recyclerView2.smoothScrollToPosition(chatFragmentBinding.recyclerView2.getBottom());
-                    }else{
-                        //chatFragmentBinding.recyclerView2.scrollToPosition(arrayListHashMap.size()-1);
-                        // chatFragmentBinding.recyclerView2.smoothScrollToPosition(chatFragmentBinding.recyclerView2.getBottom());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -665,18 +702,20 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             }else{
                 UserChat userChat=new UserChat();
                 String text =chatFragmentBinding.editText.getText().toString();
+                text =text.trim();
                 if(text.length() > 0){
                     userChat.setChat_description(text);
                     userChat.setUid(sID);
                     userChat.setTitle("RIGHT");
                     viewModel.insert(userChat);
-                    //arrayListHashMap.put(i,hashMap);
                 }else{
                     hideKeyboard(getActivity());
                 }
 
                 if(!text.equals("")){
                     sendMessage(text);
+                }else{
+                    Utils.showToast("Please enter message",getActivity());
                 }
                 try {
                     chatFragmentBinding.recyclerView2.scrollToPosition(messageItemList.size()-1);
@@ -700,31 +739,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             UserChat userChat=new UserChat();
             String text =chatFragmentBinding.editText.getText().toString();
             if(text.length() > 0){
-               // i++;
-              //  hashMap=new HashMap<>();
-               /* if(i%2 ==0){
-                    userChat.setChat_description(text);
-                    userChat.setUid(sId);
-                    userChat.setTitle("RIGHT");
-                //    hashMap.put("RIGHT",text);
-                }else{
-                    userChat.setChat_description(text);
-                    userChat.setUid(sId);
-                    userChat.setTitle("LEFT");
-                 //   hashMap.put("LEFT",text);
-                }*/
-
                 userChat.setChat_description(text);
                 userChat.setUid(sID);
                 userChat.setTitle("RIGHT");
                 viewModel.insert(userChat);
-               // arrayListHashMap.put(i,hashMap);
                 sendMessage();
-
             }
             chatFragmentBinding.editText.setText("");
-          //  chatAdapter.addItem(arrayListHashMap);
-           // chatAdapter.notifyDataSetChanged();
 
             try {
                 chatFragmentBinding.recyclerView2.scrollToPosition(messageItemList.size()-1);
@@ -735,7 +756,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             }
 
             hideKeyboard(getActivity());
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -777,24 +797,11 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
 
     @Override
     public void onDestroy() {
-        try {
-           // channel.removeListener(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         super.onDestroy();
     }
 
-    public void setAllConsumedMessages(Message message){
-        try {
-            String programUser = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
-            if(!message.getAuthor().contains(programUser)){
-
-                long index = message.getMessageIndex();
-                Logs.d("chat setAllConsumedMessages 0"," messages index:"+index);
-
-                // Logs.d("chat adpater 3"," messages index:"+index1);
-                channel.getMessages().setLastConsumedMessageIndexWithResult(index, new CallbackListener<Long>() {
+    public void setAllConsumedMessages(long index){
+        channel.getMessages().setLastConsumedMessageIndexWithResult(index, new CallbackListener<Long>() {
                     @Override
                     public void onSuccess(Long aLong) {
                         try {
@@ -815,96 +822,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                     }
                 });
 
-
+        /*channel.getMessages().setAllMessagesConsumedWithResult(new CallbackListener<Long>() {
+            @Override
+            public void onSuccess(Long aLong) {
             }
-
-            /*channel.getMessages().setAllMessagesConsumedWithResult(new CallbackListener<Long>() {
-                @Override
-                public void onSuccess(Long aLong) {
-                    try {
-                        Logs.d("AllMessagesConsumedWithResult "," messages AllMessagesConsumedWithResult :"+aLong);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            channel.getMessages().setNoMessagesConsumedWithResult(new CallbackListener<Long>() {
-                @Override
-                public void onSuccess(Long aLong) {
-                    try {
-                        Logs.d("ConsumedWithResult "," message ConsumedWithResult:"+aLong);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });*/
-
-/*
-            channel.getUnconsumedMessagesCount(new CallbackListener<Long>() {
-                @Override
-                public void onSuccess(Long aLong) {
-                    try {
-                        if(aLong != null)
-                            if(aLong != 0){
-                                Logs.d("UnconsumedMessagesCount","UnconsumedMessagesCount : "+aLong);
-                            }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            });*/
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            scrollDown();
-           } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        });*/
     }
 
-    public void setAllConsumedMessages(){
-        try {
-            //String programUser = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
-            long index = channel.getLastMessageIndex();//message.getMessageIndex();
-            Logs.d("chat setAllConsumedMessages 0"," messages index:"+index);
-
-            channel.getMessages().setLastConsumedMessageIndexWithResult(index, new CallbackListener<Long>() {
-                @Override
-                public void onSuccess(Long aLong) {
-                    try {
-                        Logs.d("LastConsumedMessageIndex "," messages LastConsumedMessageIndex:"+aLong);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            channel.getMessages().advanceLastConsumedMessageIndexWithResult(index, new CallbackListener<Long>() {
-                @Override
-                public void onSuccess(Long aLong) {
-                    try {
-                        Logs.d("LastConsumedMessageIndex "," messages LastConsumedMessageIndex:"+aLong);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            scrollDown();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public void scrollDown(){
         try {
@@ -923,17 +847,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         try {
             final Messages messagesObject = channel.getMessages();
             loadMessageShowMessage(messagesObject);
-
+            scrollDown();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        try {
-            scrollDown();
-           } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
 
@@ -941,7 +858,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
     public void loadMessageShowMessage(final Messages messagesObject){
 
         if (messagesObject != null) {
-            setAllConsumedMessages();
 
             messagesObject.getLastMessages(1000, new CallbackListener<List<Message>>() {
                 @Override
@@ -951,22 +867,22 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                     chatAdapter.addItem(messages);
                     chatAdapter.notifyDataSetChanged();
                     scrollDown();
+                    try {
+                        setAllConsumedMessages((messages.get(messages.size()-1).getMessageIndex()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
         }
     }
 
-
-
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         getActivity().getMenuInflater().inflate(R.menu.chat_menu, menu);
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -975,11 +891,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_leave) {
-            //Utils.showToast(this,"Work in progress...!!!");
             preAlert();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -1032,21 +946,17 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                     e.printStackTrace();
                 }
             }
-
             @Override
             public void onFailure(Call<LeaveChannel> call, Throwable t) {
                 showDialog1(true);
                 showError(t.getMessage().toString());
             }
         });
-
-
     }
 
     AlertDialog dialog;
     public void showAlertOnly(String msg){
         try {
-            //prefManager.setBooleanValue(PrefConstants.SCREEN,false);
             if(!prefManager.getBooleanValue(PrefConstants.SCREEN)){
                 AlertDialog.Builder builder = new AlertDialog.Builder((ChatActivity)getActivity());
                 builder.setMessage(msg)
@@ -1054,10 +964,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK button
-                        // Intent it=new Intent(getActivity(),MainActivity.class);
-                        // startActivity(it);
-                        //getActivity().finish();
-                        dialog.dismiss();
                         dialog.cancel();
                         chatFragmentBinding.imageButton.setEnabled(false);
                         chatFragmentBinding.imageButton.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -1103,7 +1009,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             startActivity(it);
             getActivity().finishAffinity();
             getActivity().finish();
-            //prefManager.getBooleanValue()
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1111,14 +1016,14 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
 
     }
 
-    ProgressDialog progressDialog1;
+    ProgressDialog progressDialog;
     @WorkerThread
     private void showProgressDialog1(){
         try {
-            progressDialog1 = new ProgressDialog(getActivity(),R.style.MyDialog);
-            progressDialog1.setMessage("Leave...");
-            progressDialog1.setCancelable(false);
-            progressDialog1.show();
+            progressDialog = new ProgressDialog(getActivity(),R.style.MyDialog);
+            progressDialog.setMessage("Leave...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1127,12 +1032,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
     private void showDialog1(final boolean show){
         try {
             if(show){
-                if(progressDialog1 != null && progressDialog1.isShowing()) {
-                    progressDialog1.dismiss();
-                    progressDialog1.cancel();
+                if(progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                    progressDialog.cancel();
                 }
             }else{
-                progressDialog1.show();
+                progressDialog.show();
             }
         } catch (Exception e) {
             e.printStackTrace();

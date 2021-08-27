@@ -77,10 +77,8 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
-
     private ChatClientManager clientManager;
-
-    private SharedPreferences sharedPreferences=null;
+    SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,43 +88,12 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String userName = sharedPreferences.getString("userName", "TestUser");
 
         prefManager =new PrefManager(this);
+        prefManager.clearPref();
         prefManager.setBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE,true);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
-
-        if(prefManager.getBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN)){
-            Logs.d("error","true : "+SessionManager.getInstance().isLoggedIn());
-            if(SessionManager.getInstance().isLoggedIn()){
-                callMain();
-            }else{
-                callMain();
-            }
-        }
-
-        try {
-            allViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            channelViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            userChannelViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-        userChatViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        deleteDb();
 
         try {
             clientManager = TwilioApplication.get().getChatClientManager();
@@ -175,11 +142,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
                 }
-
                 setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                //finish();
             }
         });
 
@@ -237,6 +200,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                         passwordEditText.getText().toString());
             }
         };
+
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListenerPassword);
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -244,15 +208,13 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    loadingProgressBar.setVisibility(View.VISIBLE);
+                    // attemptLogin();
+                    // by pass with nurse login
+                    loginWithNurse();
+
                    /* loginViewModel.login(usernameEditText.getText().toString(),
                             passwordEditText.getText().toString());*/
-                    loadingProgressBar.setVisibility(View.VISIBLE);
-
-                    sharedPreferences.edit().putString("userName", binding.username.getText().toString())
-                            .putBoolean("pinCerts", true)
-                            .putString("realm", "us1")
-                            .putString("ttl", "3000").commit();
-                    attemptLogin();
                 }
                 return false;
             }
@@ -262,20 +224,12 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-
-                sharedPreferences.edit().putString("userName", binding.username.getText().toString())
-                        .putBoolean("pinCerts", true)
-                        .putString("realm", "us1")
-                        .putString("ttl", "3000").commit();
-
-               // attemptLogin();
+                // attemptLogin();
                 // by pass with nurse login
                 loginWithNurse();
 
             }
         });
-
-
 
         try {
             if (checkPlayServices()) {
@@ -288,6 +242,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         }
 
         try {
+            sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
             String token = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
             if(token != null && !token.equals("")){
                 TwilioApplication.get().getChatClientManager().unRegisterFCMToken(token);
@@ -298,29 +253,46 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     }
 
-    public void loginWithNurse(){
+    public void deleteDb(){
 
-        //fetchUserDetails(null);
+        try {
+            allViewModel.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            channelViewModel.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            userChannelViewModel.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            userChatViewModel.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loginWithNurse(){
+        apiService =null;
         String email =binding.username.getText().toString();
         String password = binding.password.getText().toString();
-        apiService =null;
         apiService = ApiClient.getClient1().create(ApiInterface.class);
         Call<UserResult> call = apiService.loginHCM(email,password,Constants.X_DRO_SOURCE);
-
         call.enqueue(new Callback<UserResult>() {
             @Override
             public void onResponse(Call<UserResult> call, Response<UserResult> response) {
-                // return new Result.Success<>(fakeUser);
                 try {
                     int code = response.raw().code();
                     if (code<= Constants.BAD_REQUEST) {
                         if(response.body() != null){
-                           // String token = response.headers().get("x-dro-token");
-                           // prefManager.setStringValue(PrefConstants.TOKEN,token);
-                           // prefManager.setStringValue(PrefConstants.SET_PASSWORD,passwordEncrypt);
                             UserResult userResult = response.body();
                             if (userResult != null) {
-                                //surveyResultData(surveyResult);
                                 userResultData(userResult);
                             }
                         }else{
@@ -344,7 +316,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                                     e.printStackTrace();
                                 }
                                 binding.textPassword.setError(message);
-                                // textInputEmailLayout.setError(message);
                                 focusView = binding.textPassword;
                                 cancel = true;
                                 focusView.requestFocus();
@@ -362,22 +333,8 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    unloadProgress();
                 }
-                /*try {
-                    int code = response.raw().code();
-                    if (code<= Constants.BAD_REQUEST) {
-                        fetchUserDetails(response.body().toString());
-                    }else if(code == Constants.INTERNAL_SERVER_ERROR){
-                        //login(user);
-                        unloadProgress();
-                        Utils.showToast("Error : "+code,LoginActivity.this);
-                    }else{
-                        unloadProgress();
-                        Utils.showToast("Error : "+code,LoginActivity.this);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
             }
 
             @Override
@@ -386,58 +343,8 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                 unloadProgress();
             }
         });
-
-
     }
 
-    /*public void fetchUserDetails(String msg){
-        String arr[] = msg.split(",");
-        prefManager = new PrefManager(LoginActivity.this);
-        prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf(arr[0]));
-        //prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf("689"));
-        prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf(arr[8]));
-        //prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf("2282"));
-
-        sharedPreferences.edit().putString("userName", arr[2]).commit();
-        prefManager.setStringValue(PrefConstants.USER_NAME,arr[1]);
-        prefManager.setStringValue(PrefConstants.USER_FIRST_NAME,arr[2]);
-        prefManager.setStringValue(PrefConstants.USER_LAST_NAME,arr[3]);
-        prefManager.setStringValue(PrefConstants.USER_IMAGE,"");
-
-        prefManager.setStringValue(PrefConstants.PROGRAM_ID,String.valueOf(arr[7]));
-         prefManager.setStringValue(PrefConstants.ORGANIZATION_NAME,arr[6]);
-         prefManager.setStringValue(PrefConstants.PROGRAM_NAME,arr[9]);
-        prefManager.setStringValue(PrefConstants.LOGO_URL,"");
-
-        prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,false);
-
-        fetchUser();
-    }*/
-
-
-    public void fetchUserDetails(String msg){
-        //String arr[] = msg.split(",");
-        prefManager = new PrefManager(LoginActivity.this);
-        prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf("624"));
-        //prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf("689"));
-        prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf("2131"));
-        //prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf("2282"));
-
-        sharedPreferences.edit().putString("userName", "schandra@carematix.com").commit();
-        prefManager.setStringValue(PrefConstants.USER_NAME,"Sushil HCM");
-        prefManager.setStringValue(PrefConstants.USER_FIRST_NAME,"Sushil");
-        prefManager.setStringValue(PrefConstants.USER_LAST_NAME,"HCM");
-        prefManager.setStringValue(PrefConstants.USER_IMAGE,"");
-
-        prefManager.setStringValue(PrefConstants.PROGRAM_ID,String.valueOf("139"));
-        prefManager.setStringValue(PrefConstants.ORGANIZATION_NAME,"Care-QA");
-        prefManager.setStringValue(PrefConstants.PROGRAM_NAME,"Scheduled Program Test");
-        prefManager.setStringValue(PrefConstants.LOGO_URL,"");
-
-        prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,false);
-
-        fetchUser();
-    }
 
     // FCM
     private static final int  PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -501,10 +408,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     PrefManager prefManager;
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
-
-        //prefManager.setStringValue(PrefConstants.USER_NAME_EMAIL,user.getName());
-        // TODO : initiate successful logged in experience
-       // Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
         gotoDashboard();
     }
 
@@ -618,21 +521,17 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                 Utils.showToast(t.getMessage(),LoginActivity.this);
             }
         });
-
-        //loginViewModel.login(binding.username.getText().toString(),binding.password.getText().toString());
-        //loginViewModel.login(user);
     }
+
     private void hideKeyboard(){
         try {
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         } catch (Exception e) {
-            // TODO: handle exception
         }
     }
 
     public void userResultData(UserResult userResult){
-
         prefManager = new PrefManager(LoginActivity.this);
         prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf(userResult.getUserId()));
         prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf(userResult.getProgramUserId()));
@@ -650,52 +549,11 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
         prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,userResult.isFirstLogin());
 
-       // getLanguageData();
-       // gotoDashboard();
         fetchUser();
 
     }
 
-    public void getLanguageData(){
-        if(Utils.onNetworkChange(this)){
-            String programId =prefManager.getStringValue(PrefConstants.PROGRAM_ID);
-            String timeZone = prefManager.getStringValue(PrefConstants.SELECT_TIME_ZONE);
-            String languageCode = prefManager.getStringValue(PrefConstants.LANGUAGE_CODE);
-            // 1st use
-            apiService = ApiClient.getClient().create(ApiInterface.class);
-            Call<List<DroLanguage>> call= apiService.getLanguageData(Constants.X_DRO_SOURCE,timeZone,languageCode,programId);
-            call.enqueue(new Callback<List<DroLanguage>>() {
-                @Override
-                public void onResponse(Call<List<DroLanguage>> call, Response<List<DroLanguage>> response) {
-                    try {
-                        //  int statusCode = response.code();
-                        List<DroLanguage> droLanguage= response.body();
-                        if(droLanguage != null && droLanguage.size() > 0){
-                            //surveyResultData(surveyResult);
-                            //userLanguageResult(droLanguage);
-                        }else{
-                            // showProgress(false);
-                            Utils.showToast("Unable to load", LoginActivity.this);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Utils.showToast("Unable to load", LoginActivity.this);
-                    }
-                }
-                @Override
-                public void onFailure(Call<List<DroLanguage>> call, Throwable t) {
-                    //showDialog(true);
-                    Utils.showToast(t.toString(),LoginActivity.this);
-                }
-            });
-        }else {
-            Utils.showToast("No Network", LoginActivity.this);
-        }
-    }
-
     public void getToken(){
-
-
         clientManager.connectClient(new TaskCompletionListener<Void, String>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -713,35 +571,12 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             }
         });
 
-
-        /*apiService1 = ApiClient.getClient1().create(ApiInterface.class);
-        String programUserId =prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
-        Call<TokenResponse> call= apiService1.getToken(programUserId,Constants.X_DRO_SOURCE);
-        call.enqueue(new Callback<TokenResponse>() {
-            @Override
-            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
-                int code = response.raw().code();
-                if(code == Constants.OK){
-                    prefManager.setStringValue(PrefConstants.TN_TOKEN,response.body().getData().getToken());
-                    callMain();
-                }else{
-                    unloadProgress();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TokenResponse> call, Throwable t) {
-                unloadProgress();
-            }
-        });*/
-
     }
 
     public void fetchUser(){
 
         apiService1 = ApiClient.getClient1().create(ApiInterface.class);
         String programUserId =prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
-        //Constants.X_DRO_SOURCE,timeZone,languageCode,programIdac
         com.carematix.twiliochatapp.bean.fetchUser.FetchUser fetchUser=new com.carematix.twiliochatapp.bean.fetchUser.FetchUser(Integer.parseInt(programUserId),Constants.X_DRO_SOURCE);
         Call<FetchUser> call= apiService1.fetchUser(programUserId,Constants.X_DRO_SOURCE);
         call.enqueue(new Callback<FetchUser>() {
@@ -762,9 +597,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                 unloadProgress();
             }
         });
-
-
-        //getUserList();
     }
 
 
@@ -774,7 +606,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     {
         try {
             logger.d("Log in started");
-            //progressDialog = ProgressDialog.show(this, "", "Logging in. Please wait...", true);
             binding.loading.setVisibility(View.VISIBLE);
         } catch (Exception e) {
             e.printStackTrace();
@@ -804,8 +635,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
     @Override
-    public void onLogoutFinished()
-    {
+    public void onLogoutFinished(){
         finishDialog();
         TwilioApplication.get().showToast("Log out finished");
     }

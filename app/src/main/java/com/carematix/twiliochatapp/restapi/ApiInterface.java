@@ -43,7 +43,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST(ApiConstants.GET_USER_LIST)
-    Call<UserDetails> getUserList(@Field("programUserId") int programUserId, @Field("roleId") int roleId, @Field("device") String device);
+    Call<UserDetails> getUserList(@Field("programUserId") int programUserId, @Field("roleId") int roleId, @Field("device") String device,@Field("droOrganizationProgramId") String droOrganizationProgramId);
 
     @FormUrlEncoded
     @POST(ApiConstants.FETCH_CHANNEL)
@@ -59,6 +59,9 @@ public interface ApiInterface {
     @POST(ApiConstants.LOGIN_HCM)
     Call<UserResult> loginHCM(@Field("username") String userName, @Field("password") String password, @Field("device") String device);
 
+    @FormUrlEncoded
+    @POST(ApiConstants.ACTIVE_CHANNEL)
+    Call<ChannelDetails> activeChannel(@Field("oraganiserProgramUserId") String programUserId, @Field("attandeeProgramUserId") String attendProgramUserId, @Field("device") String device);
 
 
 }

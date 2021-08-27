@@ -44,11 +44,13 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     LinearLayoutManager linearLayoutManager;
     Channel channel;
 
-    public LeftChatAdapter(Context mContext, List<Message> arrayList, LinearLayoutManager linearLayoutManager, RecyclerView recyclerView,Channel mChannel ){
+    String attendeeId="";
+    public LeftChatAdapter(Context mContext, List<Message> arrayList, LinearLayoutManager linearLayoutManager, RecyclerView recyclerView,Channel mChannel,String attendeeId ){
         this.context=mContext;
         this.messageItemList = arrayList;
         this.linearLayoutManager = linearLayoutManager;
         this.channel =mChannel;
+        this.attendeeId =attendeeId;
     }
 
     @Override
@@ -65,6 +67,8 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             e.printStackTrace();
         }
     }
+
+    //public void addItem()
 
     public void addItem(Message message){
         try {
@@ -98,10 +102,11 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }else if(currentDate.equals(dateType)){
                 if(!messageItem.getAuthor().contains(programUser)){
                     return  VIEW_TYPE_LEFT_ITEM;
-                }else if(messageItem.getAuthor().contains(programUser)){
+                }else {
                     return VIEW_TYPE_RIGHT_ITEM;
                 }
             }else{
+                dateType =currentDate;
                 return VIEW_TYPE_CENTER_ITEM;
             }
 
@@ -109,7 +114,7 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             e.printStackTrace();
             dateType = currentDate;
         }
-        return VIEW_TYPE_CENTER_ITEM;
+        return VIEW_TYPE_RIGHT_ITEM;
     }
 
 
@@ -127,7 +132,7 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userViewHolder.textView.setText(" " + messageItem.getMessageBody().toString());
             userViewHolder.textTime.setText(Utils.setTime(messageItem.getDateCreatedAsDate()));
 
-            updateMemberMessageReadStatus(userViewHolder,messageItem,position);
+            updateMemberMessageReadStatus(userViewHolder,messageItem);
 
 
         }else if(viewHolder instanceof LeftViewHolder){
@@ -140,18 +145,19 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             CenterViewHolder userViewHolder = (CenterViewHolder) viewHolder;
             try {
-                userViewHolder.linearLayoutLeft.setVisibility(View.VISIBLE);
-                userViewHolder.linearLayoutRight.setVisibility(View.VISIBLE);
+                //userViewHolder.linearLayoutLeft.setVisibility(View.VISIBLE);
+                //userViewHolder.linearLayoutRight.setVisibility(View.VISIBLE);
                 PrefManager prefManager=new PrefManager(context);
-                String programUser = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
-                if(!messageItem.getAuthor().contains(programUser)){
+                String programUserID = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
+                if(!messageItem.getAuthor().equals(programUserID)){
                     userViewHolder.linearLayoutLeft.setVisibility(View.VISIBLE);
                     userViewHolder.textLeftTime.setText(" " + messageItem.getMessageBody().toString());
                     userViewHolder.textLeftTime.setText(Utils.setTime(messageItem.getDateCreatedAsDate()));
-                }else if(messageItem.getAuthor().contains(programUser)){
+                }else{
                     userViewHolder.linearLayoutRight.setVisibility(View.VISIBLE);
                     userViewHolder.textRightTime.setText(" " + messageItem.getMessageBody().toString());
                     userViewHolder.textRightTime.setText(Utils.setTime(messageItem.getDateCreatedAsDate()));
+                    updateMemberMessageReadStatus(userViewHolder,messageItem);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -165,7 +171,6 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     userViewHolder.textTimeFull.setText("Today");
                     userViewHolder.textTimeFull.setVisibility(View.VISIBLE);
                 }else if(todayDate.compareTo(currentDate) > 0){
-
                     int check = Integer.parseInt(Utils.getDateC1(messageItem.getDateCreatedAsDate()));
                     int today = Integer.parseInt(Utils.getDateC(calendar.getTimeInMillis()));
                     if(check == (today-1)){
@@ -179,7 +184,7 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     userViewHolder.textTimeFull.setText(currentDate);
                     userViewHolder.textTimeFull.setVisibility(View.GONE);
                 }
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -192,20 +197,37 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
-    public void updateMemberMessageReadStatus(RightViewHolder userViewHolder,Message messageItem,int post){
+    public void updateMemberMessageReadStatus(RightViewHolder userViewHolder,Message messageItem){
 
         try {
-            Member member =channel.getMembers().getMember(messageItem.getAuthor());
-            //long messagesIndex =channel.getMessages().getLastConsumedMessageIndex(); +" messagesIndex :"+messagesIndex
-            Logs.d("chat adapter "," member index :"+member.getLastConsumedMessageIndex()+" message index :"+messageItem.getMessageIndex());
-
+            Member member =channel.getMembers().getMember(attendeeId);
             if(member.getLastConsumedMessageIndex() == null){
                 userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_single_tick_24, 0);
             }else{
-                if(member.getLastConsumedMessageIndex() != null && member.getLastConsumedMessageIndex() <= messageItem.getMessageIndex()){
-                    userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_single_tick_24, 0);
-                }else{
+                if(member.getLastConsumedMessageIndex() >= messageItem.getMessageIndex()){
                     userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_indicator, 0);
+                }else{
+                    userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_single_tick_24, 0);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void updateMemberMessageReadStatus(CenterViewHolder userViewHolder,Message messageItem){
+
+        try {
+            Member member =channel.getMembers().getMember(attendeeId);
+            if(member.getLastConsumedMessageIndex() == null){
+                userViewHolder.textRightTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_single_tick_24, 0);
+            }else{
+                if(member.getLastConsumedMessageIndex() >= messageItem.getMessageIndex()){
+                    userViewHolder.textRightTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_double_tick_indicator, 0);
+                }else{
+                    userViewHolder.textRightTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_single_tick_24, 0);
                 }
             }
 
@@ -243,7 +265,7 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             textTime=(TextView)view.findViewById(R.id.text_time_right);
             textTimeFull=(TextView)view.findViewById(R.id.textfullDate);
 
-            textView.setOnClickListener(new View.OnClickListener() {
+            /*textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos=getAdapterPosition();
@@ -252,7 +274,7 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     context.startActivity(intent);
                     //context.finish();
                 }
-            });
+            });*/
         }
 
         public TextView getTextView() {
@@ -268,14 +290,14 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             textTime=(TextView)view.findViewById(R.id.text_time_left);
             textTimeFull=(TextView)view.findViewById(R.id.textfullDate);
 
-            textView.setOnClickListener(new View.OnClickListener() {
+            /*textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos=getAdapterPosition();
                     Logs.d("left chat adapter","position :"+pos);
 
                 }
-            });
+            });*/
         }
 
         public TextView getTextView() {

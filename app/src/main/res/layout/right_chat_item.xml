@@ -95,7 +95,7 @@
             android:fontFamily="sans-serif"
             android:layout_gravity="center|right"
             android:gravity="center|right"
-            android:drawableRight="@drawable/ic_double_tick_nsend_indicator"
+            android:drawableRight="@drawable/ic_single_tick_24"
             android:text="AM"
             android:textAlignment="center"
             android:textAppearance="?android:textAppearanceSmall"

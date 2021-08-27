@@ -42,6 +42,7 @@ public class LoginDataSource {
     public Result<LoggedInUser> login(User user){
         // handle login
         try {
+        apiService= null;
         apiService = ApiClient.getClient().create(ApiInterface.class);
         String timeZone =user.getTimeZone();
         String language = user.getLanguage();

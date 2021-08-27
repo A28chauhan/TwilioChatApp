@@ -137,10 +137,12 @@ public final class UserChannelDao_Impl implements UserChannelDao {
           final List<UserChannelList> _result = new ArrayList<UserChannelList>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final UserChannelList _item;
-            _item = new UserChannelList();
+            final String _tmpSid;
+            _tmpSid = _cursor.getString(_cursorIndexOfSid);
+            final String _tmpFriendlyName;
+            _tmpFriendlyName = _cursor.getString(_cursorIndexOfFriendlyName);
+            _item = new UserChannelList(_tmpSid,_tmpFriendlyName);
             _item.id = _cursor.getInt(_cursorIndexOfId);
-            _item.sid = _cursor.getString(_cursorIndexOfSid);
-            _item.friendlyName = _cursor.getString(_cursorIndexOfFriendlyName);
             _result.add(_item);
           }
           return _result;
@@ -177,10 +179,12 @@ public final class UserChannelDao_Impl implements UserChannelDao {
           final List<UserChannelList> _result = new ArrayList<UserChannelList>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final UserChannelList _item;
-            _item = new UserChannelList();
+            final String _tmpSid;
+            _tmpSid = _cursor.getString(_cursorIndexOfSid);
+            final String _tmpFriendlyName;
+            _tmpFriendlyName = _cursor.getString(_cursorIndexOfFriendlyName);
+            _item = new UserChannelList(_tmpSid,_tmpFriendlyName);
             _item.id = _cursor.getInt(_cursorIndexOfId);
-            _item.sid = _cursor.getString(_cursorIndexOfSid);
-            _item.friendlyName = _cursor.getString(_cursorIndexOfFriendlyName);
             _result.add(_item);
           }
           return _result;
@@ -217,10 +221,12 @@ public final class UserChannelDao_Impl implements UserChannelDao {
           final List<UserChannelList> _result = new ArrayList<UserChannelList>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final UserChannelList _item;
-            _item = new UserChannelList();
+            final String _tmpSid;
+            _tmpSid = _cursor.getString(_cursorIndexOfSid);
+            final String _tmpFriendlyName;
+            _tmpFriendlyName = _cursor.getString(_cursorIndexOfFriendlyName);
+            _item = new UserChannelList(_tmpSid,_tmpFriendlyName);
             _item.id = _cursor.getInt(_cursorIndexOfId);
-            _item.sid = _cursor.getString(_cursorIndexOfSid);
-            _item.friendlyName = _cursor.getString(_cursorIndexOfFriendlyName);
             _result.add(_item);
           }
           return _result;
@@ -255,10 +261,12 @@ public final class UserChannelDao_Impl implements UserChannelDao {
       final List<UserChannelList> _result = new ArrayList<UserChannelList>(_cursor.getCount());
       while(_cursor.moveToNext()) {
         final UserChannelList _item;
-        _item = new UserChannelList();
+        final String _tmpSid;
+        _tmpSid = _cursor.getString(_cursorIndexOfSid);
+        final String _tmpFriendlyName;
+        _tmpFriendlyName = _cursor.getString(_cursorIndexOfFriendlyName);
+        _item = new UserChannelList(_tmpSid,_tmpFriendlyName);
         _item.id = _cursor.getInt(_cursorIndexOfId);
-        _item.sid = _cursor.getString(_cursorIndexOfSid);
-        _item.friendlyName = _cursor.getString(_cursorIndexOfFriendlyName);
         _result.add(_item);
       }
       return _result;

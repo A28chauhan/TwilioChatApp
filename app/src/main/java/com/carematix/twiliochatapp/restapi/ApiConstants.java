@@ -20,6 +20,8 @@ public class ApiConstants {
 
     public static final String FETCH_CHANNEL="fetchChannel";
 
+    public static final String ACTIVE_CHANNEL="activeChannel";
+
     public static final String LEAVE_CHANNEL="leaveChannel";
 
     public static final String LOGIN_HCM="loginHC";

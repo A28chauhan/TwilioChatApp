@@ -17,6 +17,11 @@ class UserChannelList {
     @ColumnInfo(name = "friendlyName")
     public String friendlyName;
 
+    public UserChannelList(String sid, String friendlyName) {
+        this.sid = sid;
+        this.friendlyName = friendlyName;
+    }
+
     public int getId() {
         return id;
     }

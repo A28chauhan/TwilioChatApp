@@ -10,6 +10,7 @@
     <string name="invalid_password">Password must be >=8 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="not_found">No user found</string>
+    <string name="channel_not_found">Channel not found.</string>
 
     <string name="app_sign_in">Sign In Using Email</string>
     <string name="title_activity_main">Chat Activity</string>

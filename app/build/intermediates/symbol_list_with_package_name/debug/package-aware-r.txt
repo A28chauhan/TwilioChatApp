@@ -2625,6 +2625,7 @@ string cancel
 string card_content_descriptor
 string channel_invite
 string channel_invite_message
+string channel_not_found
 string character_counter_content_description
 string character_counter_overflowed_content_description
 string character_counter_pattern
