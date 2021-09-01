@@ -2173,6 +2173,8 @@ id month_navigation_next
 id month_navigation_previous
 id month_title
 id motion_base
+id msg_details
+id msg_time
 id mtrl_anchor_parent
 id mtrl_calendar_day_selector_frame
 id mtrl_calendar_days_of_week
@@ -2335,7 +2337,7 @@ id textStart
 id textTop
 id textUnconsumedMessageCount
 id textView
-id textView2
+id text_Name
 id text_dashboard
 id text_email
 id text_home
@@ -2346,8 +2348,6 @@ id text_notifications
 id text_password
 id text_time_left
 id text_time_right
-id text_user
-id text_user_1
 id textfullDate
 id textinput_counter
 id textinput_error

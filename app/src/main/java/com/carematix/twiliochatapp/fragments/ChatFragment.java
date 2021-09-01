@@ -212,7 +212,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         RecyclerView mRecyclerView = chatFragmentBinding.recyclerView2;
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setStackFromEnd(true);
+        //linearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         chatAdapter=new LeftChatAdapter(getActivity(),messageItemList,linearLayoutManager,chatFragmentBinding.recyclerView2,channel,type);
         mRecyclerView.setAdapter(chatAdapter);

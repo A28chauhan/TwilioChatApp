@@ -100,12 +100,12 @@
         "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_splash.xml"
     },
     {
-        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable-v24_ic_launcher_foreground.xml.flat",
-        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable-v24\\ic_launcher_foreground.xml"
-    },
-    {
         "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_single_tick_24.xml.flat",
         "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_single_tick_24.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable-v24\\ic_launcher_foreground.xml"
     },
     {
         "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_fragment_notifications.xml.flat",

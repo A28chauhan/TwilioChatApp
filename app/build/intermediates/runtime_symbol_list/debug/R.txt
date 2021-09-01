@@ -2172,6 +2172,8 @@ int id month_navigation_next 0x7f0a0120
 int id month_navigation_previous 0x7f0a0121
 int id month_title 0x7f0a0122
 int id motion_base 0x7f0a0123
+int id msg_details 0x7f0a01fe
+int id msg_time 0x7f0a01ff
 int id mtrl_anchor_parent 0x7f0a0124
 int id mtrl_calendar_day_selector_frame 0x7f0a0125
 int id mtrl_calendar_days_of_week 0x7f0a0126
@@ -2334,7 +2336,7 @@ int id textStart 0x7f0a01c2
 int id textTop 0x7f0a01c3
 int id textUnconsumedMessageCount 0x7f0a01c4
 int id textView 0x7f0a01c5
-int id textView2 0x7f0a01c6
+int id text_Name 0x7f0a0200
 int id text_dashboard 0x7f0a01c7
 int id text_email 0x7f0a01c8
 int id text_home 0x7f0a01c9
@@ -2345,8 +2347,6 @@ int id text_notifications 0x7f0a01cd
 int id text_password 0x7f0a01ce
 int id text_time_left 0x7f0a01cf
 int id text_time_right 0x7f0a01d0
-int id text_user 0x7f0a01d1
-int id text_user_1 0x7f0a01d2
 int id textfullDate 0x7f0a01d3
 int id textinput_counter 0x7f0a01d4
 int id textinput_error 0x7f0a01d5

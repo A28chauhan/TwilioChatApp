@@ -121,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
     public void setData(){
         try {
-            boolean vv= prefManager.getBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE);
-            if(vv){
+            boolean firstTime= prefManager.getBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE);
+            if(firstTime){
                 getAllUserListCall();
                 prefManager.setBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE,false);
             }else{

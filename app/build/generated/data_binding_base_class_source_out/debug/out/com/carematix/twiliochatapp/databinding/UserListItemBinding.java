@@ -28,28 +28,28 @@ public final class UserListItemBinding implements ViewBinding {
   public final ImageView imageView;
 
   @NonNull
+  public final TextView msgDetails;
+
+  @NonNull
+  public final TextView msgTime;
+
+  @NonNull
+  public final TextView textName;
+
+  @NonNull
   public final TextView textUnconsumedMessageCount;
-
-  @NonNull
-  public final TextView textUser;
-
-  @NonNull
-  public final TextView textUser1;
-
-  @NonNull
-  public final TextView textView2;
 
   private UserListItemBinding(@NonNull CardView rootView,
       @NonNull ConstraintLayout constraintLayout, @NonNull ImageView imageView,
-      @NonNull TextView textUnconsumedMessageCount, @NonNull TextView textUser,
-      @NonNull TextView textUser1, @NonNull TextView textView2) {
+      @NonNull TextView msgDetails, @NonNull TextView msgTime, @NonNull TextView textName,
+      @NonNull TextView textUnconsumedMessageCount) {
     this.rootView = rootView;
     this.constraintLayout = constraintLayout;
     this.imageView = imageView;
+    this.msgDetails = msgDetails;
+    this.msgTime = msgTime;
+    this.textName = textName;
     this.textUnconsumedMessageCount = textUnconsumedMessageCount;
-    this.textUser = textUser;
-    this.textUser1 = textUser1;
-    this.textView2 = textView2;
   }
 
   @Override
@@ -91,32 +91,32 @@ public final class UserListItemBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.msg_details;
+      TextView msgDetails = ViewBindings.findChildViewById(rootView, id);
+      if (msgDetails == null) {
+        break missingId;
+      }
+
+      id = R.id.msg_time;
+      TextView msgTime = ViewBindings.findChildViewById(rootView, id);
+      if (msgTime == null) {
+        break missingId;
+      }
+
+      id = R.id.text_Name;
+      TextView textName = ViewBindings.findChildViewById(rootView, id);
+      if (textName == null) {
+        break missingId;
+      }
+
       id = R.id.textUnconsumedMessageCount;
       TextView textUnconsumedMessageCount = ViewBindings.findChildViewById(rootView, id);
       if (textUnconsumedMessageCount == null) {
         break missingId;
       }
 
-      id = R.id.text_user;
-      TextView textUser = ViewBindings.findChildViewById(rootView, id);
-      if (textUser == null) {
-        break missingId;
-      }
-
-      id = R.id.text_user_1;
-      TextView textUser1 = ViewBindings.findChildViewById(rootView, id);
-      if (textUser1 == null) {
-        break missingId;
-      }
-
-      id = R.id.textView2;
-      TextView textView2 = ViewBindings.findChildViewById(rootView, id);
-      if (textView2 == null) {
-        break missingId;
-      }
-
-      return new UserListItemBinding((CardView) rootView, constraintLayout, imageView,
-          textUnconsumedMessageCount, textUser, textUser1, textView2);
+      return new UserListItemBinding((CardView) rootView, constraintLayout, imageView, msgDetails,
+          msgTime, textName, textUnconsumedMessageCount);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

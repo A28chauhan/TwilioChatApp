@@ -57,7 +57,6 @@ class FetchChannelRepository {
 
         if(result != null)
             if (result instanceof Result.Success) {
-                //FetchInDetails data = ((Result.Success<FetchInDetails>) result).getData();
                 fetchInDetails(((Result.Success<FetchInDetails>) result).getData());
             }
         return result;
