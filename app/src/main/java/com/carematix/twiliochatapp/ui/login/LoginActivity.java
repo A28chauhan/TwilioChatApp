@@ -279,70 +279,83 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
     public void loginWithNurse(){
-        apiService =null;
-        String email =binding.username.getText().toString();
-        String password = binding.password.getText().toString();
-        apiService = ApiClient.getClient1().create(ApiInterface.class);
-        Call<UserResult> call = apiService.loginHCM(email,password,Constants.X_DRO_SOURCE);
-        call.enqueue(new Callback<UserResult>() {
-            @Override
-            public void onResponse(Call<UserResult> call, Response<UserResult> response) {
-                try {
-                    int code = response.raw().code();
-                    if (code<= Constants.BAD_REQUEST) {
-                        if(response.body() != null){
-                            UserResult userResult = response.body();
-                            if (userResult != null) {
-                                userResultData(userResult);
-                            }
-                        }else{
-                            try {
+
+        if(Utils.onNetworkChange(this)){
+            apiService =null;
+            String email =binding.username.getText().toString();
+            String password = binding.password.getText().toString();
+            apiService = ApiClient.getClient1().create(ApiInterface.class);
+            Call<UserResult> call = apiService.loginHCM(email,password,Constants.X_DRO_SOURCE);
+            call.enqueue(new Callback<UserResult>() {
+                @Override
+                public void onResponse(Call<UserResult> call, Response<UserResult> response) {
+                    try {
+                        int code = response.raw().code();
+                        if (code<= Constants.BAD_REQUEST) {
+                            int code1 =response.code();
+                            if(code1 >= Constants.BAD_REQUEST){
                                 unloadProgress();
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                String message = jObjError.getString("message");
-                                try {
-                                    if(message.equals("Invalid username/password")){
-                                        // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD);
-                                    }else if(message.contains("Invalid username/password. Your")){
-                                        // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD_ACCOUNT_LOCK);
-                                    }else if(message.contains("User Account Locked")){
-                                        // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_LOCKED);
-                                    }else if(message.contains("User Account Disabled")){
-                                        // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_DISABLED);
-                                    }else{
-                                        // message =message;
+                                Utils.showToast("Error : "+code1,LoginActivity.this);
+                            }else{
+                                if(response.body() != null){
+                                    UserResult userResult = response.body();
+                                    if (userResult != null) {
+                                        userResultData(userResult);
                                     }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                }else{
+                                    try {
+                                        unloadProgress();
+                                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                        String message = jObjError.getString("message");
+                                        try {
+                                            if(message.equals("Invalid username/password")){
+                                                // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD);
+                                            }else if(message.contains("Invalid username/password. Your")){
+                                                // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD_ACCOUNT_LOCK);
+                                            }else if(message.contains("User Account Locked")){
+                                                // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_LOCKED);
+                                            }else if(message.contains("User Account Disabled")){
+                                                // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_DISABLED);
+                                            }else{
+                                                // message =message;
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        binding.textPassword.setError(message);
+                                        focusView = binding.textPassword;
+                                        cancel = true;
+                                        focusView.requestFocus();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                                binding.textPassword.setError(message);
-                                focusView = binding.textPassword;
-                                cancel = true;
-                                focusView.requestFocus();
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
+
+                        }else if(code == Constants.INTERNAL_SERVER_ERROR){
+                            //login(user);
+                            unloadProgress();
+                            Utils.showToast("Error : "+code,LoginActivity.this);
+                        }else{
+                            unloadProgress();
+                            Utils.showToast("Error : "+code,LoginActivity.this);
                         }
-                    }else if(code == Constants.INTERNAL_SERVER_ERROR){
-                        //login(user);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         unloadProgress();
-                        Utils.showToast("Error : "+code,LoginActivity.this);
-                    }else{
-                        unloadProgress();
-                        Utils.showToast("Error : "+code,LoginActivity.this);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                }
+
+                @Override
+                public void onFailure(Call<UserResult> call, Throwable t) {
+                    Utils.showToast(t.getMessage(),LoginActivity.this);
                     unloadProgress();
                 }
-            }
+            });
+        }else{
+            Utils.showToast(Utils.getStringResource(R.string.internet,LoginActivity.this),LoginActivity.this);
+        }
 
-            @Override
-            public void onFailure(Call<UserResult> call, Throwable t) {
-                Utils.showToast(t.getMessage(),LoginActivity.this);
-                unloadProgress();
-            }
-        });
     }
 
 
@@ -532,24 +545,29 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
     public void userResultData(UserResult userResult){
-        prefManager = new PrefManager(LoginActivity.this);
-        prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf(userResult.getUserId()));
-        prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf(userResult.getProgramUserId()));
+        try {
+            prefManager = new PrefManager(LoginActivity.this);
+            prefManager.setStringValue(PrefConstants.USER_ID,String.valueOf(userResult.getUserId()));
+            prefManager.setStringValue(PrefConstants.PROGRAM_USER_ID,String.valueOf(userResult.getProgramUserId()));
 
-        sharedPreferences.edit().putString("userName", userResult.getUserName()).commit();
-        prefManager.setStringValue(PrefConstants.USER_NAME,userResult.getUserName());
-        prefManager.setStringValue(PrefConstants.USER_FIRST_NAME,userResult.getFirstName());
-        prefManager.setStringValue(PrefConstants.USER_LAST_NAME,userResult.getLastName());
-        prefManager.setStringValue(PrefConstants.USER_IMAGE,userResult.getUserImage());
+            sharedPreferences.edit().putString("userName", userResult.getUserName()).commit();
+            prefManager.setStringValue(PrefConstants.USER_NAME,userResult.getUserName());
+            prefManager.setStringValue(PrefConstants.USER_FIRST_NAME,userResult.getFirstName());
+            prefManager.setStringValue(PrefConstants.USER_LAST_NAME,userResult.getLastName());
+            prefManager.setStringValue(PrefConstants.USER_IMAGE,userResult.getUserImage());
 
-        prefManager.setStringValue(PrefConstants.PROGRAM_ID,String.valueOf(userResult.getProgramInfo().getProgramId()));
-        prefManager.setStringValue(PrefConstants.ORGANIZATION_NAME,userResult.getProgramInfo().getOrganizationName());
-        prefManager.setStringValue(PrefConstants.PROGRAM_NAME,userResult.getProgramInfo().getProgramName());
-        prefManager.setStringValue(PrefConstants.LOGO_URL,userResult.getProgramInfo().getLogoUrl());
+            prefManager.setStringValue(PrefConstants.PROGRAM_ID,String.valueOf(userResult.getProgramInfo().getProgramId()));
+            prefManager.setStringValue(PrefConstants.ORGANIZATION_NAME,userResult.getProgramInfo().getOrganizationName());
+            prefManager.setStringValue(PrefConstants.PROGRAM_NAME,userResult.getProgramInfo().getProgramName());
+            prefManager.setStringValue(PrefConstants.LOGO_URL,userResult.getProgramInfo().getLogoUrl());
 
-        prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,userResult.isFirstLogin());
+            prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,userResult.isFirstLogin());
 
-        fetchUser();
+            fetchUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Utils.showToast("Please try again. ",LoginActivity.this);
+        }
 
     }
 
@@ -575,28 +593,34 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     public void fetchUser(){
 
-        apiService1 = ApiClient.getClient1().create(ApiInterface.class);
-        String programUserId =prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
-        com.carematix.twiliochatapp.bean.fetchUser.FetchUser fetchUser=new com.carematix.twiliochatapp.bean.fetchUser.FetchUser(Integer.parseInt(programUserId),Constants.X_DRO_SOURCE);
-        Call<FetchUser> call= apiService1.fetchUser(programUserId,Constants.X_DRO_SOURCE);
-        call.enqueue(new Callback<FetchUser>() {
-            @Override
-            public void onResponse(Call<FetchUser> call, Response<FetchUser> response) {
-                int code = response.raw().code();
-                if(code == Constants.OK){
-                    prefManager.setStringValue(PrefConstants.TWILIO_USER_SID,response.body().getData().getUserSid());
-                    prefManager.setStringValue(PrefConstants.TWILIO_ROLE_ID,String.valueOf(response.body().getData().getRoleId()));
-                    getToken();
-                }else{
+        if(Utils.onNetworkChange(this)){
+            apiService1=null;
+            apiService1 = ApiClient.getClient1().create(ApiInterface.class);
+            String programUserId =prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
+            com.carematix.twiliochatapp.bean.fetchUser.FetchUser fetchUser=new com.carematix.twiliochatapp.bean.fetchUser.FetchUser(Integer.parseInt(programUserId),Constants.X_DRO_SOURCE);
+            Call<FetchUser> call= apiService1.fetchUser(programUserId,Constants.X_DRO_SOURCE);
+            call.enqueue(new Callback<FetchUser>() {
+                @Override
+                public void onResponse(Call<FetchUser> call, Response<FetchUser> response) {
+                    int code = response.raw().code();
+                    if(code == Constants.OK){
+                        prefManager.setStringValue(PrefConstants.TWILIO_USER_SID,response.body().getData().getUserSid());
+                        prefManager.setStringValue(PrefConstants.TWILIO_ROLE_ID,String.valueOf(response.body().getData().getRoleId()));
+                        getToken();
+                    }else{
+                        unloadProgress();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FetchUser> call, Throwable t) {
                     unloadProgress();
                 }
-            }
+            });
+        }else{
+            Utils.showToast(Utils.getStringResource(R.string.internet,LoginActivity.this),LoginActivity.this);
+        }
 
-            @Override
-            public void onFailure(Call<FetchUser> call, Throwable t) {
-                unloadProgress();
-            }
-        });
     }
 
 

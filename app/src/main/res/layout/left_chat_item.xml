@@ -66,9 +66,11 @@
                 android:gravity="center|left"
                 android:lineSpacingExtra="6sp"
                 android:text="We"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="@dimen/text_medium"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/text_medium"
                 android:typeface="normal" />
 
 

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -121,13 +123,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
 
             chatFragmentBinding.actionLeave.setVisibility(View.VISIBLE);
             chatFragmentBinding.actionLeave.setOnClickListener(this);
-                /*String roleId = prefManager.getStringValue(PrefConstants.TWILIO_ROLE_ID);
-                if(roleId.equals("1")){
-                    chatFragmentBinding.actionLeave.setVisibility(View.GONE);
-                }else{
-                    chatFragmentBinding.actionLeave.setVisibility(View.VISIBLE);
-                    chatFragmentBinding.actionLeave.setOnClickListener(this);
-                }*/
+
 
             String roleId = prefManager.getStringValue(PrefConstants.TWILIO_ROLE_ID);
             if(roleId.equals("1")){
@@ -142,9 +138,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                         if (hasFocus) {
                             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                         }
-                        chatFragmentBinding.recyclerView2.scrollToPosition(messageItemList.size()-1);
-                        chatFragmentBinding.recyclerView2.smoothScrollToPosition(chatFragmentBinding.recyclerView2.getBottom());
-                    } catch (Exception e) {
+                        scrollDown();
+                        } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -223,6 +218,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         RecyclerView mRecyclerView = chatFragmentBinding.recyclerView2;
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         chatAdapter=new LeftChatAdapter(getActivity(),messageItemList,linearLayoutManager,chatFragmentBinding.recyclerView2,channel,type);
         mRecyclerView.setAdapter(chatAdapter);
@@ -231,7 +227,16 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             mRecyclerView.scrollToPosition(messageItemList.size()-1);
         }
         mRecyclerView.smoothScrollToPosition(mRecyclerView.getBottom());
-
+        try {
+            mRecyclerView.addOnLayoutChangeListener((view1, i, i1, i2, i3, i4, i5, i6, i7) -> {
+                if (i2 < i7) {
+                    //scrollDown();
+                    mRecyclerView.scrollBy(0, i7 - i2);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -314,6 +319,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                 progressDialog.cancel();
                 progressDialog.dismiss();
             }
+
+            channel.removeListener(channelListener);
+            chatClientManager.removeClientListener(chatClientListener);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -525,6 +533,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             identity = chatClientManager.getChatClient().getMyIdentity();
             Logs.d("chat fragmnet","identity : "+identity+" CHANNEL_ID : "+sID);
 
+
+            chatClientManager.getChatClient().removeListener(chatClientListener);
             chatClientManager.getChatClient().addListener(chatClientListener);
 
             Channels channelsObject = chatClientManager.getChatClient().getChannels();
@@ -533,6 +543,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                 public void onSuccess(final Channel foundChannel)
                 {
                     channel = foundChannel;
+                    channel.removeListener(channelListener);
                     channel.addListener(channelListener);
                     setupListView(channel);
                     setupInput();
@@ -712,9 +723,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                     userChat.setUid(sID);
                     userChat.setTitle("RIGHT");
                     viewModel.insert(userChat);
-                }else{
+                }/*else{
                     hideKeyboard(getActivity());
-                }
+                }*/
 
                 if(!text.equals("")){
                     sendMessage(text);

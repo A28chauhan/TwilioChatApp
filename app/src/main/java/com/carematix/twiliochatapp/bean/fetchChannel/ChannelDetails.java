@@ -16,6 +16,8 @@ class ChannelDetails {
     @Expose
     private Data data;
 
+
+
     public Integer getCode() {
         return code;
     }

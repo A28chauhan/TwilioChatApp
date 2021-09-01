@@ -86,38 +86,26 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    public static String dateType="";
+
     String currentDate="";
     @Override
     public int getItemViewType(int position) {
         Message messageItem =messageItemList.get(position);
         PrefManager prefManager=new PrefManager(context);
         String programUser = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
-
-        currentDate = Utils.setDateTime(messageItem.getDateCreatedAsDate());
-        try {
-            if(dateType.equals("")){
-                dateType =currentDate;
-                return VIEW_TYPE_CENTER_ITEM;
-            }else if(currentDate.equals(dateType)){
-                if(!messageItem.getAuthor().contains(programUser)){
-                    return  VIEW_TYPE_LEFT_ITEM;
-                }else {
-                    return VIEW_TYPE_RIGHT_ITEM;
-                }
-            }else{
-                dateType =currentDate;
-                return VIEW_TYPE_CENTER_ITEM;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            dateType = currentDate;
+        if(!messageItem.getAuthor().contains(programUser)){
+            return  VIEW_TYPE_LEFT_ITEM;
+        }else {
+            return VIEW_TYPE_RIGHT_ITEM;
         }
-        return VIEW_TYPE_RIGHT_ITEM;
+
     }
 
-
+    @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        Logs.d("onViewRecycled "," onViewRecycled index:"+holder.getAdapterPosition());
+        super.onViewRecycled(holder);
+    }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
@@ -201,6 +189,7 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         try {
             Member member =channel.getMembers().getMember(attendeeId);
+            if(member != null)
             if(member.getLastConsumedMessageIndex() == null){
                 userViewHolder.textTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_single_tick_24, 0);
             }else{
@@ -265,16 +254,6 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             textTime=(TextView)view.findViewById(R.id.text_time_right);
             textTimeFull=(TextView)view.findViewById(R.id.textfullDate);
 
-            /*textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos=getAdapterPosition();
-
-                    Intent intent =new Intent(context, ChatActivity.class);
-                    context.startActivity(intent);
-                    //context.finish();
-                }
-            });*/
         }
 
         public TextView getTextView() {
@@ -289,15 +268,6 @@ public class LeftChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             textView=(TextView)view.findViewById(R.id.chat_text_left);
             textTime=(TextView)view.findViewById(R.id.text_time_left);
             textTimeFull=(TextView)view.findViewById(R.id.textfullDate);
-
-            /*textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos=getAdapterPosition();
-                    Logs.d("left chat adapter","position :"+pos);
-
-                }
-            });*/
         }
 
         public TextView getTextView() {

@@ -1,8 +1,13 @@
 package com.carematix.twiliochatapp.restapi;
 
 
+import android.os.Build;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -16,7 +21,10 @@ public class ApiClient {
         retrofit = null;
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(00, TimeUnit.SECONDS)
+                .writeTimeout(00, TimeUnit.SECONDS).addInterceptor(interceptor).build();
 
         if(retrofit == null){
             retrofit = new Retrofit.Builder()
@@ -31,9 +39,13 @@ public class ApiClient {
 
     public static Retrofit getClient1(){
         retrofit = null;
+
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(00, TimeUnit.SECONDS)
+                .writeTimeout(00, TimeUnit.SECONDS).addInterceptor(interceptor).build();
 
         if(retrofit == null){
             retrofit = new Retrofit.Builder()
@@ -51,9 +63,9 @@ public class ApiClient {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(2, TimeUnit.MINUTES)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS).addInterceptor(interceptor).build();
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(00, TimeUnit.SECONDS)
+                .writeTimeout(00, TimeUnit.SECONDS).addInterceptor(interceptor).build();
 
         if(retrofit == null){
             retrofit = new Retrofit.Builder()

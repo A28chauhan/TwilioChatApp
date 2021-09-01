@@ -74,7 +74,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements ChatClientListener, OnclickListener {
+public class MainActivity extends AppCompatActivity implements OnclickListener {
 
     private ActivityMainBinding binding;
     public PrefManager prefManager;
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
                 getAllUserListCall();
                 prefManager.setBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE,false);
             }else{
+                getUserListDetails();
                 stopActivityIndicator();
             }
 
@@ -141,11 +142,9 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
             String type1= String.valueOf(attendeeProgramUserId);
 
             if(channels !=  null){
+                Logs.d("onCLick ", " onclicjk :"+channels.getStatus());
                 if(channels.getSid() != null){
-
-                    Logs.d("onCLick ", " onclicjk :"+channels.getStatus());
                     if(channels.getStatus() == Channel.ChannelStatus.JOINED){
-
                         callActivity(channels,name,type1);
                     }else{
                         channels.join(new ToastStatusListener("Successfully joined channel","Failed to join channel"){
@@ -154,7 +153,6 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
                                 //super.onSuccess();
                                 callActivity(channels,name,type1);
                             }
-
                             @Override
                             public void onError(ErrorInfo errorInfo) {
                                 super.onError(errorInfo);
@@ -163,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
                                 }
                             }
                         });
-
                     }
 
                 }else{
@@ -256,7 +253,6 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         }
 
         if(channel.getStatus() == Channel.ChannelStatus.JOINED){
-
             callActivity(channel,userName,String.valueOf(attendProgramUserId));
         }else{
             channel.join(new ToastStatusListener("Successfully joined channel","Failed to join channel"){
@@ -268,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
 
                 @Override
                 public void onError(ErrorInfo errorInfo) {
+                    Logs.d("errorInfo "," errorInfo : "+errorInfo.getMessage());
                     super.onError(errorInfo);
                 }
             });
@@ -312,7 +309,6 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
     protected void onResume() {
         try {
             setupListView();
-            getUserListDetails();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -323,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
         allViewModel.getAllList().observe(this,userAllLists -> {
             if(userAllLists.size() > 0){
                 userListAdapter.addItem(userAllLists);
+                userListAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -339,7 +336,8 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
 
             userListAdapter=new UserListAdapter(this,arrayList,this,channel);
             mRecyclerView.setAdapter(userListAdapter);
-            userListAdapter.notifyDataSetChanged();
+            mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
+            mRecyclerView.setItemViewCacheSize(10);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -421,7 +419,8 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
             e.printStackTrace();
         }
 
-
+        // get UserList in our db
+        getUserListDetails();
     }
 
 
@@ -440,7 +439,7 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
     }
 
 
-    private String getStringResource(int id) {
+    public String getStringResource(int id) {
         Resources resources = getResources();
         return resources.getString(id);
     }
@@ -468,9 +467,6 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
             e.printStackTrace();
         }
     }
-
-
-
 
     public ProgressDialog progressDialog;
     private void showActivityIndicator(final String message) {
@@ -626,99 +622,12 @@ public class MainActivity extends AppCompatActivity implements ChatClientListene
     }
 
     @Override
-    public void onChannelJoined(Channel channel) {
-        Logs.d("MainActivity onChannelJoined","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-    }
-
-    @Override
-    public void onChannelInvited(Channel channel) {
-        Logs.d("MainActivity onChannelInvited ","Received onChannelInvited callback for channel |" + channel.getFriendlyName() + "|");
-        showIncomingInvite(channel);
-    }
-    @Override
-    public void onChannelAdded(Channel channel) {
-        try {
-            Logs.d("MainActivity onChannelAdded ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public void onChannelUpdated(Channel channel, Channel.UpdateReason updateReason) {
-        Logs.d("MainActivity onChannelUpdated ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-    }
-    @Override
-    public void onChannelDeleted(Channel channel) {
-        try {
-            Logs.d("MainActivity ChannelDeleted ","Received onChannelJoined callback for channel |" + channel.getFriendlyName() + "|");
-            //setData();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public void onChannelSynchronizationChange(Channel channel) {
-        Logs.d("MainActivity ChannelSyncChange ","onChannelSynchronizationChange |" + channel.getFriendlyName() + "|");
-    }
-    @Override
-    public void onError(ErrorInfo errorInfo) {
-        TwilioApplication.get().showToast("MainActivity Received onError : " , Toast.LENGTH_LONG);
-    }
-    @Override
-    public void onUserUpdated(com.twilio.chat.User user, com.twilio.chat.User.UpdateReason updateReason) {
-        Logs.d("MainActivity UserUpdated ","onUserUpdated |" +updateReason.name() + "|");
-
-    }
-    @Override
-    public void onUserSubscribed(com.twilio.chat.User user) {
-        Logs.d("MainActivity onUserSubscribed ","onUserSubscribed |" +user.getFriendlyName() + "|");
-    }
-    @Override
-    public void onUserUnsubscribed(com.twilio.chat.User user) {
-        Logs.d("MainActivity onUserUnsubscribed ","onUserUnsubscribed |" +user.getFriendlyName() + "|");
-    }
-    @Override
-    public void onClientSynchronization(ChatClient.SynchronizationStatus synchronizationStatus) {
-        Logs.d("MainActivity ChannelSync","Received onChannelJoined callback for channel |" + synchronizationStatus.getValue() + "|");
-    }
-    @Override
-    public void onNewMessageNotification(String s, String s1, long l) {
-        TwilioApplication.get().showToast("MainActivity Received onNewMessage push notification : " , Toast.LENGTH_LONG);
-    }
-    @Override
-    public void onAddedToChannelNotification(String s) {
-        TwilioApplication.get().showToast("MainActivity Received onAddedToChannel push notification : " , Toast.LENGTH_LONG);
-    }
-    @Override
-    public void onInvitedToChannelNotification(String s) {
-        TwilioApplication.get().showToast("MainActivity Received onNewMessage push notification : " , Toast.LENGTH_LONG);
-    }
-    @Override
-    public void onRemovedFromChannelNotification(String s) {
-        TwilioApplication.get().showToast("MainActivity Received onRemovedFromChannel push notification : " , Toast.LENGTH_LONG);
-    }
-    @Override
-    public void onNotificationSubscribed() {
-        TwilioApplication.get().showToast("MainActivity Received onNotificationSubscribed push notification : " , Toast.LENGTH_LONG);
-    }
-    @Override
-    public void onNotificationFailed(ErrorInfo errorInfo) {
-        TwilioApplication.get().showToast("MainActivity Received onNotificationFailed push notification : " , Toast.LENGTH_LONG);
-    }
-    @Override
-    public void onConnectionStateChange(ChatClient.ConnectionState connectionState) {
-        TwilioApplication.get().showToast("MainActivity Received onConnectionStateChange push notification : " , Toast.LENGTH_LONG);
-    }
-    @Override
-    public void onTokenExpired() {
-    }
-    @Override
-    public void onTokenAboutToExpire() {
-    }
-
-    @Override
     public void onBackPressed() {
         MainActivity.this.finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

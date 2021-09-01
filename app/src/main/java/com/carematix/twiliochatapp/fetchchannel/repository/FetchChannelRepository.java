@@ -10,6 +10,11 @@ import com.carematix.twiliochatapp.data.Result;
 import com.carematix.twiliochatapp.data.model.LoggedInUser;
 import com.carematix.twiliochatapp.fetchchannel.data.FetchChannelDataSource;
 import com.carematix.twiliochatapp.fetchchannel.data.FetchInDetails;
+import com.carematix.twiliochatapp.helper.Logs;
+import com.twilio.chat.Channel;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public
 class FetchChannelRepository {
@@ -26,9 +31,12 @@ class FetchChannelRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public FetchChannelRepository(Application application){
-        //AppDatabase db =AppDatabase.getDatabase(application);
-        //userChatDao = db.userChannelDao();
+    public FetchInDetails getFetchInDetails() {
+        return fetchInDetails;
+    }
+
+    public void setFetchInDetails(FetchInDetails fetchInDetails) {
+        this.fetchInDetails = fetchInDetails;
     }
 
     // private constructor : singleton access
@@ -43,14 +51,45 @@ class FetchChannelRepository {
         return instance;
     }
 
-
     public Result<FetchInDetails> fetchChannelList(String attendeeID,String programUserId) {
 
         Result<FetchInDetails> result = dataSource.fetchChannel(attendeeID,programUserId);
+
         if(result != null)
             if (result instanceof Result.Success) {
+                //FetchInDetails data = ((Result.Success<FetchInDetails>) result).getData();
                 fetchInDetails(((Result.Success<FetchInDetails>) result).getData());
             }
         return result;
     }
+
+    /*public Result<FetchInDetails> fetchChannelList(String attendeeID,String programUserId) {
+        Result<FetchInDetails> result=null;
+
+        HashMap<String,Result<FetchInDetails>> hashMap = dataSource.fetchChannel(attendeeID,programUserId);
+
+        try {
+            if(hashMap.size() > 0)
+            for(Map.Entry<String, Result<FetchInDetails>> result1 : hashMap.entrySet()){
+                Logs.d("fetchChannelList responce data ","attendeeProgramUserId  key"+result1.getKey()+" "+hashMap.size());
+                if(attendeeID.equals(result1.getKey()))
+                result = result1.getValue();
+                if(result != null)
+                    if (result instanceof Result.Success) {
+                        FetchInDetails data = ((Result.Success<FetchInDetails>) result).getData();
+                        fetchInDetails(((Result.Success<FetchInDetails>) result).getData());
+                        setFetchInDetails(((Result.Success<FetchInDetails>) result).getData());
+                    }
+                return result;
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }*/
+
+
+
 }

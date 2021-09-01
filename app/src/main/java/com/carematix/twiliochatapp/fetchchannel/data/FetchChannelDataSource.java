@@ -5,13 +5,17 @@ import com.carematix.twiliochatapp.bean.fetchChannel.ChannelDetails;
 import com.carematix.twiliochatapp.bean.login.UserResult;
 import com.carematix.twiliochatapp.data.Result;
 import com.carematix.twiliochatapp.data.model.LoggedInUser;
+import com.carematix.twiliochatapp.fetchchannel.repository.FetchChannelRepository;
 import com.carematix.twiliochatapp.helper.Constants;
+import com.carematix.twiliochatapp.helper.Logs;
 import com.carematix.twiliochatapp.restapi.ApiClient;
 import com.carematix.twiliochatapp.restapi.ApiInterface;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,10 +25,11 @@ public
 class FetchChannelDataSource {
     Result<FetchInDetails> fetchInDetailsResult=null;
     ApiInterface apiService= null;
-    public Result<FetchInDetails> fetchChannel(final String attendeeProgramUserId,final String programUserId){
+    HashMap<String,FetchInDetails> resultHashMap=new HashMap<>();
+   public Result<FetchInDetails> fetchChannel(final String attendeeProgramUserId, final String programUserId){
         // handle login
         try {
-            apiService= null;
+            Logs.d("fetchChannel","fetchChannel call");
             apiService = ApiClient.getClient1().create(ApiInterface.class);
             Call<ChannelDetails> call = apiService.activeChannel(programUserId,attendeeProgramUserId, Constants.X_DRO_SOURCE);
             call.enqueue(new Callback<ChannelDetails>() {
@@ -34,9 +39,9 @@ class FetchChannelDataSource {
                         int code = response.code();
                         if (code == 200) {
                             if(response.body().getMessage().contains("No active")){
-                                fetchInDetailsResult = fetchFailureDetails(response.body().getMessage());
+                                //fetchInDetailsResult = fetchFailureDetails(response.body().getMessage());
                             }else{
-                                // setAllChannel(response,attendeeProgramUserId);
+                                Logs.d("responce data ","attendeeProgramUserId  "+attendeeProgramUserId + "responce "+response.body().getData().getChannelSid());
                                 fetchInDetailsResult = fetchSuccessDetails(response,attendeeProgramUserId);
                             }
                         }else{
@@ -49,23 +54,27 @@ class FetchChannelDataSource {
 
                 @Override
                 public void onFailure(Call<ChannelDetails> call, Throwable t) {
-                    LoggedInUser loggedInUser =new LoggedInUser(t.getMessage());
                     fetchInDetailsResult = fetchFailureDetails(t.getMessage().toString());
+
                 }
             });
 
         } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
+            return fetchErrorDetails(e);
         }
         return fetchInDetailsResult;
     }
 
     private Result<FetchInDetails> fetchSuccessDetails(Response<ChannelDetails> response ,String attendeeProgramUserId){
-        //return new Result.Success<>(new FetchInDetails(attendeeProgramUserId,response));
-        return new Result.Success<>(new FetchInDetails(attendeeProgramUserId,response));
+        resultHashMap.put(attendeeProgramUserId,new FetchInDetails(attendeeProgramUserId,response));
+       return new Result.Success<>(new FetchInDetails(attendeeProgramUserId,response,resultHashMap));
     }
 
     private Result<FetchInDetails> fetchFailureDetails(String errorMsg){
         return new Result.Failure<>(new FetchInDetails(errorMsg));
+    }
+
+    private Result<FetchInDetails> fetchErrorDetails(Exception errorMsg){
+        return new Result.Error(new IOException("Error logging in", errorMsg));
     }
 }
