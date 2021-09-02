@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.carematix.twiliochatapp.architecture.table.UserChannelList;
@@ -28,9 +29,10 @@ interface UserChannelDao {
     @Query("SELECT * FROM Channel_list WHERE friendlyName LIKE (:userIds) ORDER BY friendlyName DESC LIMIT 1")
     List<UserChannelList> loadDataLikeByIdsA(String userIds);
 
-    //@Insert onConflict = OnConflictStrategy.IGNORE
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    //@Insert()
     void insertAll(UserChannelList users);
+
 
     @Delete
     void delete(UserChannelList user);

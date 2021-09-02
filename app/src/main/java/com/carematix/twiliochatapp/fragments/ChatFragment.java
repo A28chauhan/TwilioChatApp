@@ -775,11 +775,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
                     }
                 });
 
-        /*channel.getMessages().setAllMessagesConsumedWithResult(new CallbackListener<Long>() {
-            @Override
-            public void onSuccess(Long aLong) {
-            }
-        });*/
     }
 
 

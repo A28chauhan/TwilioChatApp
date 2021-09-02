@@ -21,6 +21,7 @@ import com.carematix.twiliochatapp.R;
 import com.carematix.twiliochatapp.application.ChatClientManager;
 import com.carematix.twiliochatapp.application.TwilioApplication;
 import com.carematix.twiliochatapp.architecture.table.UserAllList;
+import com.carematix.twiliochatapp.architecture.viewModel.FetchChannelDetailsViewModel;
 import com.carematix.twiliochatapp.architecture.viewModel.UserChannelListViewModel;
 import com.carematix.twiliochatapp.architecture.viewModel.UserChannelViewModel;
 import com.carematix.twiliochatapp.architecture.viewModel.UserListViewModel;
@@ -36,6 +37,7 @@ import com.carematix.twiliochatapp.listener.OnclickListener;
 import com.carematix.twiliochatapp.preference.PrefConstants;
 import com.carematix.twiliochatapp.preference.PrefManager;
 import com.carematix.twiliochatapp.twilio.ChannelManager;
+import com.carematix.twiliochatapp.twilio.ToastStatusListener;
 import com.twilio.chat.CallbackListener;
 import com.twilio.chat.Channel;
 import com.twilio.chat.ChannelListener;
@@ -49,6 +51,7 @@ import com.twilio.chat.Messages;
 import com.twilio.chat.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,23 +64,15 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
     List<UserAllList> arrayList;
     OnclickListener onclickListener;
 
-    public UserListViewModel userListviewModel;
-    public UserChannelViewModel userChannelViewModel;
-    public UserChannelListViewModel userChannelListViewModel;
-    public FetchChannelViewModel fetchChannelViewModel;
-
     PrefManager prefManager;
 
     Channel channel;
     Channels channelsObject;
-
-    private ChannelManager channelManager;
     private ChatClientManager chatClientManager;
+    public FetchChannelDetailsViewModel fetchChannelDetailsViewModel;
 
     public HashMap<Integer,Channel> channelList =new HashMap<>();
     public HashMap<Integer,ViewHolder> holderViewList =new HashMap<>();
-
-    public int count =0;
 
     public UserListAdapter(Context mContext, ArrayList<UserAllList> arrayList, OnclickListener onclickListener,Channel channels){
         this.context=mContext;
@@ -85,17 +80,7 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
         this.onclickListener =onclickListener;
         this.channel=channels;
         prefManager=new PrefManager(context);
-        count =0;
-        try {
-            userListviewModel =new ViewModelProvider((MainActivity)mContext).get(UserListViewModel.class);
-            userChannelViewModel = new ViewModelProvider((MainActivity)mContext).get(UserChannelViewModel.class);
-            userChannelListViewModel = new ViewModelProvider((MainActivity)mContext).get(UserChannelListViewModel.class);
-            fetchChannelViewModel = new ViewModelProvider((MainActivity)mContext, new FetchChannelViewModelFactory()).get(FetchChannelViewModel.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        channelManager = ChannelManager.getInstance();
+        fetchChannelDetailsViewModel = new ViewModelProvider((MainActivity)mContext).get(FetchChannelDetailsViewModel.class);
         chatClientManager = TwilioApplication.get().getChatClientManager();
         // add chat client listener
     }
@@ -113,18 +98,10 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
 
-        String name = arrayList.get(position).getFirstName();
-        String lastName = arrayList.get(position).getLastName();
-        String userName= name+" "+lastName;
-        viewHolder.userListItemBinding.textName.setText(userName);
-        viewHolder.userListItemBinding.msgDetails.setText(Utils.getStringResource(R.string.tap_to_start,context));
-        viewHolder.userListItemBinding.msgDetails.setVisibility(View.VISIBLE);
-
         try {
-            int attendeeProgramUserID =arrayList.get(position).getDroProgramUserId();
-            holderViewList.put(attendeeProgramUserID,viewHolder);
-
-            fetchChannelDetails(viewHolder);
+            holderViewList.put(arrayList.get(position).getDroProgramUserId(),viewHolder);
+            viewHolder.setUserAllList(arrayList.get(position));
+            viewHolder.setUserDetails();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -132,37 +109,14 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
     }
 
 
-   public void fetchChannelDetails(ViewHolder holder){
-       try {
-           holder.fetchUserDetails(holder.getAdapterPosition());
-       } catch (Exception e) {
-           e.printStackTrace();
-       }
-    }
-
-    /*public ViewHolder getViewHolder(HashMap<Integer,Channel> channelList,Channel channel){
-        for(Map.Entry<Integer,Channel> entry: channelList.entrySet()){
-            Channel channel1 = entry.getValue();
-            if(channel1 != null){
-                if(channel1.getSid().equals(channel.getSid())){
-                    viewHolder = holderViewList.get(entry.getKey());
-                    return viewHolder;
-                }
-            }
-        }
-
-        return viewHolder;
-    }*/
-
     //onBindViewHolder onCreateViewHolder getItemViewType
+    View itemView;
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
+        itemView= LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.user_list_item, parent, false);
-
         Logs.d(" onCreateViewHolder ","onCreateViewHolder call "+viewType);
-
         return new ViewHolder(itemView);
     }
 
@@ -178,189 +132,104 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         UserListItemBinding userListItemBinding;
+        Channel channel;
+        UserAllList userAllList;
+
+        public Channel getChannel() {
+            return channel;
+        }
+
+        public void setChannel(Channel channel) {
+            this.channel = channel;
+        }
+
+        public UserAllList getUserAllList() {
+            return userAllList;
+        }
+
+        public void setUserAllList(UserAllList userAllList) {
+            this.userAllList = userAllList;
+        }
+
         public ViewHolder(View view){
             super(view);
             userListItemBinding = UserListItemBinding.bind(view);
+            //setContentView(binding.getRoot());
+
             userListItemBinding.textName.setOnClickListener(this::onClick);
             userListItemBinding.msgDetails.setOnClickListener(this::onClick);
             userListItemBinding.constraintLayout.setOnClickListener(this::onClick);
 
-
-        }
-
-        public void fetchUserDetails(int position){
             try {
-                if(arrayList.size() > 0){
-                    int attendeeProgramUserID =arrayList.get(position).getDroProgramUserId();
-                    String programUserId = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
-                    channelList.put(attendeeProgramUserID,null);
-                    fetchChannelViewModel.fetchChannel(String.valueOf(attendeeProgramUserID),programUserId);
-                }
-
-                fetchChannelViewModel.getFetchChannelResult().observe(((MainActivity)context), new Observer<FetchChannelResult>() {
-                    @Override
-                    public void onChanged(FetchChannelResult fetchChannelResult) {
-                        if (fetchChannelResult == null) {
-                            return;
-                        }
-                        if (fetchChannelResult.getSuccess() != null) {
-                            updateUiWithUser(fetchChannelResult);
-                        }
-                    }
-                });
+                chatClientManager.getChatClient().addListener(chatClientListener);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        public void updateUiWithUser(FetchChannelResult fetchChannelResult){
+        public void setUserDetails() {
 
-            FetchChannelView fetchChannelView=fetchChannelResult.getSuccess();
-            //HashMap<String, FetchInDetails> resultHashMap = fetchChannelView.getFetchInDetails();
+            String userName= getUserAllList().getFirstName() + " " + getUserAllList().getLastName();
+            userListItemBinding.textName.setText( ""+userName);
+            userListItemBinding.msgDetails.setText(Utils.getStringResource(R.string.tap_to_start,context));
+            userListItemBinding.msgDetails.setVisibility(View.VISIBLE);
+            fetchUserDetails();
+        }
 
+        public void fetchUserDetails(){
             try {
-                if (chatClientManager == null || chatClientManager.getChatClient() == null) return;
 
-                if (channelsObject == null){
-                    channelsObject = chatClientManager.getChatClient().getChannels();
+                if(arrayList.size() > 0){
+                    int attendeeProgramUserID =getUserAllList().getDroProgramUserId();
+                    channelList.put(attendeeProgramUserID,null);
+                    String programUserId = prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
+                    fetchChannelDetailsViewModel.setViewHolder(this);
+                    fetchChannelDetailsViewModel.setProgramUserId(programUserId);
+                    fetchChannelDetailsViewModel.setAttendeeProgramUserId(String.valueOf(attendeeProgramUserID));
+                    fetchChannelDetailsViewModel.callApi(programUserId,String.valueOf(attendeeProgramUserID),this);
+
+                    fetchChannelDetailsViewModel.getMutableLiveData().observe(((MainActivity) context), new Observer<FetchInDetails>() {
+                        @Override
+                        public void onChanged(FetchInDetails fetchInDetails) {
+                            if (fetchInDetails == null) {
+                                return;
+                            }
+                            if (fetchInDetails.getAttendeUserID() != null) {
+                                Logs.d("fetchInDetails" ,"fetchInDetails : "+fetchInDetails.getAttendeUserID());
+                                updateUiWithUser(fetchInDetails);
+
+                                //fetchChannelDetailsViewModel.getMutableLiveData().removeObserver();
+                            }
+
+                        }
+                    });
+
                 }
 
-                //FetchInDetails fetchChannel = entry.getValue();
-                int attendId =Integer.parseInt(fetchChannelView.getChannelSId());
-                String channelId = fetchChannelView.getUserResultResponse().body().getData().getChannelSid();//fetchChannelView.getUserResultResponse().body().getData().getChannelSid();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-                channelsObject.getChannel(channelId, new CallbackListener<Channel>() {
+        public void updateUiWithUser(FetchInDetails fetchInDetails){
+            try {
+
+                if (chatClientManager == null || chatClientManager.getChatClient() == null) return;
+
+                int attendId =Integer.parseInt(fetchInDetails.getAttendeUserID());
+                String channelId = fetchInDetails.getChannelDetailsResponse().body().getData().getChannelSid();//fetchChannelView.getUserResultResponse().body().getData().getChannelSid();
+
+                chatClientManager.getChatClient().getChannels().getChannel(channelId, new CallbackListener<Channel>() {
                     @Override
                     public void onSuccess(Channel channels) {
                         try {
                             channels.removeListener(channelListener);
                             channels.addListener(channelListener);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            channelList.put(attendId,channels);
+
                             setChannel(channels);
-                            Logs.d("onSuccess","get chaneel : "+channels.getSid());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                            channelList.put(attendId,channels);
 
-                    }
-                });
-
-               /* Logs.d("updateUiWithUser","updateUiWithUser : "+resultHashMap.size());
-                if(resultHashMap.size() > 0)
-                    for(Map.Entry<String,FetchInDetails> entry: resultHashMap.entrySet()){
-                        FetchInDetails fetchChannel = entry.getValue();
-                        int attendId =Integer.parseInt(entry.getKey());
-                        String channelId = fetchChannel.getChannelDetailsResponse().body().getData().getChannelSid();//fetchChannelView.getUserResultResponse().body().getData().getChannelSid();
-
-                        channelsObject.getChannel(channelId, new CallbackListener<Channel>() {
-                            @Override
-                            public void onSuccess(Channel channels) {
-                                try {
-                                    channels.removeListener(channelListener);
-                                    channels.addListener(channelListener);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    channelList.put(attendId,channels);
-                                    setChannel(channels);
-                                    Logs.d("onSuccess","get chaneel : "+channels.getSid());
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        });
-                    }*/
-
-
-                try {
-                    chatClientManager.getChatClient().addListener(chatClientListener);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        MutableLiveData<Channel> mutableLiveData =new MutableLiveData<>();
-
-        public MutableLiveData<Channel> getMutableLiveData() {
-            return mutableLiveData;
-        }
-
-        public void setChannel(Channel channels){
-
-            try {
-                mutableLiveData.setValue(channels);
-
-                mutableLiveData.observe(((MainActivity) context), new Observer<Channel>() {
-                    @Override
-                    public void onChanged(Channel channel) {
-                        updateValue(channel);
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        public void updateValue(Channel channels){
-            if(channels != null){
-            try {
-                    channels.getMessages().getLastMessages(1, new CallbackListener<List<Message>>() {
-                        @Override
-                        public void onSuccess(List<Message> messages) {
-                            try {
-                                if (messages.size() > 0) {
-                                    String UserMessages = messages.get(0).getMessageBody().toString();
-                                    userListItemBinding.msgDetails.setText(UserMessages);
-                                    userListItemBinding.msgTime.setText(Utils.setTime(messages.get(0).getDateCreatedAsDate()));
-                                    userListItemBinding.msgDetails.setVisibility(View.VISIBLE);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onError(ErrorInfo errorInfo) {
-                            super.onError(errorInfo);
-                            Logs.d("onError ","getUnconsumedMessagesCount : "+errorInfo.getMessage());
-                        }
-                    });
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                channels.getUnconsumedMessagesCount(new CallbackListener<Long>() {
-                    @Override
-                    public void onSuccess(Long aLong) {
-                        try {
-                            if(aLong != null){
-                                if(aLong == 0){
-
-                                    userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                    userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
-                                }else{
-                                    userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
-                                    userListItemBinding.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
-                                }
-                            }else{
-                                userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
-                            }
-
+                            joinChannel(channels);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -370,21 +239,89 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                     @Override
                     public void onError(ErrorInfo errorInfo) {
                         super.onError(errorInfo);
-                        Logs.d("onError ","getUnconsumedMessagesCount : "+errorInfo.getMessage());
+                        Logs.d("error","getChannel is getting null."+errorInfo.getMessage());
                     }
                 });
+
+
+
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-
-            }else{
-                Utils.showToast("Channel not found",context);
             }
         }
 
         @Override
         public void onClick(View view) {
             click();
+        }
+
+        public void joinChannel(Channel channels){
+
+            if(channels.getStatus() == Channel.ChannelStatus.JOINED){
+                Logs.d("Channel","Channel already joined : "+channels.getStatus());
+                updateView(channels);
+            }else{
+
+                Logs.d("Channel","Channel not joined :"+channels.getStatus());
+                channels.join(new ToastStatusListener("Successfully joined channel","Failed to join channel"){
+                    @Override
+                    public void onSuccess() {
+                        //super.onSuccess();
+                        Logs.d("Channel","Channel joined Successfully");
+                        setAllConsume(channels);
+                       // updateView(channels);
+                    }
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                    }
+                });
+            }
+
+        }
+
+        public void setAllConsume(Channel channels){
+            updateViewFirstTime(channels);
+        }
+
+        public void updateViewFirstTime(Channel channel){
+            try {
+                Logs.d("channel"," updateView count "+channel.getSid());
+                if (channel.getMessages() != null) {
+
+                    channel.getMessages().getLastMessages(50, new CallbackListener<List<Message>>() {
+                        @Override
+                        public void onSuccess(List<Message> messages) {
+                            if(messages.size()>0){
+                                viewHolder = getViewHolder(channelList,channel);
+                                String UserMessages = messages.get((messages.size()-1)).getMessageBody().toString();
+                                Date date=messages.get((messages.size()-1)).getDateCreatedAsDate();
+                                int count=messages.size();
+                                Logs.d("updateViewFirstTime onSuccess"," getLastMessages count"+UserMessages +" "+date.getTime());
+                                viewHolder.userListItemBinding.msgDetails.setText(UserMessages);
+                                viewHolder.userListItemBinding.msgTime.setText(Utils.setTime(date));
+                                viewHolder.userListItemBinding.msgDetails.setVisibility(View.VISIBLE);
+
+                                viewHolder.userListItemBinding.textUnconsumedMessageCount.setText(""+count);
+                                viewHolder.userListItemBinding.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+
+                            }else{
+                                viewHolder.userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                viewHolder.userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                            }
+                        }
+
+                        @Override
+                        public void onError(ErrorInfo errorInfo) {
+                            super.onError(errorInfo);
+                            Logs.d("ErrorInfo"," getLastMessages count"+errorInfo.getMessage()+" "+channel.getSid());
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
 
         public void click(){
@@ -405,40 +342,44 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
         }
 
         public void getUpdateView(Message message){
-
+            Logs.d("getUpdateView","messages added"+message.getChannel().getSid());
+            viewHolder = getViewHolder(channelList,message.getChannel());
             try {
                 String UserMessages = message.getMessageBody().toString();
-                userListItemBinding.msgDetails.setText(UserMessages);
-                userListItemBinding.msgTime.setText(Utils.setTime(message.getDateCreatedAsDate()));
-                userListItemBinding.msgDetails.setVisibility(View.VISIBLE);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                viewHolder.userListItemBinding.msgDetails.setText(UserMessages);
+                viewHolder.userListItemBinding.msgTime.setText(Utils.setTime(message.getDateCreatedAsDate()));
+                viewHolder.userListItemBinding.msgDetails.setVisibility(View.VISIBLE);
 
-
-            try {
-                channel =message.getChannel();
-                channel.getUnconsumedMessagesCount(new CallbackListener<Long>() {
+                message.getChannel().getUnconsumedMessagesCount(new CallbackListener<Long>() {
                     @Override
                     public void onSuccess(Long aLong) {
                         try {
+                            Logs.d("errorInfo onSuccess","messages added"+aLong);
+                            viewHolder = getViewHolder(channelList,message.getChannel());
                             if(aLong != null){
                                 if(aLong == 0){
-                                    userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                    userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                    viewHolder.userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                    viewHolder.userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
                                 }else{
-                                    userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
-                                    userListItemBinding.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                    viewHolder.userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
+                                    viewHolder.userListItemBinding.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
                                 }
                             }else{
-                                userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                updateViewFirstTime(message.getChannel());
+                               // viewHolder.userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                               // viewHolder.userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
                             }
 
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
+                    }
+
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        Logs.d("errorInfo","messages getUnconsumedMessagesCount added"+errorInfo.getMessage());
                     }
                 });
             } catch (Exception e) {
@@ -447,24 +388,33 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
 
         }
 
-        public void updateView1(Channel channel){
-
+        public void updateView(Channel channel){
             try {
-                final Messages messagesObject = channel.getMessages();
-                if (messagesObject != null) {
-                    messagesObject.getLastMessages(1, new CallbackListener<List<Message>>() {
+                Logs.d("channel"," updateView count "+channel.getSid());
+                if (channel.getMessages() != null) {
+                    channel.getMessages().getLastMessages(1, new CallbackListener<List<Message>>() {
                         @Override
                         public void onSuccess(List<Message> messages) {
                             try {
+                                Logs.d("channel"," onSuccess messages "+messages.size()+" "+channel.getSid());
+
                                 if (messages.size() > 0) {
+                                    viewHolder = getViewHolder(channelList,channel);
+                                    //viewHolder= (ViewHolder) itemView.getTag();
                                     String UserMessages = messages.get(0).getMessageBody().toString();
-                                    userListItemBinding.msgDetails.setText(UserMessages);
-                                    userListItemBinding.msgTime.setText(Utils.setTime(messages.get(0).getDateCreatedAsDate()));
-                                    userListItemBinding.msgDetails.setVisibility(View.VISIBLE);
+                                    viewHolder.userListItemBinding.msgDetails.setText(UserMessages);
+                                    viewHolder.userListItemBinding.msgTime.setText(Utils.setTime(messages.get(0).getDateCreatedAsDate()));
+                                    viewHolder.userListItemBinding.msgDetails.setVisibility(View.VISIBLE);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                        }
+
+                        @Override
+                        public void onError(ErrorInfo errorInfo) {
+                            super.onError(errorInfo);
+                            Logs.d("ErrorInfo"," getLastMessages count"+errorInfo.getMessage()+" "+channel.getSid());
                         }
                     });
                 }
@@ -473,21 +423,26 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
             }
 
             try {
+                Logs.d("channel"," getUnconsumed count "+channel.getSid());
                 channel.getUnconsumedMessagesCount(new CallbackListener<Long>() {
                     @Override
                     public void onSuccess(Long aLong) {
                         try {
+                            Logs.d("onSuccess"," getUnconsumed count"+channel.getSid()+" aLong = "+aLong);
+                            viewHolder = getViewHolder(channelList,channel);
+                            //viewHolder= (ViewHolder) itemView.getTag();
                             if(aLong != null){
                                 if(aLong == 0){
-                                    userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                    userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                    viewHolder.userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                                    viewHolder.userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
                                 }else{
-                                    userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
-                                    userListItemBinding.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
+                                    viewHolder.userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf(aLong));
+                                    viewHolder.userListItemBinding.textUnconsumedMessageCount.setVisibility(View.VISIBLE);
                                 }
                             }else{
-                                userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                                userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                                updateViewFirstTime(channel);
+                               // viewHolder.userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                               // viewHolder.userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
                             }
 
                         } catch (Exception e) {
@@ -495,24 +450,46 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                         }
 
                     }
+
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        super.onError(errorInfo);
+                        Logs.d("ErrorInfo"," getUnconsumed count"+errorInfo.getMessage() +" "+channel.getSid());
+                    }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        public void updateView(Channel channel){
+        ViewHolder viewHolder=null;
+        public ViewHolder getViewHolder(HashMap<Integer,Channel> channelList,Channel channel){
             try {
-                userListItemBinding.msgDetails.setText(Utils.getStringResource(R.string.tap_to_start,context));
-                userListItemBinding.msgTime.setText("");
-                userListItemBinding.msgDetails.setVisibility(View.VISIBLE);
+                for(Map.Entry<Integer,Channel> entry: channelList.entrySet()){
+                    Channel channel1 = entry.getValue();
+                    if(channel1 != null){
+                        if(channel1.getSid().equals(channel.getSid())){
+                            viewHolder = holderViewList.get(entry.getKey());
+                            return viewHolder;
+                        }
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return viewHolder;
+        }
 
+        public void ClearChannelDetails(Channel channel){
             try {
-                userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
-                userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
+                viewHolder = getViewHolder(channelList,channel);
+
+                viewHolder.userListItemBinding.msgDetails.setText(Utils.getStringResource(R.string.tap_to_start,context));
+                viewHolder.userListItemBinding.msgTime.setText("");
+                viewHolder.userListItemBinding.msgDetails.setVisibility(View.VISIBLE);
+
+                viewHolder.userListItemBinding.textUnconsumedMessageCount.setText(""+String.valueOf("0"));
+                viewHolder.userListItemBinding.textUnconsumedMessageCount.setVisibility(View.INVISIBLE);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -546,8 +523,8 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
             @Override
             public void onMemberUpdated(Member member, Member.UpdateReason updateReason) {
                 try {
-                    Logs.e("adapter onMessageAdded userListAdapter"," msg : "+member.getChannel().getSid());
-                    updateView1(member.getChannel());
+                    //Logs.e("adapter onMemberUpdated userListAdapter"," msg : "+member.getChannel().getSid());
+                    //updateView(member.getChannel());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -600,7 +577,7 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
             public void onChannelDeleted(Channel channel) {
                 if(channel != null){
                     Logs.d("adapter onChannelDeleted ","onChannelDeleted"+channel.getSid());
-                    updateView(channel);
+                    ClearChannelDetails(channel);
                 }
             }
 

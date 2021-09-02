@@ -115,6 +115,8 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                     return;
                 }
                 loginButton.setEnabled(loginFormState.isDataValid());
+                enableButtonLogin();
+
                 if (loginFormState.getUsernameError() != null) {
                     textInputEmail.setError(getString(loginFormState.getUsernameError()));
                 }
@@ -124,7 +126,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+        /*loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
             @Override
             public void onChanged(@Nullable LoginResult loginResult) {
                 if (loginResult == null) {
@@ -144,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                 }
                 setResult(Activity.RESULT_OK);
             }
-        });
+        });*/
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
@@ -178,19 +180,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                 textInputEmail.setError(null);
                 textInputPassword.setError(null);
                 if(s.length() >= 8){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String email = binding.username.toString();
-                            if(loginViewModel.loginDataChanged(email)) {
-                                binding.login.setBackground(getResources().getDrawable(R.drawable.btn_shape));
-                                binding.login.setEnabled(true);
-                            }
-                        }
-                    });
-                }else{
-                    binding.login.setBackground(getResources().getDrawable(R.drawable.btn_shape_fade));
-                    binding.login.setEnabled(false);
+                    enableButtonLogin();
                 }
             }
 
@@ -208,13 +198,11 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loadingProgressBar.setVisibility(View.VISIBLE);
                     // attemptLogin();
                     // by pass with nurse login
-                    loginWithNurse();
-
-                   /* loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());*/
+                    if(enableButtonLogin()){
+                        loginWithNurse();
+                    }
                 }
                 return false;
             }
@@ -223,23 +211,14 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                // attemptLogin();
-                // by pass with nurse login
-                loginWithNurse();
+                if(enableButtonLogin()){
+                    // attemptLogin();
+                    // by pass with nurse login
+                    loginWithNurse();
+                }
 
             }
         });
-
-        try {
-            if (checkPlayServices()) {
-                // Start IntentService to register this application with GCM.
-                Intent intent = new Intent(this, RegistrationIntentService.class);
-                startService(intent);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         try {
             sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
@@ -253,25 +232,30 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     }
 
+    public boolean enableButtonLogin(){
+        String email = binding.username.getText().toString();
+        String password = binding.password.getText().toString();
+        Logs.d("dd",""+loginViewModel.loginDataChanged(email));
+        if(loginViewModel.loginDataChangedLogin(email) && password.length() >= 8 ) {
+            binding.login.setBackground(getResources().getDrawable(R.drawable.btn_shape));
+            binding.login.setEnabled(true);
+            return true;
+        }else{
+            binding.login.setBackground(getResources().getDrawable(R.drawable.btn_shape_fade));
+            binding.login.setEnabled(false);
+            return false;
+        }
+    }
+
     public void deleteDb(){
 
         try {
             allViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            channelViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        try {
+            channelViewModel.delete();
+
             userChannelViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
+
             userChatViewModel.delete();
         } catch (Exception e) {
             e.printStackTrace();
@@ -281,6 +265,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     public void loginWithNurse(){
 
         if(Utils.onNetworkChange(this)){
+            binding.loading.setVisibility(View.VISIBLE);
             apiService =null;
             String email =binding.username.getText().toString();
             String password = binding.password.getText().toString();
@@ -292,43 +277,50 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                     try {
                         int code = response.raw().code();
                         if (code<= Constants.BAD_REQUEST) {
-                            int code1 =response.code();
-                            if(code1 >= Constants.BAD_REQUEST){
-                                unloadProgress();
-                                Utils.showToast("Error : "+code1,LoginActivity.this);
-                            }else{
-                                if(response.body() != null){
-                                    UserResult userResult = response.body();
-                                    if (userResult != null) {
-                                        userResultData(userResult);
-                                    }
-                                }else{
-                                    try {
+                            if(code == 200){
+                                try {
+                                    int code1 =response.body().getCode();
+                                    if(code1 >= Constants.BAD_REQUEST){
                                         unloadProgress();
-                                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                        String message = jObjError.getString("message");
+                                        Utils.showToast("User Not found ",LoginActivity.this);
+                                    }
+                                } catch (Exception e1) {
+                                    e1.printStackTrace();
+
+                                    if(response.body() != null){
+                                        UserResult userResult = response.body();
+                                        if (userResult != null) {
+                                            userResultData(userResult);
+                                        }
+                                    }else{
                                         try {
-                                            if(message.equals("Invalid username/password")){
-                                                // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD);
-                                            }else if(message.contains("Invalid username/password. Your")){
-                                                // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD_ACCOUNT_LOCK);
-                                            }else if(message.contains("User Account Locked")){
-                                                // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_LOCKED);
-                                            }else if(message.contains("User Account Disabled")){
-                                                // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_DISABLED);
-                                            }else{
-                                                // message =message;
+                                            unloadProgress();
+                                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                            String message = jObjError.getString("message");
+                                            try {
+                                                if(message.equals("Invalid username/password")){
+                                                    // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD);
+                                                }else if(message.contains("Invalid username/password. Your")){
+                                                    // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD_ACCOUNT_LOCK);
+                                                }else if(message.contains("User Account Locked")){
+                                                    // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_LOCKED);
+                                                }else if(message.contains("User Account Disabled")){
+                                                    // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_DISABLED);
+                                                }else{
+                                                    // message =message;
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
                                             }
+                                            binding.textPassword.setError(message);
+                                            focusView = binding.textPassword;
+                                            cancel = true;
+                                            focusView.requestFocus();
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
-                                        binding.textPassword.setError(message);
-                                        focusView = binding.textPassword;
-                                        cancel = true;
-                                        focusView.requestFocus();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
                                     }
+
                                 }
                             }
 
@@ -410,6 +402,16 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
     private final String USERNAME_FORM_FIELD = "username";
     public void callMain(){
+
+        try {
+            if (checkPlayServices()) {
+                Intent intent = new Intent(this, RegistrationIntentService.class);
+                startService(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         unloadProgress();
         SessionManager.getInstance().createLoginSession(prefManager.getStringValue(PrefConstants.USER_NAME));
         prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,true);
@@ -566,6 +568,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             fetchUser();
         } catch (Exception e) {
             e.printStackTrace();
+            unloadProgress();
             Utils.showToast("Please try again. ",LoginActivity.this);
         }
 
@@ -586,6 +589,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             @Override
             public void onError(String errorMessage) {
                 unloadProgress();
+                Utils.showToast("Please try again. ",LoginActivity.this);
             }
         });
 
@@ -609,12 +613,14 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                         getToken();
                     }else{
                         unloadProgress();
+                        Utils.showToast("Please try again. ",LoginActivity.this);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<FetchUser> call, Throwable t) {
                     unloadProgress();
+                    Utils.showToast("Please try again. ",LoginActivity.this);
                 }
             });
         }else{

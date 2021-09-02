@@ -8,6 +8,9 @@ import java.io.Serializable;
 
 public class UserResult implements Serializable {
 
+
+
+
     @SerializedName("userName")
     @Expose
     String userName;
@@ -39,6 +42,40 @@ public class UserResult implements Serializable {
     @SerializedName("firstLogin")
     @Expose
     boolean firstLogin;
+
+    @SerializedName("code")
+    @Expose
+    private Integer code;
+    @SerializedName("message")
+    @Expose
+    private String message;
+    @SerializedName("data")
+    @Expose
+    private Object data;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
 
     public String getToken() {
         return token;

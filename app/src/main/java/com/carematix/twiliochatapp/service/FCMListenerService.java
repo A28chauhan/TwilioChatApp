@@ -35,13 +35,13 @@ class FCMListenerService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Logs.d("onMessageReceived for FCM","FCM");
+       // Logs.d("onMessageReceived for FCM","FCM");
 
-        Logs.d("onMessageReceived","From: " + remoteMessage.getFrom());
+       // Logs.d("onMessageReceived","From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Logs.d("onMessageReceived","Data Message Body: " + remoteMessage.getData());
+           // Logs.d("onMessageReceived","Data Message Body: " + remoteMessage.getData());
 
             String title = null;
             try {
@@ -80,8 +80,8 @@ class FCMListenerService extends FirebaseMessagingService {
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Logs.d("onMessageReceived","Notification Message Body: " + remoteMessage.getNotification().getBody());
-            Logs.e("onMessageReceived","We do not parse notification body - leave it to system");
+            //Logs.d("onMessageReceived","Notification Message Body: " + remoteMessage.getNotification().getBody());
+            //Logs.e("onMessageReceived","We do not parse notification body - leave it to system");
         }
     }
 

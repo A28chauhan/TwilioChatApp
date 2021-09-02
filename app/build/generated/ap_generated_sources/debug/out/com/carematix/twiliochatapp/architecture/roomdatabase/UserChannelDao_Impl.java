@@ -34,7 +34,7 @@ public final class UserChannelDao_Impl implements UserChannelDao {
     this.__insertionAdapterOfUserChannelList = new EntityInsertionAdapter<UserChannelList>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR ABORT INTO `Channel_list` (`id`,`sid`,`friendlyName`) VALUES (nullif(?, 0),?,?)";
+        return "INSERT OR IGNORE INTO `Channel_list` (`id`,`sid`,`friendlyName`) VALUES (nullif(?, 0),?,?)";
       }
 
       @Override

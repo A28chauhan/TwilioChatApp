@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
         try {
             channelManager = ChannelManager.getInstance();
-            checkTwilioClient();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -236,6 +235,12 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
                 public void onSuccess(Channel channel) {
                     getSingleChannelDetails(channel,attendProgramUserId,userName);
                 }
+
+                @Override
+                public void onError(ErrorInfo errorInfo) {
+                    super.onError(errorInfo);
+                    stopActivityIndicator();
+                }
             });
 
 
@@ -246,11 +251,8 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
     }
 
     public void getSingleChannelDetails(Channel channel,int attendProgramUserId,String userName){
-        try {
-            stopActivityIndicator();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        stopActivityIndicator();
 
         if(channel.getStatus() == Channel.ChannelStatus.JOINED){
             callActivity(channel,userName,String.valueOf(attendProgramUserId));
@@ -308,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
     @Override
     protected void onResume() {
         try {
+            checkTwilioClient();
             setupListView();
         } catch (Exception e) {
             e.printStackTrace();
@@ -579,18 +582,16 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
     public void alertLogout(){
 
-        prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,false);
-        prefManager.setBooleanValue(PrefConstants.PREFERENCE_LOGIN_CHECK,false);
-
         try {
             SessionManager.getInstance().logoutUser();
+            chatClientManager.getChatClient().shutdown();
+            deleteAllDb();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         prefManager.clearPref();
 
-        deleteAllDb();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         MainActivity.this.finish();
 
@@ -616,6 +617,16 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
         try {
             userChatViewModel.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
+            String token = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
+            if(token != null && !token.equals("")){
+                TwilioApplication.get().getChatClientManager().unRegisterFCMToken(token);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
