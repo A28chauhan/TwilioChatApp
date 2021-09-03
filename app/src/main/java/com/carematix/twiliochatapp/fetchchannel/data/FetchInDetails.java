@@ -1,5 +1,6 @@
 package com.carematix.twiliochatapp.fetchchannel.data;
 
+import com.carematix.twiliochatapp.adapter.UserListAdapter;
 import com.carematix.twiliochatapp.bean.fetchChannel.ChannelDetails;
 import com.carematix.twiliochatapp.data.Result;
 
@@ -10,6 +11,15 @@ import retrofit2.Response;
 public
 class FetchInDetails {
 
+    UserListAdapter.ViewHolder viewHolder;
+
+    public UserListAdapter.ViewHolder getViewHolder() {
+        return viewHolder;
+    }
+
+    public void setViewHolder(UserListAdapter.ViewHolder viewHolder) {
+        this.viewHolder = viewHolder;
+    }
 
     String attendeUserID;
     Response<ChannelDetails> channelDetailsResponse;
@@ -26,7 +36,11 @@ class FetchInDetails {
         this.attendeUserID = attendeUserID;
         this.channelDetailsResponse = channelDetailsResponse;
     }
-
+    public FetchInDetails( String attendeUserID, Response<ChannelDetails> channelDetailsResponse,UserListAdapter.ViewHolder viewHolder) {
+        this.viewHolder = viewHolder;
+        this.attendeUserID = attendeUserID;
+        this.channelDetailsResponse = channelDetailsResponse;
+    }
     public FetchInDetails(String attendeUserID, Response<ChannelDetails> channelDetailsResponse, HashMap<String, FetchInDetails> hashMapFetchInDetails) {
         this.attendeUserID = attendeUserID;
         this.channelDetailsResponse = channelDetailsResponse;

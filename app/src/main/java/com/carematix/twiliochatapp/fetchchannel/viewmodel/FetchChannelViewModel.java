@@ -36,6 +36,8 @@ public class FetchChannelViewModel extends ViewModel {
         // can be launched in a separate asynchronous job
         Result<FetchInDetails> result = fetchChannelRepository.fetchChannelList(attendeeID, programUserId);
         if (result instanceof Result.Success) {
+            Logs.d("responce data ","attendeeProgramUserId  "+  "responce ");
+
             FetchInDetails data = ((Result.Success<FetchInDetails>) result).getData();
             fetchChannelResult.setValue(new FetchChannelResult(new FetchChannelView(data.getAttendeUserID(),data.getChannelDetailsResponse(), data.getHashMapFetchInDetails())));
         } else if (result instanceof Result.Failure){

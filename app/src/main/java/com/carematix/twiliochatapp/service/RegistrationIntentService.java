@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.carematix.twiliochatapp.application.SessionManager;
 import com.carematix.twiliochatapp.application.TwilioApplication;
 import com.carematix.twiliochatapp.helper.FCMPreferences;
 import com.carematix.twiliochatapp.helper.Logs;
@@ -53,29 +54,30 @@ public class RegistrationIntentService extends IntentService {
                     // Get new FCM registration token
                     String token = task.getResult();
                     sharedPreferences.edit().putString(FCMPreferences.TOKEN_NAME, token).commit();
-                    TwilioApplication.get().getChatClientManager().setFCMToken(token);
+                    if (SessionManager.getInstance().isLoggedIn()) TwilioApplication.get().getChatClientManager().setFCMToken(token);
                 }
+
             });
-            Logs.d("FCM Register : ","FCM Registration Token: " + token);
+           // Logs.d("FCM Register : ","FCM Registration Token: " + token);
 
             /**
              * Persist registration to Twilio servers.
              */
-            TwilioApplication.get().getChatClientManager().setFCMToken(token);
+          ///  TwilioApplication.get().getChatClientManager().setFCMToken(token);
 
-            sharedPreferences.edit().putString(FCMPreferences.TOKEN_NAME, token).commit();
+           // sharedPreferences.edit().putString(FCMPreferences.TOKEN_NAME, token).commit();
 
-            subscribeTopics(token);
+           // subscribeTopics(token);
 
             // You should store a boolean that indicates whether the generated token has been
             // sent to your server. If the boolean is false, send the token to your server,
             // otherwise your server should have already received the token.
-            sharedPreferences.edit().putBoolean(FCMPreferences.SENT_TOKEN_TO_SERVER, true).commit();
+           // sharedPreferences.edit().putBoolean(FCMPreferences.SENT_TOKEN_TO_SERVER, true).commit();
         } catch (Exception e) {
             logger.e("Failed to complete token refresh", e);
             // If an exception happens while fetching the new token or updating our registration
             // data, this ensures that we'll attempt the update at a later time.
-            sharedPreferences.edit().putBoolean(FCMPreferences.SENT_TOKEN_TO_SERVER, false).commit();
+           // sharedPreferences.edit().putBoolean(FCMPreferences.SENT_TOKEN_TO_SERVER, false).commit();
         }
         // Notify UI that registration has completed, so the progress indicator can be hidden.
         Intent registrationComplete = new Intent(FCMPreferences.REGISTRATION_COMPLETE);
@@ -88,10 +90,10 @@ public class RegistrationIntentService extends IntentService {
      * @param token GCM token
      * @throws IOException if unable to reach the GCM PubSub service
      */
-    private void subscribeTopics(String token) throws IOException
-    {
-        // for (String topic : TOPICS) {
-        //     FirebaseMessaging.getInstance().subscribeToTopic("/topics/"+topic);
-        // }
-    }
+//    private void subscribeTopics(String token) throws IOException
+//    {
+//        // for (String topic : TOPICS) {
+//        //     FirebaseMessaging.getInstance().subscribeToTopic("/topics/"+topic);
+//        // }
+//    }
 }

@@ -1,6 +1,6 @@
 [
     {
-        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout-w1240dp-v13\\activity_login.xml",
-        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout-w1240dp\\activity_login.xml"
+        "merged": "/Users/carematix/TwilioChatApp/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout-w1240dp-v13/activity_login.xml",
+        "source": "/Users/carematix/TwilioChatApp/app/src/main/res/layout-w1240dp/activity_login.xml"
     }
 ]

@@ -19,6 +19,7 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -79,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     private ActivityLoginBinding binding;
     private ChatClientManager clientManager;
     SharedPreferences sharedPreferences;
+    private static final Logger logger = Logger.getLogger(LoginActivity.class);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,12 +96,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         prefManager.setBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE,true);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
         deleteDb();
-
-        try {
-            clientManager = TwilioApplication.get().getChatClientManager();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
@@ -117,32 +113,14 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                 loginButton.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
                     textInputEmail.setError(getString(loginFormState.getUsernameError()));
+                }else{
+                    textInputEmail.setError(null);
                 }
                 if (loginFormState.getPasswordError() != null) {
                     textInputPassword.setError(getString(loginFormState.getPasswordError()));
+                }else{
+                    textInputPassword.setError(null);
                 }
-            }
-        });
-
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-
-                if (loginResult.getErrorMsg() != null) {
-                    showLoginFailed(loginResult.getErrorMsg());
-                }
-
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
             }
         });
 
@@ -155,8 +133,9 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // ignore
-                textInputEmail.setError(null);
-                textInputPassword.setError(null);
+                enableSignButton();
+
+
             }
 
             @Override
@@ -174,24 +153,8 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
-                textInputEmail.setError(null);
-                textInputPassword.setError(null);
-                if(s.length() >= 8){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String email = binding.username.toString();
-                            if(loginViewModel.loginDataChanged(email)) {
-                                binding.login.setBackground(getResources().getDrawable(R.drawable.btn_shape));
-                                binding.login.setEnabled(true);
-                            }
-                        }
-                    });
-                }else{
-                    binding.login.setBackground(getResources().getDrawable(R.drawable.btn_shape_fade));
-                    binding.login.setEnabled(false);
-                }
+
+                enableSignButton();
             }
 
             @Override
@@ -208,13 +171,11 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loadingProgressBar.setVisibility(View.VISIBLE);
-                    // attemptLogin();
-                    // by pass with nurse login
-                    loginWithNurse();
 
-                   /* loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());*/
+                    if( enableSignButton() ){
+                        loginWithNurse();
+                    }
+
                 }
                 return false;
             }
@@ -223,62 +184,65 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                // attemptLogin();
-                // by pass with nurse login
-                loginWithNurse();
-
+                if( enableSignButton() ) {
+                    loginWithNurse();
+                }
             }
         });
+        sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
 
-        try {
-            if (checkPlayServices()) {
-                // Start IntentService to register this application with GCM.
-                Intent intent = new Intent(this, RegistrationIntentService.class);
-                startService(intent);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    }
+
+    public boolean enableSignButton(){
+
+        String email =binding.username.getText().toString();
+        String password = binding.password.getText().toString();
+
+        loginViewModel.loginDataChanged(email,
+                password);
+        if ( !loginViewModel.loginDataChanged(email) ) {
+            //  binding.textEmail.setError(getString(loginViewModel.getLoginFormState().getValue().getUsernameError()));
+            binding.login.setBackground(getResources().getDrawable(R.drawable.btn_shape_fade));
+            binding.login.setEnabled(false);
+            return false;
+        }else{
+            binding.textEmail.setError(null);
+
         }
-
-        try {
-            sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
-            String token = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
-            if(token != null && !token.equals("")){
-                TwilioApplication.get().getChatClientManager().unRegisterFCMToken(token);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(!( password.length() >= 8)){
+            binding.password.setError(getString(loginViewModel.getLoginFormState().getValue().getPasswordError()));
+            binding.login.setBackground(getResources().getDrawable(R.drawable.btn_shape_fade));
+            binding.login.setEnabled(false);
+            return false;
+        }else{
+            binding.password.setError(null);
         }
-
+        if (loginViewModel.loginDataChanged(email) && ( password.length() >= 8)){
+            binding.login.setBackground(getResources().getDrawable(R.drawable.btn_shape));
+            binding.login.setEnabled(true);
+            return true;
+        }
+        binding.login.setBackground(getResources().getDrawable(R.drawable.btn_shape_fade));
+        binding.login.setEnabled(false);
+        return false;
     }
 
     public void deleteDb(){
 
         try {
             allViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             channelViewModel.delete();
+            userChannelViewModel.delete();
+            userChatViewModel.delete();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try {
-            userChannelViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            userChatViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void loginWithNurse(){
+        binding.loading.setVisibility(View.VISIBLE);
 
         if(Utils.onNetworkChange(this)){
             apiService =null;
@@ -291,52 +255,31 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                 public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                     try {
                         int code = response.raw().code();
-                        if (code<= Constants.BAD_REQUEST) {
-                            int code1 =response.code();
-                            if(code1 >= Constants.BAD_REQUEST){
-                                unloadProgress();
-                                Utils.showToast("Error : "+code1,LoginActivity.this);
+                        if (code <= Constants.BAD_REQUEST) {
+
+                            UserResult userResult = response.body();
+
+                            if(userResult.getProgramUserId() != 0){
+                                // UserResult userResult = response.body();
+                                // if (userResult != null) {
+                                userResultData(userResult);
+                                // }
                             }else{
-                                if(response.body() != null){
-                                    UserResult userResult = response.body();
-                                    if (userResult != null) {
-                                        userResultData(userResult);
-                                    }
-                                }else{
-                                    try {
-                                        unloadProgress();
-                                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                        String message = jObjError.getString("message");
-                                        try {
-                                            if(message.equals("Invalid username/password")){
-                                                // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD);
-                                            }else if(message.contains("Invalid username/password. Your")){
-                                                // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD_ACCOUNT_LOCK);
-                                            }else if(message.contains("User Account Locked")){
-                                                // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_LOCKED);
-                                            }else if(message.contains("User Account Disabled")){
-                                                // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_DISABLED);
-                                            }else{
-                                                // message =message;
-                                            }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                        binding.textPassword.setError(message);
-                                        focusView = binding.textPassword;
-                                        cancel = true;
-                                        focusView.requestFocus();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                try {
+                                    unloadProgress();
+
+                                    binding.textPassword.setError("message");
+                                    focusView = binding.textPassword;
+                                    cancel = true;
+                                    focusView.requestFocus();
+                                } catch (Exception e) {
+                                    unloadProgress();
+
+                                    e.printStackTrace();
                                 }
                             }
-
-                        }else if(code == Constants.INTERNAL_SERVER_ERROR){
-                            //login(user);
-                            unloadProgress();
-                            Utils.showToast("Error : "+code,LoginActivity.this);
-                        }else{
+                        }
+                        else{
                             unloadProgress();
                             Utils.showToast("Error : "+code,LoginActivity.this);
                         }
@@ -359,34 +302,9 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
 
-    // FCM
-    private static final int  PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private boolean checkPlayServices()
-    {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int                   resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                logger.i("This device is not supported.");
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
 
     @Override
     protected void onResume() {
-        try {
-            if (TwilioApplication.get().getChatClientManager() != null) {
-                 TwilioApplication.get().getChatClientManager().getChatClient();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         super.onResume();
     }
 
@@ -419,10 +337,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
     PrefManager prefManager;
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        gotoDashboard();
-    }
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
@@ -432,109 +346,11 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    private void gotoDashboard(){
-        prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,true);
-        Intent intent=new Intent(this, MainActivity.class);
-        startActivity(intent);
-        this.finish();
-    }
-
     String passwordEncrypt=null;
     User user;
     View focusView = null;
     ApiInterface apiService= null,apiService1=null;
     boolean cancel=false;
-    public void attemptLogin(){
-        hideKeyboard();
-        apiService= null;apiService1=null;
-        String password = binding.password.getText().toString();
-        passwordEncrypt = Utils.toBase64(password);
-        if(passwordEncrypt.contains("\n")){
-            passwordEncrypt = passwordEncrypt.replace("\n","");
-        }
-
-        String choose_language = "en";
-        choose_language = Utils.capitalizeAll(choose_language);
-
-        prefManager.setStringValue(PrefConstants.LANGUAGE_CODE, choose_language);
-        prefManager.setStringValue(PrefConstants.SELECT_LANGUAGE, choose_language);
-
-        if(choose_language != null  || choose_language.equals("")){
-           //user = new User(email,passwordEncrypt,choose_language,timeZone,Constants.X_DRO_SOURCE,dnToken);
-            user = new User(binding.username.getText().toString(),passwordEncrypt,choose_language,Constants.TIMEZONE,Constants.X_DRO_SOURCE,"");
-        }else{
-            user = new User(binding.username.getText().toString(),passwordEncrypt,Constants.LANGUAGE, Constants.TIMEZONE,Constants.X_DRO_SOURCE,"");
-        }
-
-        apiService = ApiClient.getClient().create(ApiInterface.class);
-        String timeZone =user.getTimeZone();
-        String language = user.getLanguage();
-        Call<UserResult> call = apiService.postUserDetails(Constants.CONTENT_TYPE, Constants.X_DRO_SOURCE,timeZone,language, user);
-
-        call.enqueue(new Callback<UserResult>() {
-            @Override
-            public void onResponse(Call<UserResult> call, Response<UserResult> response) {
-                // return new Result.Success<>(fakeUser);
-                try {
-                    int code = response.raw().code();
-                    if (code<= Constants.BAD_REQUEST) {
-                        if(response.body() != null){
-                            String token = response.headers().get("x-dro-token");
-                            prefManager.setStringValue(PrefConstants.TOKEN,token);
-                            prefManager.setStringValue(PrefConstants.SET_PASSWORD,passwordEncrypt);
-                            UserResult userResult = response.body();
-                            if (userResult != null) {
-                                //surveyResultData(surveyResult);
-                                 userResultData(userResult);
-                            }
-                        }else{
-                            try {
-                                unloadProgress();
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                String message = jObjError.getString("message");
-                                try {
-                                    if(message.equals("Invalid username/password")){
-                                       // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD);
-                                    }else if(message.contains("Invalid username/password. Your")){
-                                       // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD_ACCOUNT_LOCK);
-                                    }else if(message.contains("User Account Locked")){
-                                       // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_LOCKED);
-                                    }else if(message.contains("User Account Disabled")){
-                                       // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_DISABLED);
-                                    }else{
-                                       // message =message;
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                binding.textPassword.setError(message);
-                                // textInputEmailLayout.setError(message);
-                                focusView = binding.textPassword;
-                                cancel = true;
-                                focusView.requestFocus();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }else if(code == Constants.INTERNAL_SERVER_ERROR){
-                        //login(user);
-                        unloadProgress();
-                        Utils.showToast("Error : "+code,LoginActivity.this);
-                    }else{
-                        unloadProgress();
-                        Utils.showToast("Error : "+code,LoginActivity.this);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserResult> call, Throwable t) {
-                Utils.showToast(t.getMessage(),LoginActivity.this);
-            }
-        });
-    }
 
     private void hideKeyboard(){
         try {
@@ -571,30 +387,12 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     }
 
-    public void getToken(){
-        clientManager.connectClient(new TaskCompletionListener<Void, String>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                //String fcmToken = prefManager.getStringValue(PrefConstants.TN_TOKEN);
-                String fcmToken = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
-                Logs.d("fcmToken ","token :"+fcmToken);
-                SessionManager.getInstance().createLoginSession(USERNAME_FORM_FIELD);
-                TwilioApplication.get().getChatClientManager().setFCMToken(fcmToken);
-                callMain();
-            }
 
-            @Override
-            public void onError(String errorMessage) {
-                unloadProgress();
-            }
-        });
-
-    }
 
     public void fetchUser(){
 
         if(Utils.onNetworkChange(this)){
-            apiService1=null;
+            //apiService1=null;
             apiService1 = ApiClient.getClient1().create(ApiInterface.class);
             String programUserId =prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID);
             com.carematix.twiliochatapp.bean.fetchUser.FetchUser fetchUser=new com.carematix.twiliochatapp.bean.fetchUser.FetchUser(Integer.parseInt(programUserId),Constants.X_DRO_SOURCE);
@@ -623,8 +421,30 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     }
 
+    public void getToken(){
+        try {
+            clientManager = TwilioApplication.get().getChatClientManager();
 
-    private static final Logger logger = Logger.getLogger(LoginActivity.class);
+            clientManager.connectClient(new TaskCompletionListener<Void, String>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    String fcmToken = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
+                    Logs.d("fcmToken ","token :"+fcmToken);
+                    SessionManager.getInstance().createLoginSession(USERNAME_FORM_FIELD);
+                    TwilioApplication.get().getChatClientManager().setFCMToken(fcmToken);
+                    callMain();
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+                    unloadProgress();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onLoginStarted()
     {

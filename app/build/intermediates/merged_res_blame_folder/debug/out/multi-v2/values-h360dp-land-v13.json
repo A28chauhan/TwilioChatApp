@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-h360dp-land-v13\\values-h360dp-land-v13.xml",
+            "outputFile": "/Users/carematix/TwilioChatApp/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-h360dp-land-v13/values-h360dp-land-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\AMIT\\.gradle\\caches\\transforms-3\\94bf3601654a7cf1b05c721d623ce281\\transformed\\material-1.4.0\\res\\values-h360dp-land-v13\\values-h360dp-land-v13.xml",
+                    "source": "/Users/carematix/.gradle/caches/transforms-3/94bf3601654a7cf1b05c721d623ce281/transformed/material-1.4.0/res/values-h360dp-land-v13/values-h360dp-land-v13.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10",
                         "startColumns": "4,4,4,4,4,4,4,4,4",

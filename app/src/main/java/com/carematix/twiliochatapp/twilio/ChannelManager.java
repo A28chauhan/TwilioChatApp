@@ -9,6 +9,7 @@ import com.carematix.twiliochatapp.R;
 import com.carematix.twiliochatapp.accessToken.AccessTokenFetcher;
 import com.carematix.twiliochatapp.application.ChatClientManager;
 import com.carematix.twiliochatapp.application.TwilioApplication;
+import com.carematix.twiliochatapp.helper.Logs;
 import com.carematix.twiliochatapp.listener.LoadChannelListener;
 import com.carematix.twiliochatapp.listener.TaskCompletionListener;
 import com.twilio.chat.CallbackListener;
@@ -30,7 +31,7 @@ public class ChannelManager implements ChatClientListener {
     private static ChannelManager sharedManager = new ChannelManager();
     public Channel generalChannel;
     private ChatClientManager chatClientManager;
-    private ChannelExtractor channelExtractor;
+  //  private ChannelExtractor channelExtractor;
     private List<Channel> channels;
     private Channels channelsObject;
     private ChatClientListener listener;
@@ -41,7 +42,7 @@ public class ChannelManager implements ChatClientListener {
 
     private ChannelManager() {
         this.chatClientManager = TwilioApplication.get().getChatClientManager();
-        this.channelExtractor = new ChannelExtractor();
+     //   this.channelExtractor = new ChannelExtractor();
         this.listener = this;
         defaultChannelName = getStringResource(R.string.default_channel_name);
         defaultChannelUniqueName = getStringResource(R.string.default_channel_unique_name);
@@ -60,128 +61,108 @@ public class ChannelManager implements ChatClientListener {
         return this.defaultChannelName;
     }
 
-    public void leaveChannelWithHandler(Channel channel, StatusListener handler) {
-        channel.leave(handler);
-    }
+//    public void leaveChannelWithHandler(Channel channel, StatusListener handler) {
+//        channel.leave(handler);
+//    }
+//
+//    public void deleteChannelWithHandler(Channel channel, StatusListener handler) {
+//        channel.destroy(handler);
+//    }
 
-    public void deleteChannelWithHandler(Channel channel, StatusListener handler) {
-        channel.destroy(handler);
-    }
+//    public void populateChannels(final LoadChannelListener listener) {
+//        if (this.chatClientManager == null || this.isRefreshingChannels) {
+//            return;
+//        }
+//        this.isRefreshingChannels = true;
+//
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                channelsObject = chatClientManager.getChatClient().getChannels();
+//
+//                channelsObject.getPublicChannelsList(new CallbackListener<Paginator<ChannelDescriptor>>() {
+//                    @Override
+//                    public void onSuccess(Paginator<ChannelDescriptor> channelDescriptorPaginator) {
+//                        extractChannelsFromPaginatorAndPopulate(channelDescriptorPaginator, listener);
+//                    }
+//                });
+//
+//            }
+//        });
+//    }
 
-    public void populateChannels(final LoadChannelListener listener) {
-        if (this.chatClientManager == null || this.isRefreshingChannels) {
-            return;
-        }
-        this.isRefreshingChannels = true;
 
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                channelsObject = chatClientManager.getChatClient().getChannels();
 
-                channelsObject.getPublicChannelsList(new CallbackListener<Paginator<ChannelDescriptor>>() {
-                    @Override
-                    public void onSuccess(Paginator<ChannelDescriptor> channelDescriptorPaginator) {
-                        extractChannelsFromPaginatorAndPopulate(channelDescriptorPaginator, listener);
-                    }
-                });
+//    public void createChannelWithName(String name, final StatusListener handler) {
+//        this.channelsObject
+//                .channelBuilder()
+//                .withFriendlyName(name)
+//                .withType(Channel.ChannelType.PUBLIC)
+//                .build(new CallbackListener<Channel>() {
+//                    @Override
+//                    public void onSuccess(final Channel newChannel) {
+//                        handler.onSuccess();
+//                    }
+//
+//                    @Override
+//                    public void onError(ErrorInfo errorInfo) {
+//                        handler.onError(errorInfo);
+//                    }
+//                });
+//    }
+//
+//    public void joinOrCreateGeneralChannelWithCompletion(final StatusListener listener) {
+//        channelsObject.getChannel(defaultChannelUniqueName, new CallbackListener<Channel>() {
+//            @Override
+//            public void onSuccess(Channel channel) {
+//                ChannelManager.this.generalChannel = channel;
+//                if (channel != null) {
+//                    joinGeneralChannelWithCompletion(listener);
+//                } else {
+//                    createGeneralChannelWithCompletion(listener);
+//                }
+//            }
+//        });
+//    }
 
-            }
-        });
-    }
+//    private void joinGeneralChannelWithCompletion(final StatusListener listener) {
+//        if (generalChannel.getStatus() == Channel.ChannelStatus.JOINED) {
+//            listener.onSuccess();
+//            return;
+//        }
+//        this.generalChannel.join(new StatusListener() {
+//            @Override
+//            public void onSuccess() {
+//                listener.onSuccess();
+//            }
+//
+//            @Override
+//            public void onError(ErrorInfo errorInfo) {
+//                listener.onError(errorInfo);
+//            }
+//        });
+//    }
 
-    private void extractChannelsFromPaginatorAndPopulate(final Paginator<ChannelDescriptor> channelsPaginator,
-                                                         final LoadChannelListener listener) {
-        channels = new ArrayList<>();
-        ChannelManager.this.channels.clear();
-        channelExtractor.extractAndSortFromChannelDescriptor(channelsPaginator,
-                new TaskCompletionListener<List<Channel>, String>() {
-                    @Override
-                    public void onSuccess(List<Channel> channels) {
-                        ChannelManager.this.channels.addAll(channels);
-                        Collections.sort(ChannelManager.this.channels, new CustomChannelComparator1());
-                        ChannelManager.this.isRefreshingChannels = false;
-                        chatClientManager.addClientListener(ChannelManager.this);
-                        listener.onChannelsFinishedLoading(ChannelManager.this.channels);
-                    }
-
-                    @Override
-                    public void onError(String errorText) {
-                        Log.e(TwilioApplication.TAG,"Error populating channels: " + errorText);
-                    }
-                });
-    }
-
-    public void createChannelWithName(String name, final StatusListener handler) {
-        this.channelsObject
-                .channelBuilder()
-                .withFriendlyName(name)
-                .withType(Channel.ChannelType.PUBLIC)
-                .build(new CallbackListener<Channel>() {
-                    @Override
-                    public void onSuccess(final Channel newChannel) {
-                        handler.onSuccess();
-                    }
-
-                    @Override
-                    public void onError(ErrorInfo errorInfo) {
-                        handler.onError(errorInfo);
-                    }
-                });
-    }
-
-    public void joinOrCreateGeneralChannelWithCompletion(final StatusListener listener) {
-        channelsObject.getChannel(defaultChannelUniqueName, new CallbackListener<Channel>() {
-            @Override
-            public void onSuccess(Channel channel) {
-                ChannelManager.this.generalChannel = channel;
-                if (channel != null) {
-                    joinGeneralChannelWithCompletion(listener);
-                } else {
-                    createGeneralChannelWithCompletion(listener);
-                }
-            }
-        });
-    }
-
-    private void joinGeneralChannelWithCompletion(final StatusListener listener) {
-        if (generalChannel.getStatus() == Channel.ChannelStatus.JOINED) {
-            listener.onSuccess();
-            return;
-        }
-        this.generalChannel.join(new StatusListener() {
-            @Override
-            public void onSuccess() {
-                listener.onSuccess();
-            }
-
-            @Override
-            public void onError(ErrorInfo errorInfo) {
-                listener.onError(errorInfo);
-            }
-        });
-    }
-
-    private void createGeneralChannelWithCompletion(final StatusListener listener) {
-        this.channelsObject
-                .channelBuilder()
-                .withFriendlyName(defaultChannelName)
-                .withUniqueName(defaultChannelUniqueName)
-                .withType(Channel.ChannelType.PUBLIC)
-                .build(new CallbackListener<Channel>() {
-                    @Override
-                    public void onSuccess(final Channel channel) {
-                        ChannelManager.this.generalChannel = channel;
-                        ChannelManager.this.channels.add(channel);
-                        joinGeneralChannelWithCompletion(listener);
-                    }
-
-                    @Override
-                    public void onError(ErrorInfo errorInfo) {
-                        listener.onError(errorInfo);
-                    }
-                });
-    }
+//    private void createGeneralChannelWithCompletion(final StatusListener listener) {
+//        this.channelsObject
+//                .channelBuilder()
+//                .withFriendlyName(defaultChannelName)
+//                .withUniqueName(defaultChannelUniqueName)
+//                .withType(Channel.ChannelType.PUBLIC)
+//                .build(new CallbackListener<Channel>() {
+//                    @Override
+//                    public void onSuccess(final Channel channel) {
+//                        ChannelManager.this.generalChannel = channel;
+//                        ChannelManager.this.channels.add(channel);
+//                        joinGeneralChannelWithCompletion(listener);
+//                    }
+//
+//                    @Override
+//                    public void onError(ErrorInfo errorInfo) {
+//                        listener.onError(errorInfo);
+//                    }
+//                });
+//    }
 
     public void setChannelListener(ChatClientListener listener) {
         this.listener = listener;
@@ -194,6 +175,8 @@ public class ChannelManager implements ChatClientListener {
 
     @Override
     public void onChannelAdded(Channel channel) {
+        Logs.d("onChannelAdded","onChannelAdded");
+
         if (listener != null) {
             listener.onChannelAdded(channel);
         }
@@ -234,13 +217,14 @@ public class ChannelManager implements ChatClientListener {
 
     @Override
     public void onChannelJoined(Channel channel) {
-
+        Logs.d("onChannelJoined","onChannelJoined");
     }
 
     @Override
     public void onChannelInvited(Channel channel) {
-
+        Logs.d("onChannelInvited","onChannelInvited");
     }
+
 
     @Override
     public void onUserUpdated(User user, User.UpdateReason updateReason) {

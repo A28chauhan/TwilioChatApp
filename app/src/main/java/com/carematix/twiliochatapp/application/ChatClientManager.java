@@ -45,31 +45,32 @@ class ChatClientManager {
 
     public void setFCMToken(String token)
     {
-        String fcmToken= null;
-        try {
-            fcmToken =token;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Logs.d("setFCMToken","setFCMToken "+fcmToken);
-        this.fcmToken = fcmToken;
-        if (this.chatClient != null) {
+//        String fcmToken= null;
+//        try {
+//            fcmToken =token;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        if (this.chatClient != null || token != null) {
+            this.fcmToken = token;
             setupFcmToken();
+            Logs.d("setFCMToken","setFCMToken "+fcmToken);
+
         }
     }
 
 
     public void unRegisterFCMToken(String token)
     {
-        String fcmToken= null;
-        try {
-            fcmToken =token;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Logs.d("setFCMToken","setFCMToken "+fcmToken);
-        this.fcmToken = fcmToken;
+//        String fcmToken= null;
+//        try {
+//            fcmToken =token;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         if (this.chatClient != null) {
+            this.fcmToken = token;
+            Logs.d("setFCMToken","setFCMToken "+fcmToken);
             unregisterFcmToken();
         }
     }

@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../layout/custom_preview.xml" value="0.13072916666666667" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/btn_shape.xml" value="0.3828125" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/btn_shape_fade.xml" value="0.21296296296296297" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/drawable/corner_background.xml" value="0.13148148148148148" />
@@ -23,12 +24,17 @@
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/layout/activity_splash.xml" value="0.25625" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/layout/center_chat_item.xml" value="0.26510416666666664" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/layout/chat_fragment.xml" value="0.264" />
-        <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/layout/left_chat_item.xml" value="0.1" />
+        <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/layout/left_chat_item.xml" value="0.26510416666666664" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/layout/right_chat_item.xml" value="0.26510416666666664" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/layout/user_list_item.xml" value="0.30364583333333334" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/menu/chat_menu.xml" value="0.2777777777777778" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/menu/menu_main.xml" value="0.1625" />
         <entry key="..\:/Android_Project/TwilioChatApp/app/src/main/res/xml/network_security_config.xml" value="0.26458333333333334" />
+        <entry key="app/src/main/res/layout/activity_chat.xml" value="0.12135416666666667" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.182518115942029" />
+        <entry key="app/src/main/res/layout/chat_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/user_list_item.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/chat_menu.xml" value="0.12135416666666667" />
       </map>
     </option>
   </component>

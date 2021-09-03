@@ -6,13 +6,12 @@ import androidx.annotation.NonNull;
 
 import com.carematix.twiliochatapp.helper.FCMPreferences;
 import com.carematix.twiliochatapp.helper.Logs;
-import com.carematix.twiliochatapp.twilio.Logger;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
 public
 class FCMInstanceIDService extends FirebaseMessagingService {
 
-    private static final Logger logger = Logger.getLogger(FCMInstanceIDService.class);
+    //private static final Logger logger = Logger.getLogger(FCMInstanceIDService.class);
     /**
      * Called if InstanceID token is updated. This may occur if the security of
      * the previous token had been compromised. This call is initiated by the

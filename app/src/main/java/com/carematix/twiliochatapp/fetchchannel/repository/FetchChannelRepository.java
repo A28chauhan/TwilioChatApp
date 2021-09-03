@@ -52,6 +52,7 @@ class FetchChannelRepository {
     }
 
     public Result<FetchInDetails> fetchChannelList(String attendeeID,String programUserId) {
+        Logs.d("responce data ","attendeeProgramUserId  "+  "responce ");
 
         Result<FetchInDetails> result = dataSource.fetchChannel(attendeeID,programUserId);
 

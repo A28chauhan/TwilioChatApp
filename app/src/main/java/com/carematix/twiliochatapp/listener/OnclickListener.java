@@ -1,9 +1,6 @@
 package com.carematix.twiliochatapp.listener;
 
-import com.carematix.twiliochatapp.twilio.ChannelModel;
 import com.twilio.chat.Channel;
-
-import java.util.Map;
 
 public
 interface OnclickListener {
