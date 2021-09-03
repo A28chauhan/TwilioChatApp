@@ -8,6 +8,14 @@
         "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_notifications_black_24dp.xml"
     },
     {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_actionbar_progress.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\actionbar_progress.xml"
+    },
+    {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_ic_refresh_24.xml.flat",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_refresh_24.xml"
+    },
+    {
         "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\xml_network_security_config.xml.flat",
         "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\xml\\network_security_config.xml"
     },

@@ -126,10 +126,10 @@ public class Utils {
     public static String setTime(Date timeInMillies){
         String time=null;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat(" hh:mm aaa ");
-            time = sdf.format(timeInMillies);
-            // Date date = fmt.parse(timeInMillies);
-            //return fmt.format(date);
+            if(timeInMillies != null){
+                SimpleDateFormat sdf = new SimpleDateFormat(" hh:mm aaa ");
+                time = sdf.format(timeInMillies);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

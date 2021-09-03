@@ -221,6 +221,12 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         });
 
         try {
+
+            if (checkPlayServices()) {
+                Intent intent = new Intent(this, RegistrationIntentService.class);
+                startService(intent);
+            }
+
             sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
             String token = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
             if(token != null && !token.equals("")){
@@ -402,15 +408,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
     private final String USERNAME_FORM_FIELD = "username";
     public void callMain(){
-
-        try {
-            if (checkPlayServices()) {
-                Intent intent = new Intent(this, RegistrationIntentService.class);
-                startService(intent);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         unloadProgress();
         SessionManager.getInstance().createLoginSession(prefManager.getStringValue(PrefConstants.USER_NAME));

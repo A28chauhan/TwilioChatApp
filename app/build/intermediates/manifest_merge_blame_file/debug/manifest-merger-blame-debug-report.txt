@@ -117,412 +117,413 @@
 64-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:48:9-54
 65        android:supportsRtl="true"
 65-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:49:9-35
-66        android:theme="@style/Theme.TwilioChatApp" >
-66-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:51:9-51
-67        <activity
-67-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:53:9-64:20
-68            android:name="com.carematix.twiliochatapp.SplashActivity"
-68-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:54:13-43
-69            android:exported="true"
-69-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:55:13-36
-70            android:label="@string/app_name"
-70-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:57:13-45
-71            android:launchMode="singleInstance"
-71-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:56:13-48
-72            android:theme="@style/Theme.TwilioChatApp.NoActionBar" >
-72-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:58:13-67
-73            <intent-filter>
-73-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:59:13-63:29
-74                <action android:name="android.intent.action.MAIN" />
-74-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:60:17-69
-74-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:60:25-66
-75
-76                <category android:name="android.intent.category.DEFAULT" />
-76-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:61:17-75
-76-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:61:27-73
-77                <category android:name="android.intent.category.LAUNCHER" />
-77-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:62:17-77
-77-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:62:27-74
-78            </intent-filter>
-79        </activity>
-80        <activity
-80-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:66:9-70:48
-81            android:name="com.carematix.twiliochatapp.MainActivity"
-81-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:67:13-41
-82            android:exported="true"
-82-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:68:13-36
-83            android:label="@string/app_name"
-83-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:70:13-45
-84            android:launchMode="singleInstance" />
-84-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:69:13-48
-85        <activity
-85-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:72:9-76:51
-86            android:name="com.carematix.twiliochatapp.ui.login.LoginActivity"
-86-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:73:13-51
-87            android:exported="true"
-87-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:74:13-36
-88            android:label="@string/app_sign_in"
-88-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:76:13-48
-89            android:launchMode="singleInstance" />
-89-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:75:13-48
-90        <activity
-90-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:79:9-89:20
-91            android:name="com.carematix.twiliochatapp.ChatActivity"
-91-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:80:13-41
-92            android:launchMode="singleInstancePerTask"
-92-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:82:13-55
-93            android:noHistory="false"
-93-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:81:13-38
-94            android:parentActivityName="com.carematix.twiliochatapp.MainActivity"
-94-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:84:13-55
-95            android:theme="@style/Theme.TwilioChatApp.NoActionBar"
-95-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:83:13-67
-96            android:windowSoftInputMode="stateHidden" >
-96-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:85:13-54
-97            <meta-data
-97-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:86:13-88:49
-98                android:name="android.support.PARENT_ACTIVITY"
-98-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:87:17-63
-99                android:value=".MainActivity" />
-99-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:88:17-46
-100        </activity>
-101
-102        <meta-data
-102-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:92:9-94:57
-103            android:name="preloaded_fonts"
-103-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:93:13-43
-104            android:resource="@array/preloaded_fonts" />
-104-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:94:13-54
-105
-106        <service
-106-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:96:9-102:19
-107            android:name="com.carematix.twiliochatapp.service.FCMListenerService"
-107-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:96:18-60
-108            android:directBootAware="true"
-108-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:98:13-43
-109            android:exported="false" >
-109-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:97:13-37
-110            <intent-filter>
-110-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:99:13-101:29
-111                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-111-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:100:17-78
-111-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:100:25-75
-112            </intent-filter>
-113        </service>
-114
-115        <meta-data
-115-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:104:9-106:67
-116            android:name="com.google.firebase.messaging.default_notification_icon"
-116-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:105:13-83
-117            android:resource="@drawable/ic_launcher_background" />
-117-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:106:13-64
-118        <meta-data
-118-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:107:9-109:53
-119            android:name="com.google.firebase.messaging.default_notification_color"
-119-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:108:13-84
-120            android:resource="@color/colorAccent" />
-120-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:109:13-50
-121        <meta-data
-121-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:111:9-113:71
-122            android:name="com.google.firebase.messaging.default_notification_channel_id"
-122-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:112:13-89
-123            android:value="@string/default_notification_channel_id" />
-123-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:113:13-68
-124        <meta-data
-124-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:114:9-116:69
-125            android:name="com.google.android.gms.version"
-125-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:115:13-58
-126            android:value="@integer/google_play_services_version" />
-126-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:116:13-66
-127        <meta-data
-127-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:119:9-121:37
-128            android:name="firebase_messaging_auto_init_enabled"
-128-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:120:13-64
-129            android:value="false" />
-129-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:121:13-34
-130        <meta-data
-130-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:122:9-124:37
-131            android:name="firebase_analytics_collection_enabled"
-131-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:123:13-65
-132            android:value="false" />
-132-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:124:13-34
-133
-134        <service
-134-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:126:9-133:19
-135            android:name="com.carematix.twiliochatapp.service.FCMInstanceIDService"
-135-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:127:13-57
-136            android:exported="false" >
-136-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:128:13-37
-137
-138            <!-- android:exported="true" -->
-139            <intent-filter>
-139-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:130:13-132:29
-140                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-140-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:131:17-80
-140-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:131:25-77
-141            </intent-filter>
-142        </service>
-143        <service
-143-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:135:9-137:48
-144            android:name="com.carematix.twiliochatapp.service.RegistrationIntentService"
-144-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:136:13-62
-145            android:exported="false" />
-145-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:137:13-37
-146        <service
-146-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:23:9-29:19
-147            android:name="com.google.firebase.components.ComponentDiscoveryService"
-147-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:24:13-84
-148            android:directBootAware="true"
-148-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:35:13-43
-149            android:exported="false" >
-149-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:25:13-37
-150            <meta-data
-150-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:26:13-28:85
-151                android:name="com.google.firebase.components:com.google.firebase.inappmessaging.display.FirebaseInAppMessagingDisplayRegistrar"
-151-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:27:17-144
-152                android:value="com.google.firebase.components.ComponentRegistrar" />
-152-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:28:17-82
-153            <meta-data
-153-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:52:13-54:85
-154                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
-154-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:53:17-119
-155                android:value="com.google.firebase.components.ComponentRegistrar" />
-155-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:54:17-82
-156            <meta-data
-156-->[com.google.firebase:firebase-analytics-ktx:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\506a6096827d0fe19f50c89aa671428c\transformed\jetified-firebase-analytics-ktx-19.0.0\AndroidManifest.xml:11:13-13:85
-157                android:name="com.google.firebase.components:com.google.firebase.analytics.ktx.FirebaseAnalyticsKtxRegistrar"
-157-->[com.google.firebase:firebase-analytics-ktx:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\506a6096827d0fe19f50c89aa671428c\transformed\jetified-firebase-analytics-ktx-19.0.0\AndroidManifest.xml:12:17-126
-158                android:value="com.google.firebase.components.ComponentRegistrar" />
-158-->[com.google.firebase:firebase-analytics-ktx:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\506a6096827d0fe19f50c89aa671428c\transformed\jetified-firebase-analytics-ktx-19.0.0\AndroidManifest.xml:13:17-82
-159            <meta-data
-159-->[com.google.firebase:firebase-crashlytics:18.2.1] C:\Users\AMIT\.gradle\caches\transforms-3\65ed26ab3dc308d5b00c353b12ccfc14\transformed\jetified-firebase-crashlytics-18.2.1\AndroidManifest.xml:18:13-20:85
-160                android:name="com.google.firebase.components:com.google.firebase.crashlytics.CrashlyticsRegistrar"
-160-->[com.google.firebase:firebase-crashlytics:18.2.1] C:\Users\AMIT\.gradle\caches\transforms-3\65ed26ab3dc308d5b00c353b12ccfc14\transformed\jetified-firebase-crashlytics-18.2.1\AndroidManifest.xml:19:17-115
-161                android:value="com.google.firebase.components.ComponentRegistrar" />
-161-->[com.google.firebase:firebase-crashlytics:18.2.1] C:\Users\AMIT\.gradle\caches\transforms-3\65ed26ab3dc308d5b00c353b12ccfc14\transformed\jetified-firebase-crashlytics-18.2.1\AndroidManifest.xml:20:17-82
-162            <meta-data
-162-->[com.google.android.gms:play-services-measurement-api:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a7bdad6ef5af2714dbf87266f81d0b9\transformed\jetified-play-services-measurement-api-19.0.0\AndroidManifest.xml:30:13-32:85
-163                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
-163-->[com.google.android.gms:play-services-measurement-api:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a7bdad6ef5af2714dbf87266f81d0b9\transformed\jetified-play-services-measurement-api-19.0.0\AndroidManifest.xml:31:17-139
-164                android:value="com.google.firebase.components.ComponentRegistrar" />
-164-->[com.google.android.gms:play-services-measurement-api:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a7bdad6ef5af2714dbf87266f81d0b9\transformed\jetified-play-services-measurement-api-19.0.0\AndroidManifest.xml:32:17-82
-165            <meta-data
-165-->[com.google.firebase:firebase-inappmessaging:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\36442ff1c41448bd63ab18d047cceb82\transformed\jetified-firebase-inappmessaging-20.0.0\AndroidManifest.xml:17:13-19:85
-166                android:name="com.google.firebase.components:com.google.firebase.inappmessaging.FirebaseInAppMessagingRegistrar"
-166-->[com.google.firebase:firebase-inappmessaging:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\36442ff1c41448bd63ab18d047cceb82\transformed\jetified-firebase-inappmessaging-20.0.0\AndroidManifest.xml:18:17-129
-167                android:value="com.google.firebase.components.ComponentRegistrar" />
-167-->[com.google.firebase:firebase-inappmessaging:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\36442ff1c41448bd63ab18d047cceb82\transformed\jetified-firebase-inappmessaging-20.0.0\AndroidManifest.xml:19:17-82
-168            <meta-data
-168-->[com.google.firebase:firebase-abt:21.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\b5bdad53bb7fa8182eec7d14a48d186b\transformed\jetified-firebase-abt-21.0.0\AndroidManifest.xml:13:13-15:85
-169                android:name="com.google.firebase.components:com.google.firebase.abt.component.AbtRegistrar"
-169-->[com.google.firebase:firebase-abt:21.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\b5bdad53bb7fa8182eec7d14a48d186b\transformed\jetified-firebase-abt-21.0.0\AndroidManifest.xml:14:17-109
-170                android:value="com.google.firebase.components.ComponentRegistrar" />
-170-->[com.google.firebase:firebase-abt:21.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\b5bdad53bb7fa8182eec7d14a48d186b\transformed\jetified-firebase-abt-21.0.0\AndroidManifest.xml:15:17-82
-171            <meta-data
-171-->[com.google.firebase:firebase-datatransport:18.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\d951a2f096fd61bcf1f431dd4a7e1ed4\transformed\jetified-firebase-datatransport-18.0.0\AndroidManifest.xml:28:13-30:85
-172                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
-172-->[com.google.firebase:firebase-datatransport:18.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\d951a2f096fd61bcf1f431dd4a7e1ed4\transformed\jetified-firebase-datatransport-18.0.0\AndroidManifest.xml:29:17-115
-173                android:value="com.google.firebase.components.ComponentRegistrar" />
-173-->[com.google.firebase:firebase-datatransport:18.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\d951a2f096fd61bcf1f431dd4a7e1ed4\transformed\jetified-firebase-datatransport-18.0.0\AndroidManifest.xml:30:17-82
-174            <meta-data
-174-->[com.google.firebase:firebase-installations:17.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\19cfae46e2405ded8e57d7ee69d94b9f\transformed\jetified-firebase-installations-17.0.0\AndroidManifest.xml:18:13-20:85
-175                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
-175-->[com.google.firebase:firebase-installations:17.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\19cfae46e2405ded8e57d7ee69d94b9f\transformed\jetified-firebase-installations-17.0.0\AndroidManifest.xml:19:17-127
-176                android:value="com.google.firebase.components.ComponentRegistrar" />
-176-->[com.google.firebase:firebase-installations:17.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\19cfae46e2405ded8e57d7ee69d94b9f\transformed\jetified-firebase-installations-17.0.0\AndroidManifest.xml:20:17-82
-177            <meta-data
-177-->[com.google.firebase:firebase-common-ktx:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\ba95ad5b491dc4c1040b826a5129a041\transformed\jetified-firebase-common-ktx-20.0.0\AndroidManifest.xml:15:13-17:85
-178                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonKtxRegistrar"
-178-->[com.google.firebase:firebase-common-ktx:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\ba95ad5b491dc4c1040b826a5129a041\transformed\jetified-firebase-common-ktx-20.0.0\AndroidManifest.xml:16:17-113
-179                android:value="com.google.firebase.components.ComponentRegistrar" />
-179-->[com.google.firebase:firebase-common-ktx:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\ba95ad5b491dc4c1040b826a5129a041\transformed\jetified-firebase-common-ktx-20.0.0\AndroidManifest.xml:17:17-82
-180        </service>
-181
-182        <receiver
-182-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:27:9-35:20
-183            android:name="com.google.firebase.messaging.directboot.FirebaseMessagingDirectBootReceiver"
-183-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:28:13-104
-184            android:directBootAware="true"
-184-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:29:13-43
-185            android:exported="true"
-185-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:30:13-36
-186            android:permission="com.google.android.c2dm.permission.SEND" >
-186-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:31:13-73
-187            <intent-filter>
-187-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:32:13-34:29
-188                <action android:name="com.google.firebase.messaging.RECEIVE_DIRECT_BOOT" />
-188-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:33:17-92
-188-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:33:25-89
-189            </intent-filter>
-190        </receiver>
-191        <receiver
-191-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:28:9-35:20
-192            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
-192-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:29:13-78
-193            android:exported="true"
-193-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:30:13-36
-194            android:permission="com.google.android.c2dm.permission.SEND" >
-194-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:31:13-73
-195            <intent-filter>
-195-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:32:13-34:29
-196                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-196-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:33:17-81
-196-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:33:25-78
-197            </intent-filter>
-198        </receiver>
-199        <!--
-200             FirebaseMessagingService performs security checks at runtime,
-201             but set to not exported to explicitly avoid allowing another app to call it.
-202        -->
-203        <service
-203-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:41:9-48:19
-204            android:name="com.google.firebase.messaging.FirebaseMessagingService"
-204-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:42:13-82
-205            android:directBootAware="true"
-205-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:43:13-43
-206            android:exported="false" >
-206-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:44:13-37
-207            <intent-filter android:priority="-500" >
-207-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:99:13-101:29
-208                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-208-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:100:17-78
-208-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:100:25-75
-209            </intent-filter>
-210        </service>
-211
-212        <activity
-212-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:23:9-27:75
-213            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
-213-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:24:13-93
-214            android:excludeFromRecents="true"
-214-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:25:13-46
-215            android:exported="false"
-215-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:26:13-37
-216            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-216-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:27:13-72
-217        <!--
-218            Service handling Google Sign-In user revocation. For apps that do not integrate with
-219            Google Sign-In, this service will never be started.
-220        -->
-221        <service
-221-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:33:9-37:51
-222            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
-222-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:34:13-89
-223            android:exported="true"
-223-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:35:13-36
-224            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
-224-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:36:13-107
-225            android:visibleToInstantApps="true" />
-225-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:37:13-48
-226
-227        <receiver
-227-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:29:9-33:20
-228            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
-228-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:30:13-85
-229            android:enabled="true"
-229-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:31:13-35
-230            android:exported="false" >
-230-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:32:13-37
-231        </receiver>
-232
-233        <service
-233-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:35:9-38:40
-234            android:name="com.google.android.gms.measurement.AppMeasurementService"
-234-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:36:13-84
-235            android:enabled="true"
-235-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:37:13-35
-236            android:exported="false" />
-236-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:38:13-37
-237        <service
-237-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:39:9-43:72
-238            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
-238-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:40:13-87
-239            android:enabled="true"
-239-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:41:13-35
-240            android:exported="false"
-240-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:42:13-37
-241            android:permission="android.permission.BIND_JOB_SERVICE" />
-241-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:43:13-69
-242
-243        <provider
-243-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:26:9-31:39
-244            android:name="com.google.firebase.provider.FirebaseInitProvider"
-244-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:27:13-77
-245            android:authorities="com.carematix.twiliochatapp.firebaseinitprovider"
-245-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:28:13-72
-246            android:directBootAware="true"
-246-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:29:13-43
-247            android:exported="false"
-247-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:30:13-37
-248            android:initOrder="100" />
-248-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:31:13-36
-249
-250        <activity
-250-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\dbf18334bc9cfbe1a05f716e180ae063\transformed\jetified-play-services-base-17.1.0\AndroidManifest.xml:23:9-26:75
-251            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-251-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\dbf18334bc9cfbe1a05f716e180ae063\transformed\jetified-play-services-base-17.1.0\AndroidManifest.xml:24:13-79
-252            android:exported="false"
-252-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\dbf18334bc9cfbe1a05f716e180ae063\transformed\jetified-play-services-base-17.1.0\AndroidManifest.xml:25:13-37
-253            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-253-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\dbf18334bc9cfbe1a05f716e180ae063\transformed\jetified-play-services-base-17.1.0\AndroidManifest.xml:26:13-72
-254
-255        <provider
-255-->[androidx.lifecycle:lifecycle-process:2.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a0f9eac5d8d567bd2a876c753456465\transformed\jetified-lifecycle-process-2.1.0\AndroidManifest.xml:23:9-27:43
-256            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
-256-->[androidx.lifecycle:lifecycle-process:2.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a0f9eac5d8d567bd2a876c753456465\transformed\jetified-lifecycle-process-2.1.0\AndroidManifest.xml:24:13-79
-257            android:authorities="com.carematix.twiliochatapp.lifecycle-process"
-257-->[androidx.lifecycle:lifecycle-process:2.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a0f9eac5d8d567bd2a876c753456465\transformed\jetified-lifecycle-process-2.1.0\AndroidManifest.xml:25:13-69
-258            android:exported="false"
-258-->[androidx.lifecycle:lifecycle-process:2.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a0f9eac5d8d567bd2a876c753456465\transformed\jetified-lifecycle-process-2.1.0\AndroidManifest.xml:26:13-37
-259            android:multiprocess="true" />
-259-->[androidx.lifecycle:lifecycle-process:2.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a0f9eac5d8d567bd2a876c753456465\transformed\jetified-lifecycle-process-2.1.0\AndroidManifest.xml:27:13-40
-260
-261        <service
-261-->[androidx.room:room-runtime:2.2.6] C:\Users\AMIT\.gradle\caches\transforms-3\363031a819855af38a105ac5380dd4ce\transformed\room-runtime-2.2.6\AndroidManifest.xml:25:9-28:40
-262            android:name="androidx.room.MultiInstanceInvalidationService"
-262-->[androidx.room:room-runtime:2.2.6] C:\Users\AMIT\.gradle\caches\transforms-3\363031a819855af38a105ac5380dd4ce\transformed\room-runtime-2.2.6\AndroidManifest.xml:26:13-74
-263            android:directBootAware="true"
-263-->[androidx.room:room-runtime:2.2.6] C:\Users\AMIT\.gradle\caches\transforms-3\363031a819855af38a105ac5380dd4ce\transformed\room-runtime-2.2.6\AndroidManifest.xml:27:13-43
-264            android:exported="false" />
-264-->[androidx.room:room-runtime:2.2.6] C:\Users\AMIT\.gradle\caches\transforms-3\363031a819855af38a105ac5380dd4ce\transformed\room-runtime-2.2.6\AndroidManifest.xml:28:13-37
-265        <service
-265-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:29:9-35:19
-266            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
-266-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:30:13-103
-267            android:exported="false" >
-267-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:31:13-37
-268            <meta-data
-268-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:32:13-34:39
-269                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
-269-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:33:17-94
-270                android:value="cct" />
-270-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:34:17-36
-271        </service>
-272        <service
-272-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:26:9-30:19
-273            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
-273-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:27:13-117
-274            android:exported="false"
-274-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:28:13-37
-275            android:permission="android.permission.BIND_JOB_SERVICE" >
-275-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:29:13-69
-276        </service>
-277
-278        <receiver
-278-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:32:9-34:40
-279            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
-279-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:33:13-132
-280            android:exported="false" />
-280-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:34:13-37
-281
-282        <provider
-282-->[com.squareup.picasso:picasso:2.71828] C:\Users\AMIT\.gradle\caches\transforms-3\ec827070a9ec2ce380f9eeae7142ee04\transformed\jetified-picasso-2.71828\AndroidManifest.xml:8:9-11:40
-283            android:name="com.squareup.picasso.PicassoProvider"
-283-->[com.squareup.picasso:picasso:2.71828] C:\Users\AMIT\.gradle\caches\transforms-3\ec827070a9ec2ce380f9eeae7142ee04\transformed\jetified-picasso-2.71828\AndroidManifest.xml:9:13-64
-284            android:authorities="com.carematix.twiliochatapp.com.squareup.picasso"
-284-->[com.squareup.picasso:picasso:2.71828] C:\Users\AMIT\.gradle\caches\transforms-3\ec827070a9ec2ce380f9eeae7142ee04\transformed\jetified-picasso-2.71828\AndroidManifest.xml:10:13-72
-285            android:exported="false" />
-285-->[com.squareup.picasso:picasso:2.71828] C:\Users\AMIT\.gradle\caches\transforms-3\ec827070a9ec2ce380f9eeae7142ee04\transformed\jetified-picasso-2.71828\AndroidManifest.xml:11:13-37
-286    </application>
-287
-288</manifest>
+66        android:testOnly="true"
+67        android:theme="@style/Theme.TwilioChatApp" >
+67-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:51:9-51
+68        <activity
+68-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:53:9-64:20
+69            android:name="com.carematix.twiliochatapp.SplashActivity"
+69-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:54:13-43
+70            android:exported="true"
+70-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:55:13-36
+71            android:label="@string/app_name"
+71-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:57:13-45
+72            android:launchMode="singleInstance"
+72-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:56:13-48
+73            android:theme="@style/Theme.TwilioChatApp.NoActionBar" >
+73-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:58:13-67
+74            <intent-filter>
+74-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:59:13-63:29
+75                <action android:name="android.intent.action.MAIN" />
+75-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:60:17-69
+75-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:60:25-66
+76
+77                <category android:name="android.intent.category.DEFAULT" />
+77-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:61:17-75
+77-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:61:27-73
+78                <category android:name="android.intent.category.LAUNCHER" />
+78-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:62:17-77
+78-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:62:27-74
+79            </intent-filter>
+80        </activity>
+81        <activity
+81-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:66:9-70:48
+82            android:name="com.carematix.twiliochatapp.MainActivity"
+82-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:67:13-41
+83            android:exported="true"
+83-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:68:13-36
+84            android:label="@string/app_name"
+84-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:70:13-45
+85            android:launchMode="singleInstance" />
+85-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:69:13-48
+86        <activity
+86-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:72:9-76:51
+87            android:name="com.carematix.twiliochatapp.ui.login.LoginActivity"
+87-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:73:13-51
+88            android:exported="true"
+88-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:74:13-36
+89            android:label="@string/app_sign_in"
+89-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:76:13-48
+90            android:launchMode="singleInstance" />
+90-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:75:13-48
+91        <activity
+91-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:79:9-89:20
+92            android:name="com.carematix.twiliochatapp.ChatActivity"
+92-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:80:13-41
+93            android:launchMode="singleInstancePerTask"
+93-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:82:13-55
+94            android:noHistory="false"
+94-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:81:13-38
+95            android:parentActivityName="com.carematix.twiliochatapp.MainActivity"
+95-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:84:13-55
+96            android:theme="@style/Theme.TwilioChatApp.NoActionBar"
+96-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:83:13-67
+97            android:windowSoftInputMode="stateHidden" >
+97-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:85:13-54
+98            <meta-data
+98-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:86:13-88:49
+99                android:name="android.support.PARENT_ACTIVITY"
+99-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:87:17-63
+100                android:value=".MainActivity" />
+100-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:88:17-46
+101        </activity>
+102
+103        <meta-data
+103-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:92:9-94:57
+104            android:name="preloaded_fonts"
+104-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:93:13-43
+105            android:resource="@array/preloaded_fonts" />
+105-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:94:13-54
+106
+107        <service
+107-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:96:9-102:19
+108            android:name="com.carematix.twiliochatapp.service.FCMListenerService"
+108-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:96:18-60
+109            android:directBootAware="true"
+109-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:98:13-43
+110            android:exported="false" >
+110-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:97:13-37
+111            <intent-filter>
+111-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:99:13-101:29
+112                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+112-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:100:17-78
+112-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:100:25-75
+113            </intent-filter>
+114        </service>
+115
+116        <meta-data
+116-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:104:9-106:67
+117            android:name="com.google.firebase.messaging.default_notification_icon"
+117-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:105:13-83
+118            android:resource="@drawable/ic_launcher_background" />
+118-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:106:13-64
+119        <meta-data
+119-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:107:9-109:53
+120            android:name="com.google.firebase.messaging.default_notification_color"
+120-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:108:13-84
+121            android:resource="@color/colorAccent" />
+121-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:109:13-50
+122        <meta-data
+122-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:111:9-113:71
+123            android:name="com.google.firebase.messaging.default_notification_channel_id"
+123-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:112:13-89
+124            android:value="@string/default_notification_channel_id" />
+124-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:113:13-68
+125        <meta-data
+125-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:114:9-116:69
+126            android:name="com.google.android.gms.version"
+126-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:115:13-58
+127            android:value="@integer/google_play_services_version" />
+127-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:116:13-66
+128        <meta-data
+128-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:119:9-121:37
+129            android:name="firebase_messaging_auto_init_enabled"
+129-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:120:13-64
+130            android:value="false" />
+130-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:121:13-34
+131        <meta-data
+131-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:122:9-124:37
+132            android:name="firebase_analytics_collection_enabled"
+132-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:123:13-65
+133            android:value="false" />
+133-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:124:13-34
+134
+135        <service
+135-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:126:9-133:19
+136            android:name="com.carematix.twiliochatapp.service.FCMInstanceIDService"
+136-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:127:13-57
+137            android:exported="false" >
+137-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:128:13-37
+138
+139            <!-- android:exported="true" -->
+140            <intent-filter>
+140-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:130:13-132:29
+141                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+141-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:131:17-80
+141-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:131:25-77
+142            </intent-filter>
+143        </service>
+144        <service
+144-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:135:9-137:48
+145            android:name="com.carematix.twiliochatapp.service.RegistrationIntentService"
+145-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:136:13-62
+146            android:exported="false" />
+146-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:137:13-37
+147        <service
+147-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:23:9-29:19
+148            android:name="com.google.firebase.components.ComponentDiscoveryService"
+148-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:24:13-84
+149            android:directBootAware="true"
+149-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:35:13-43
+150            android:exported="false" >
+150-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:25:13-37
+151            <meta-data
+151-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:26:13-28:85
+152                android:name="com.google.firebase.components:com.google.firebase.inappmessaging.display.FirebaseInAppMessagingDisplayRegistrar"
+152-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:27:17-144
+153                android:value="com.google.firebase.components.ComponentRegistrar" />
+153-->[com.google.firebase:firebase-inappmessaging-display:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c8298b46fc71a4fe6408b6d874a5a718\transformed\jetified-firebase-inappmessaging-display-20.0.0\AndroidManifest.xml:28:17-82
+154            <meta-data
+154-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:52:13-54:85
+155                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+155-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:53:17-119
+156                android:value="com.google.firebase.components.ComponentRegistrar" />
+156-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:54:17-82
+157            <meta-data
+157-->[com.google.firebase:firebase-analytics-ktx:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\506a6096827d0fe19f50c89aa671428c\transformed\jetified-firebase-analytics-ktx-19.0.0\AndroidManifest.xml:11:13-13:85
+158                android:name="com.google.firebase.components:com.google.firebase.analytics.ktx.FirebaseAnalyticsKtxRegistrar"
+158-->[com.google.firebase:firebase-analytics-ktx:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\506a6096827d0fe19f50c89aa671428c\transformed\jetified-firebase-analytics-ktx-19.0.0\AndroidManifest.xml:12:17-126
+159                android:value="com.google.firebase.components.ComponentRegistrar" />
+159-->[com.google.firebase:firebase-analytics-ktx:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\506a6096827d0fe19f50c89aa671428c\transformed\jetified-firebase-analytics-ktx-19.0.0\AndroidManifest.xml:13:17-82
+160            <meta-data
+160-->[com.google.firebase:firebase-crashlytics:18.2.1] C:\Users\AMIT\.gradle\caches\transforms-3\65ed26ab3dc308d5b00c353b12ccfc14\transformed\jetified-firebase-crashlytics-18.2.1\AndroidManifest.xml:18:13-20:85
+161                android:name="com.google.firebase.components:com.google.firebase.crashlytics.CrashlyticsRegistrar"
+161-->[com.google.firebase:firebase-crashlytics:18.2.1] C:\Users\AMIT\.gradle\caches\transforms-3\65ed26ab3dc308d5b00c353b12ccfc14\transformed\jetified-firebase-crashlytics-18.2.1\AndroidManifest.xml:19:17-115
+162                android:value="com.google.firebase.components.ComponentRegistrar" />
+162-->[com.google.firebase:firebase-crashlytics:18.2.1] C:\Users\AMIT\.gradle\caches\transforms-3\65ed26ab3dc308d5b00c353b12ccfc14\transformed\jetified-firebase-crashlytics-18.2.1\AndroidManifest.xml:20:17-82
+163            <meta-data
+163-->[com.google.android.gms:play-services-measurement-api:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a7bdad6ef5af2714dbf87266f81d0b9\transformed\jetified-play-services-measurement-api-19.0.0\AndroidManifest.xml:30:13-32:85
+164                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+164-->[com.google.android.gms:play-services-measurement-api:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a7bdad6ef5af2714dbf87266f81d0b9\transformed\jetified-play-services-measurement-api-19.0.0\AndroidManifest.xml:31:17-139
+165                android:value="com.google.firebase.components.ComponentRegistrar" />
+165-->[com.google.android.gms:play-services-measurement-api:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a7bdad6ef5af2714dbf87266f81d0b9\transformed\jetified-play-services-measurement-api-19.0.0\AndroidManifest.xml:32:17-82
+166            <meta-data
+166-->[com.google.firebase:firebase-inappmessaging:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\36442ff1c41448bd63ab18d047cceb82\transformed\jetified-firebase-inappmessaging-20.0.0\AndroidManifest.xml:17:13-19:85
+167                android:name="com.google.firebase.components:com.google.firebase.inappmessaging.FirebaseInAppMessagingRegistrar"
+167-->[com.google.firebase:firebase-inappmessaging:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\36442ff1c41448bd63ab18d047cceb82\transformed\jetified-firebase-inappmessaging-20.0.0\AndroidManifest.xml:18:17-129
+168                android:value="com.google.firebase.components.ComponentRegistrar" />
+168-->[com.google.firebase:firebase-inappmessaging:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\36442ff1c41448bd63ab18d047cceb82\transformed\jetified-firebase-inappmessaging-20.0.0\AndroidManifest.xml:19:17-82
+169            <meta-data
+169-->[com.google.firebase:firebase-abt:21.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\b5bdad53bb7fa8182eec7d14a48d186b\transformed\jetified-firebase-abt-21.0.0\AndroidManifest.xml:13:13-15:85
+170                android:name="com.google.firebase.components:com.google.firebase.abt.component.AbtRegistrar"
+170-->[com.google.firebase:firebase-abt:21.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\b5bdad53bb7fa8182eec7d14a48d186b\transformed\jetified-firebase-abt-21.0.0\AndroidManifest.xml:14:17-109
+171                android:value="com.google.firebase.components.ComponentRegistrar" />
+171-->[com.google.firebase:firebase-abt:21.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\b5bdad53bb7fa8182eec7d14a48d186b\transformed\jetified-firebase-abt-21.0.0\AndroidManifest.xml:15:17-82
+172            <meta-data
+172-->[com.google.firebase:firebase-datatransport:18.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\d951a2f096fd61bcf1f431dd4a7e1ed4\transformed\jetified-firebase-datatransport-18.0.0\AndroidManifest.xml:28:13-30:85
+173                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+173-->[com.google.firebase:firebase-datatransport:18.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\d951a2f096fd61bcf1f431dd4a7e1ed4\transformed\jetified-firebase-datatransport-18.0.0\AndroidManifest.xml:29:17-115
+174                android:value="com.google.firebase.components.ComponentRegistrar" />
+174-->[com.google.firebase:firebase-datatransport:18.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\d951a2f096fd61bcf1f431dd4a7e1ed4\transformed\jetified-firebase-datatransport-18.0.0\AndroidManifest.xml:30:17-82
+175            <meta-data
+175-->[com.google.firebase:firebase-installations:17.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\19cfae46e2405ded8e57d7ee69d94b9f\transformed\jetified-firebase-installations-17.0.0\AndroidManifest.xml:18:13-20:85
+176                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+176-->[com.google.firebase:firebase-installations:17.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\19cfae46e2405ded8e57d7ee69d94b9f\transformed\jetified-firebase-installations-17.0.0\AndroidManifest.xml:19:17-127
+177                android:value="com.google.firebase.components.ComponentRegistrar" />
+177-->[com.google.firebase:firebase-installations:17.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\19cfae46e2405ded8e57d7ee69d94b9f\transformed\jetified-firebase-installations-17.0.0\AndroidManifest.xml:20:17-82
+178            <meta-data
+178-->[com.google.firebase:firebase-common-ktx:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\ba95ad5b491dc4c1040b826a5129a041\transformed\jetified-firebase-common-ktx-20.0.0\AndroidManifest.xml:15:13-17:85
+179                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonKtxRegistrar"
+179-->[com.google.firebase:firebase-common-ktx:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\ba95ad5b491dc4c1040b826a5129a041\transformed\jetified-firebase-common-ktx-20.0.0\AndroidManifest.xml:16:17-113
+180                android:value="com.google.firebase.components.ComponentRegistrar" />
+180-->[com.google.firebase:firebase-common-ktx:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\ba95ad5b491dc4c1040b826a5129a041\transformed\jetified-firebase-common-ktx-20.0.0\AndroidManifest.xml:17:17-82
+181        </service>
+182
+183        <receiver
+183-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:27:9-35:20
+184            android:name="com.google.firebase.messaging.directboot.FirebaseMessagingDirectBootReceiver"
+184-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:28:13-104
+185            android:directBootAware="true"
+185-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:29:13-43
+186            android:exported="true"
+186-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:30:13-36
+187            android:permission="com.google.android.c2dm.permission.SEND" >
+187-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:31:13-73
+188            <intent-filter>
+188-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:32:13-34:29
+189                <action android:name="com.google.firebase.messaging.RECEIVE_DIRECT_BOOT" />
+189-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:33:17-92
+189-->[com.google.firebase:firebase-messaging-directboot:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\df741201ca16ce26af85d2b8627613f7\transformed\jetified-firebase-messaging-directboot-22.0.0\AndroidManifest.xml:33:25-89
+190            </intent-filter>
+191        </receiver>
+192        <receiver
+192-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:28:9-35:20
+193            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+193-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:29:13-78
+194            android:exported="true"
+194-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:30:13-36
+195            android:permission="com.google.android.c2dm.permission.SEND" >
+195-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:31:13-73
+196            <intent-filter>
+196-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:32:13-34:29
+197                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+197-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:33:17-81
+197-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:33:25-78
+198            </intent-filter>
+199        </receiver>
+200        <!--
+201             FirebaseMessagingService performs security checks at runtime,
+202             but set to not exported to explicitly avoid allowing another app to call it.
+203        -->
+204        <service
+204-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:41:9-48:19
+205            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+205-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:42:13-82
+206            android:directBootAware="true"
+206-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:43:13-43
+207            android:exported="false" >
+207-->[com.google.firebase:firebase-messaging:22.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\516cae6d9bff69c907f1346693c8e526\transformed\jetified-firebase-messaging-22.0.0\AndroidManifest.xml:44:13-37
+208            <intent-filter android:priority="-500" >
+208-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:99:13-101:29
+209                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+209-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:100:17-78
+209-->F:\Android_Project\TwilioChatApp\app\src\main\AndroidManifest.xml:100:25-75
+210            </intent-filter>
+211        </service>
+212
+213        <activity
+213-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:23:9-27:75
+214            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+214-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:24:13-93
+215            android:excludeFromRecents="true"
+215-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:25:13-46
+216            android:exported="false"
+216-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:26:13-37
+217            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+217-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:27:13-72
+218        <!--
+219            Service handling Google Sign-In user revocation. For apps that do not integrate with
+220            Google Sign-In, this service will never be started.
+221        -->
+222        <service
+222-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:33:9-37:51
+223            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+223-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:34:13-89
+224            android:exported="true"
+224-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:35:13-36
+225            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+225-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:36:13-107
+226            android:visibleToInstantApps="true" />
+226-->[com.google.android.gms:play-services-auth:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f5cd0e000c1af066f24b9f449bea0270\transformed\jetified-play-services-auth-19.0.0\AndroidManifest.xml:37:13-48
+227
+228        <receiver
+228-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:29:9-33:20
+229            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+229-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:30:13-85
+230            android:enabled="true"
+230-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:31:13-35
+231            android:exported="false" >
+231-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:32:13-37
+232        </receiver>
+233
+234        <service
+234-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:35:9-38:40
+235            android:name="com.google.android.gms.measurement.AppMeasurementService"
+235-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:36:13-84
+236            android:enabled="true"
+236-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:37:13-35
+237            android:exported="false" />
+237-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:38:13-37
+238        <service
+238-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:39:9-43:72
+239            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+239-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:40:13-87
+240            android:enabled="true"
+240-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:41:13-35
+241            android:exported="false"
+241-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:42:13-37
+242            android:permission="android.permission.BIND_JOB_SERVICE" />
+242-->[com.google.android.gms:play-services-measurement:19.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\e6356b1cbed8a0ed7a87cf9c38247b0c\transformed\jetified-play-services-measurement-19.0.0\AndroidManifest.xml:43:13-69
+243
+244        <provider
+244-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:26:9-31:39
+245            android:name="com.google.firebase.provider.FirebaseInitProvider"
+245-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:27:13-77
+246            android:authorities="com.carematix.twiliochatapp.firebaseinitprovider"
+246-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:28:13-72
+247            android:directBootAware="true"
+247-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:29:13-43
+248            android:exported="false"
+248-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:30:13-37
+249            android:initOrder="100" />
+249-->[com.google.firebase:firebase-common:20.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\c5c05285322607e50420bb630860b5bb\transformed\jetified-firebase-common-20.0.0\AndroidManifest.xml:31:13-36
+250
+251        <activity
+251-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\dbf18334bc9cfbe1a05f716e180ae063\transformed\jetified-play-services-base-17.1.0\AndroidManifest.xml:23:9-26:75
+252            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+252-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\dbf18334bc9cfbe1a05f716e180ae063\transformed\jetified-play-services-base-17.1.0\AndroidManifest.xml:24:13-79
+253            android:exported="false"
+253-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\dbf18334bc9cfbe1a05f716e180ae063\transformed\jetified-play-services-base-17.1.0\AndroidManifest.xml:25:13-37
+254            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+254-->[com.google.android.gms:play-services-base:17.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\dbf18334bc9cfbe1a05f716e180ae063\transformed\jetified-play-services-base-17.1.0\AndroidManifest.xml:26:13-72
+255
+256        <provider
+256-->[androidx.lifecycle:lifecycle-process:2.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a0f9eac5d8d567bd2a876c753456465\transformed\jetified-lifecycle-process-2.1.0\AndroidManifest.xml:23:9-27:43
+257            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
+257-->[androidx.lifecycle:lifecycle-process:2.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a0f9eac5d8d567bd2a876c753456465\transformed\jetified-lifecycle-process-2.1.0\AndroidManifest.xml:24:13-79
+258            android:authorities="com.carematix.twiliochatapp.lifecycle-process"
+258-->[androidx.lifecycle:lifecycle-process:2.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a0f9eac5d8d567bd2a876c753456465\transformed\jetified-lifecycle-process-2.1.0\AndroidManifest.xml:25:13-69
+259            android:exported="false"
+259-->[androidx.lifecycle:lifecycle-process:2.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a0f9eac5d8d567bd2a876c753456465\transformed\jetified-lifecycle-process-2.1.0\AndroidManifest.xml:26:13-37
+260            android:multiprocess="true" />
+260-->[androidx.lifecycle:lifecycle-process:2.1.0] C:\Users\AMIT\.gradle\caches\transforms-3\3a0f9eac5d8d567bd2a876c753456465\transformed\jetified-lifecycle-process-2.1.0\AndroidManifest.xml:27:13-40
+261
+262        <service
+262-->[androidx.room:room-runtime:2.2.6] C:\Users\AMIT\.gradle\caches\transforms-3\363031a819855af38a105ac5380dd4ce\transformed\room-runtime-2.2.6\AndroidManifest.xml:25:9-28:40
+263            android:name="androidx.room.MultiInstanceInvalidationService"
+263-->[androidx.room:room-runtime:2.2.6] C:\Users\AMIT\.gradle\caches\transforms-3\363031a819855af38a105ac5380dd4ce\transformed\room-runtime-2.2.6\AndroidManifest.xml:26:13-74
+264            android:directBootAware="true"
+264-->[androidx.room:room-runtime:2.2.6] C:\Users\AMIT\.gradle\caches\transforms-3\363031a819855af38a105ac5380dd4ce\transformed\room-runtime-2.2.6\AndroidManifest.xml:27:13-43
+265            android:exported="false" />
+265-->[androidx.room:room-runtime:2.2.6] C:\Users\AMIT\.gradle\caches\transforms-3\363031a819855af38a105ac5380dd4ce\transformed\room-runtime-2.2.6\AndroidManifest.xml:28:13-37
+266        <service
+266-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:29:9-35:19
+267            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+267-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:30:13-103
+268            android:exported="false" >
+268-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:31:13-37
+269            <meta-data
+269-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:32:13-34:39
+270                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+270-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:33:17-94
+271                android:value="cct" />
+271-->[com.google.android.datatransport:transport-backend-cct:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f1faef8f310a97a211f2f2342b15d5c8\transformed\jetified-transport-backend-cct-3.0.0\AndroidManifest.xml:34:17-36
+272        </service>
+273        <service
+273-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:26:9-30:19
+274            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+274-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:27:13-117
+275            android:exported="false"
+275-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:28:13-37
+276            android:permission="android.permission.BIND_JOB_SERVICE" >
+276-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:29:13-69
+277        </service>
+278
+279        <receiver
+279-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:32:9-34:40
+280            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+280-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:33:13-132
+281            android:exported="false" />
+281-->[com.google.android.datatransport:transport-runtime:3.0.0] C:\Users\AMIT\.gradle\caches\transforms-3\f7327a7861b486c7934ac44e0cb0f137\transformed\jetified-transport-runtime-3.0.0\AndroidManifest.xml:34:13-37
+282
+283        <provider
+283-->[com.squareup.picasso:picasso:2.71828] C:\Users\AMIT\.gradle\caches\transforms-3\ec827070a9ec2ce380f9eeae7142ee04\transformed\jetified-picasso-2.71828\AndroidManifest.xml:8:9-11:40
+284            android:name="com.squareup.picasso.PicassoProvider"
+284-->[com.squareup.picasso:picasso:2.71828] C:\Users\AMIT\.gradle\caches\transforms-3\ec827070a9ec2ce380f9eeae7142ee04\transformed\jetified-picasso-2.71828\AndroidManifest.xml:9:13-64
+285            android:authorities="com.carematix.twiliochatapp.com.squareup.picasso"
+285-->[com.squareup.picasso:picasso:2.71828] C:\Users\AMIT\.gradle\caches\transforms-3\ec827070a9ec2ce380f9eeae7142ee04\transformed\jetified-picasso-2.71828\AndroidManifest.xml:10:13-72
+286            android:exported="false" />
+286-->[com.squareup.picasso:picasso:2.71828] C:\Users\AMIT\.gradle\caches\transforms-3\ec827070a9ec2ce380f9eeae7142ee04\transformed\jetified-picasso-2.71828\AndroidManifest.xml:11:13-37
+287    </application>
+288
+289</manifest>

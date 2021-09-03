@@ -69,6 +69,8 @@ import com.twilio.chat.ErrorInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -83,11 +85,7 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
     private ChatClientManager chatClientManager;
 
     Channels channelsObject;
-    private ChannelManager channelManager;
-    Channel channel=null;
-
     SharedPreferences sharedPreferences=null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,30 +102,26 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
             e.printStackTrace();
         }
 
-
+        sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
         prefManager =new PrefManager(this);
         prefManager.setStringValue(PrefConstants.WHICH_SCREEN,"main");
         prefManager.setBooleanValue(PrefConstants.PREFERENCE_LOGIN_CHECK,true);
         prefManager.setBooleanValue(PrefConstants.SCREEN,false);
 
-        try {
-            channelManager = ChannelManager.getInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
     public void setData(){
         try {
-            boolean firstTime= prefManager.getBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE);
+            setupListView();
+            getAllUserListCall();
+            /*boolean firstTime= prefManager.getBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE);
             if(firstTime){
-                getAllUserListCall();
                 prefManager.setBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE,false);
             }else{
                 getUserListDetails();
                 stopActivityIndicator();
-            }
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,12 +129,13 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
     }
 
     @Override
-    public void onClick(int attendeeProgramUserId, String programUserId, int pos, final Channel channels,String UserName) {
+    public void onClick(UserAllList userAllList, final Channel channels,String UserName) {
         try {
             String name = UserName;
-            String type1= String.valueOf(attendeeProgramUserId);
+            String type1= String.valueOf(userAllList.getDroProgramUserId());
 
             if(channels !=  null){
+                prefManager =new PrefManager(MainActivity.this);
                 Logs.d("onCLick ", " onclicjk :"+channels.getStatus());
                 if(channels.getSid() != null){
                     if(channels.getStatus() == Channel.ChannelStatus.JOINED){
@@ -156,19 +151,20 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
                             public void onError(ErrorInfo errorInfo) {
                                 super.onError(errorInfo);
                                 if(channels.getStatus() == Channel.ChannelStatus.NOT_PARTICIPATING){
-                                    fetchChannel(attendeeProgramUserId,programUserId,UserName);
+
+                                    fetchChannel(userAllList.getDroProgramUserId(),prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID),UserName);
                                 }
                             }
                         });
                     }
 
                 }else{
-                    fetchChannel(attendeeProgramUserId,programUserId,UserName);
+                    fetchChannel(userAllList.getDroProgramUserId(),prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID),UserName);
                 }
 
 
             }else{
-                fetchChannel(attendeeProgramUserId,programUserId,UserName);
+                fetchChannel(userAllList.getDroProgramUserId(),prefManager.getStringValue(PrefConstants.PROGRAM_USER_ID),UserName);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,9 +206,10 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
         com.carematix.twiliochatapp.bean.fetchChannel.Data data=null;
         try {
             data=  response.body().getData();
-            Logs.d("call channel ","call channel list");
             if(!data.getChannelSid().equals("")){
                 getChannelsDetails(data.getChannelSid(),attendProgramUserId,userName);
+            }else{
+                Utils.showToast("Channel not found.",MainActivity.this);
             }
 
         } catch (Exception e) {
@@ -222,10 +219,8 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
     public void getChannelsDetails(String sid,int attendProgramUserId,String userName){
         try {
-            //if (channelsObject == null) return;
             if (chatClientManager == null || chatClientManager.getChatClient() == null) return;
 
-            Logs.d("get channel call","channel call details.");
             if (channelsObject == null){
                 channelsObject = chatClientManager.getChatClient().getChannels();
             }
@@ -263,7 +258,6 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
                     //super.onSuccess();
                     callActivity(channel,userName,String.valueOf(attendProgramUserId));
                 }
-
                 @Override
                 public void onError(ErrorInfo errorInfo) {
                     Logs.d("errorInfo "," errorInfo : "+errorInfo.getMessage());
@@ -285,10 +279,6 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
         MainActivity.this.finish();
     }
 
-    @Override
-    public void onLongClickListener(int attendeeProgramUserId, String programUserId, final Channel channels1,String UserName) {
-
-    }
 
 
     public UserListViewModel allViewModel;
@@ -311,7 +301,6 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
     protected void onResume() {
         try {
             checkTwilioClient();
-            setupListView();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -322,14 +311,24 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
         allViewModel.getAllList().observe(this,userAllLists -> {
             if(userAllLists.size() > 0){
                 userListAdapter.addItem(userAllLists);
-                userListAdapter.notifyDataSetChanged();
             }
         });
+
+        if(chatClientManager.getChatClient() == null){
+            chatClientManager =TwilioApplication.get().getChatClientManager();
+        }else{
+            chatClientManager.getChatClient().addListener(chatClientListener);
+        }
+
     }
 
     UserListAdapter userListAdapter;
     ArrayList<UserAllList> arrayList=new ArrayList<>();
     public void setupListView(){
+
+        if(chatClientManager.getChatClient() == null){
+            chatClientManager =TwilioApplication.get().getChatClientManager();
+        }
         mRecyclerView = binding.recyclerView;
         binding.recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -337,10 +336,11 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         try {
 
-            userListAdapter=new UserListAdapter(this,arrayList,this,channel);
+            userListAdapter=new UserListAdapter(this,arrayList,this,chatClientManager);
             mRecyclerView.setAdapter(userListAdapter);
             mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
             mRecyclerView.setItemViewCacheSize(10);
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -385,17 +385,8 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
             binding.recyclerView.setVisibility(View.VISIBLE);
             try {
                 allViewModel.delete();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
                 channelViewModel.delete();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
-            try {
                 Data data=  response.body().getData();
                 List<User> userList=data.getUsers();
                 for(User user : userList){
@@ -413,10 +404,6 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
         try {
             setFCMToken();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             stopActivityIndicator();
         } catch (Exception e) {
             e.printStackTrace();
@@ -463,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
     public void setFCMToken(){
         try {
-            sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
+
             String fcmToken = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
             TwilioApplication.get().getChatClientManager().setFCMToken(fcmToken);
         } catch (Exception e) {
@@ -566,23 +553,67 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }else if(id == R.id.action_logout){
-            alertLogout();
-            return true;
-        }else if(id == R.id.action_create){
-            return true;
-        }else{
-
+        switch (item.getItemId()){
+            case R.id.action_logout:
+                alertLogout();
+                return true;
+            case R.id.action_refresh:
+                refreshMenuItem = item;
+                refreshAdapter();
+                return true;
+            default:
+                refreshMenuItem = item;
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
+    }
+
+    MenuItem refreshMenuItem;
+    public void refreshAdapter(){
+
+        if (Utils.onNetworkChange(this)) {
+
+            try {
+                if(refreshMenuItem != null)
+                refreshMenuItem.setActionView(R.layout.actionbar_progress);
+                refreshMenuItem.expandActionView();
+
+                if(userListAdapter!= null){
+                    userListAdapter.notifyDataSetChanged();
+                }
+
+                Timer timer=new Timer("timer");
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(refreshMenuItem != null)
+                                    refreshMenuItem.collapseActionView();
+                                refreshMenuItem.setActionView(null);
+                            }
+                        });
+                    }
+                },3000L,3000);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            Utils.showToast(getStringResource(R.string.internet),this);
+        }
+
+
     }
 
     public void alertLogout(){
 
         try {
+            String token = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
+            if(token != null && !token.equals("")){
+                TwilioApplication.get().getChatClientManager().unRegisterFCMToken(token);
+            }
             SessionManager.getInstance().logoutUser();
             chatClientManager.getChatClient().shutdown();
             deleteAllDb();
@@ -600,33 +631,12 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
     public void deleteAllDb(){
         try {
             allViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        try {
             channelViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
+
             userChannelViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        try {
             userChatViewModel.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
-            String token = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
-            if(token != null && !token.equals("")){
-                TwilioApplication.get().getChatClientManager().unRegisterFCMToken(token);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -641,4 +651,95 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
+    //Q2FyZUAxMDE= Q2FyZUAxMTE= Q2FyZUAxMTA=
+    public ChatClientListener chatClientListener=new ChatClientListener() {
+        @Override
+        public void onChannelJoined(Channel channel) {
+            Logs.d("adapter onChannelJoined ","onChannelJoined"+channel.getSid());
+            if(channel != null){
+                userListAdapter.addItemWithChannel(channel,"Invite");
+                userListAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onChannelInvited(Channel channel) {
+            Logs.d("adapter onChannelInvited ","onChannelInvited"+channel.getSid());
+            if(channel != null){
+                userListAdapter.addItemWithChannel(channel,"Invite");
+                userListAdapter.notifyDataSetChanged();
+                //notifyItemChanged(getItemCount(),channel);
+            }
+        }
+
+        @Override
+        public void onChannelAdded(Channel channel) {
+            Logs.d("adapter onChannelAdded ","onChannelAdded"+channel.getSid());
+        }
+
+        @Override
+        public void onChannelUpdated(Channel channel, Channel.UpdateReason updateReason) {
+            Logs.d("adapter onChannelUpdated ","onChannelUpdated"+channel.getSid());
+        }
+
+        @Override
+        public void onChannelDeleted(Channel channel) {
+            if(channel != null){
+                Logs.d("adapter onChannelDeleted ","onChannelDeleted"+channel.getSid());
+                userListAdapter.addItemWithChannel(channel,"Delete");
+                //clearChannelDetails(channel);
+
+            }
+        }
+
+        @Override
+        public void onChannelSynchronizationChange(Channel channel) {
+            Logs.d("adapter onChannelSynchronizationChange ","onChannelSynchronizationChange"+channel.getSid());
+        }
+
+        @Override
+        public void onError(ErrorInfo errorInfo) {}
+
+        @Override
+        public void onUserUpdated(com.twilio.chat.User user, com.twilio.chat.User.UpdateReason updateReason) {}
+
+        @Override
+        public void onUserSubscribed(com.twilio.chat.User user) {}
+
+        @Override
+        public void onUserUnsubscribed(com.twilio.chat.User user) {}
+
+        @Override
+        public void onClientSynchronization(ChatClient.SynchronizationStatus synchronizationStatus) {}
+
+        @Override
+        public void onNewMessageNotification(String s, String s1, long l) {}
+
+        @Override
+        public void onAddedToChannelNotification(String s) {}
+
+        @Override
+        public void onInvitedToChannelNotification(String s) {}
+
+        @Override
+        public void onRemovedFromChannelNotification(String s) {}
+
+        @Override
+        public void onNotificationSubscribed() {}
+
+        @Override
+        public void onNotificationFailed(ErrorInfo errorInfo) {}
+
+        @Override
+        public void onConnectionStateChange(ChatClient.ConnectionState connectionState) {}
+
+        @Override
+        public void onTokenExpired() {}
+
+        @Override
+        public void onTokenAboutToExpire() {}
+    };
+
 }

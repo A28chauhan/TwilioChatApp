@@ -18,8 +18,19 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="101"
+        android:icon="@drawable/ic_refresh_24"
+        android:visible="true"
+        android:title=""
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_logout"
         android:orderInCategory="102"
         android:title="@string/action_logout"
         app:showAsAction="ifRoom" />
+
+
+
 </menu>

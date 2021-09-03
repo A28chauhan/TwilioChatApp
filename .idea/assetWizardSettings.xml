@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/E:/Android_sdk/sdk/icons/material/materialicons/done/baseline_done_24.xml" />
+                                      <entry key="url" value="file:/E:/Android_sdk/sdk/icons/material/materialicons/refresh/baseline_refresh_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,8 +28,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="636368" />
-                            <entry key="outputName" value="ic_single_tick_24" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_refresh_24" />
                             <entry key="sourceFile" value="F:\Android_Project\TwilioChatApp" />
                           </map>
                         </option>

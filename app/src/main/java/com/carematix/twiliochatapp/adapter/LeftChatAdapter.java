@@ -15,19 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.carematix.twiliochatapp.ChatActivity;
 import com.carematix.twiliochatapp.R;
 import com.carematix.twiliochatapp.helper.Logs;
 import com.carematix.twiliochatapp.helper.Utils;
 import com.carematix.twiliochatapp.preference.PrefConstants;
 import com.carematix.twiliochatapp.preference.PrefManager;
-import com.carematix.twiliochatapp.twilio.MessageItem;
-import com.twilio.chat.CallbackListener;
 import com.twilio.chat.Channel;
 import com.twilio.chat.Member;
-import com.twilio.chat.Members;
 import com.twilio.chat.Message;
-import com.twilio.chat.Messages;
 
 import java.util.Calendar;
 import java.util.List;

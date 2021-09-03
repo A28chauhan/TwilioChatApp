@@ -16,6 +16,10 @@
         "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_splash.xml"
     },
     {
+        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\actionbar_progress.xml",
+        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\actionbar_progress.xml"
+    },
+    {
         "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\fragment_dashboard.xml",
         "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\fragment_dashboard.xml"
     },

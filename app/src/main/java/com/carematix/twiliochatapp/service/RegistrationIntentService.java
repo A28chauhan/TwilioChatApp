@@ -8,26 +8,19 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.carematix.twiliochatapp.application.SessionManager;
 import com.carematix.twiliochatapp.application.TwilioApplication;
 import com.carematix.twiliochatapp.helper.FCMPreferences;
 import com.carematix.twiliochatapp.helper.Logs;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.twilio.messaging.internal.Logger;
-
-import java.io.IOException;
 
 public class RegistrationIntentService extends IntentService {
 
-    private static final Logger logger = Logger.getLogger(RegistrationIntentService.class);
 
-    private static final String[] TOPICS = { "global" };
-
-    public RegistrationIntentService()
-    {
+    public RegistrationIntentService(){
         super("RegistrationIntentService");
-        logger.i("Stared");
     }
 
     @Override
@@ -47,20 +40,18 @@ public class RegistrationIntentService extends IntentService {
                     // Get new FCM registration token
                     String token = task.getResult();
                     sharedPreferences.edit().putString(FCMPreferences.TOKEN_NAME, token).commit();
-                    TwilioApplication.get().getChatClientManager().setFCMToken(token);
+                    if(SessionManager.getInstance().isLoggedIn()){
+                        TwilioApplication.get().getChatClientManager().setFCMToken(token);
+                    }
                 }
             });
 
         } catch (Exception e) {
-            logger.e("Failed to complete token refresh", e);
-            // If an exception happens while fetching the new token or updating our registration
-            // data, this ensures that we'll attempt the update at a later time.
-            sharedPreferences.edit().putBoolean(FCMPreferences.SENT_TOKEN_TO_SERVER, false).commit();
+            e.printStackTrace();
         }
         // Notify UI that registration has completed, so the progress indicator can be hidden.
         Intent registrationComplete = new Intent(FCMPreferences.REGISTRATION_COMPLETE);
         LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
-
     }
 
 

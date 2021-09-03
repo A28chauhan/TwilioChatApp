@@ -40,9 +40,8 @@
 
             <TextView
                 android:id="@+id/typingIndicator"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.8"
                 android:text=""
                 android:layout_marginLeft="5dp"
                 android:textAppearance="?android:textAppearanceMedium"
@@ -58,9 +57,8 @@
 
             <TextView
                 android:id="@+id/isOnline"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
                 android:layout_marginLeft="10dp"
                 android:text=""
                 android:textAppearance="?android:textAppearanceMedium"

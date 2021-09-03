@@ -27,16 +27,14 @@ class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-            Channel channel = getIntent().getParcelableExtra(Constants.EXTRA_CHANNEL);
+            Channel channel = null;
             bundle = getIntent().getExtras();
-            String position = bundle.getString(Constants.EXTRA_ID, null);
             String name = bundle.getString(Constants.EXTRA_NAME,null);
-            String type = bundle.getString(Constants.EXTRA_TYPE,null);
+            String attendeeId = bundle.getString(Constants.EXTRA_TYPE,null);
             channel =bundle.getParcelable(Constants.EXTRA_CHANNEL);
 
             Logs.d("chat Activity"," name : "+name);
-            Logs.d("chat Activity"," id : "+position);
-            Logs.d("chat Activity"," type : "+type);
+            Logs.d("chat Activity"," type : "+attendeeId);
             Logs.d("chat Activity"," name : "+channel.getSid());
 
             chatFragment=new ChatFragment();
