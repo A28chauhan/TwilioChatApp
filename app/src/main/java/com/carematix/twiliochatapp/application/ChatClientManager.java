@@ -45,7 +45,7 @@ class ChatClientManager {
 
     public void setFCMToken(String token){
         if (this.chatClient != null || token != null) {
-            this.fcmToken = fcmToken;
+            this.fcmToken = token;
             Logs.d("setFCMToken","setFCMToken "+token);
             setupFcmToken();
         }
@@ -62,6 +62,7 @@ class ChatClientManager {
 
     private void setupFcmToken(){
         try {
+            Logs.e("setFCMToken1","setFCMToken1 "+fcmToken);
             if(fcmToken != null && !fcmToken.equals("")){
                 this.chatClient.registerFCMToken(new ChatClient.FCMToken(this.fcmToken),
                         new ToastStatusListener("Firebase Messaging registration successful",
