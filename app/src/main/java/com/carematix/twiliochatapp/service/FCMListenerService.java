@@ -14,6 +14,7 @@ import com.carematix.twiliochatapp.MainActivity;
 import com.carematix.twiliochatapp.R;
 import com.carematix.twiliochatapp.application.TwilioApplication;
 import com.carematix.twiliochatapp.helper.Constants;
+import com.carematix.twiliochatapp.helper.Logs;
 import com.carematix.twiliochatapp.helper.Utils;
 import com.carematix.twiliochatapp.preference.PrefConstants;
 import com.carematix.twiliochatapp.preference.PrefManager;
@@ -36,6 +37,7 @@ class FCMListenerService extends FirebaseMessagingService {
             try {
                 NotificationPayload payload = new NotificationPayload(remoteMessage.getData());
 
+                Logs.d("onMessageReceived","onMessageReceived");
                 ChatClient client = TwilioApplication.get().getChatClientManager().getChatClient();
                 if (client != null) {
                     client.handleNotification(payload);

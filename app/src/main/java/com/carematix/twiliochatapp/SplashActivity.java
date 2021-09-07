@@ -16,7 +16,6 @@ import com.carematix.twiliochatapp.ui.login.LoginActivity;
 public
 class SplashActivity extends AppCompatActivity{
 
-    PrefManager prefManager;
     ActivitySplashBinding activitySplashBinding;
 
     @Override
@@ -24,9 +23,6 @@ class SplashActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(activitySplashBinding.getRoot());
-
-        prefManager =new PrefManager(this);
-        prefManager.setBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE,true);
 
         Thread t =new Thread(new Runnable() {
             @Override

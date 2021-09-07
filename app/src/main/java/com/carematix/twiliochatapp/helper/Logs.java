@@ -5,7 +5,7 @@ import android.util.Log;
 public
 class Logs {
 
-    public static boolean isTrue = false;
+    public static boolean isTrue = true;
     public static void d(String title,String msg){
         if(isTrue){
             Log.d("Logs : "+title," Msg : " + msg);

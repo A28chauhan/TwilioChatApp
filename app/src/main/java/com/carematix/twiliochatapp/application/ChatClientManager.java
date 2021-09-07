@@ -60,8 +60,7 @@ class ChatClientManager {
         }
     }
 
-    private void setupFcmToken()
-    {
+    private void setupFcmToken(){
         try {
             if(fcmToken != null && !fcmToken.equals("")){
                 this.chatClient.registerFCMToken(new ChatClient.FCMToken(this.fcmToken),
@@ -75,8 +74,7 @@ class ChatClientManager {
         }
     }
 
-    public void unregisterFcmToken()
-    {
+    public void unregisterFcmToken(){
         try {
             if(fcmToken != null && !fcmToken.equals(""))
                 this.chatClient.unregisterFCMToken(new ChatClient.FCMToken(this.fcmToken),

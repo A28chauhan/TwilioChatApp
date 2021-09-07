@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
         sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
         prefManager =new PrefManager(this);
-        prefManager.setStringValue(PrefConstants.WHICH_SCREEN,"main");
         prefManager.setBooleanValue(PrefConstants.PREFERENCE_LOGIN_CHECK,true);
         prefManager.setBooleanValue(PrefConstants.SCREEN,false);
 
@@ -115,13 +114,6 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
         try {
             setupListView();
             getAllUserListCall();
-            /*boolean firstTime= prefManager.getBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE);
-            if(firstTime){
-                prefManager.setBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE,false);
-            }else{
-                getUserListDetails();
-                stopActivityIndicator();
-            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,20 +124,19 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
     public void onClick(UserAllList userAllList, final Channel channels,String UserName) {
         try {
             String name = UserName;
-            String type1= String.valueOf(userAllList.getDroProgramUserId());
-
+            String attendeeId= String.valueOf(userAllList.getDroProgramUserId());
+            prefManager =new PrefManager(MainActivity.this);
             if(channels !=  null){
-                prefManager =new PrefManager(MainActivity.this);
                 Logs.d("onCLick ", " onclicjk :"+channels.getStatus());
                 if(channels.getSid() != null){
                     if(channels.getStatus() == Channel.ChannelStatus.JOINED){
-                        callActivity(channels,name,type1);
+                        callActivity(channels,name,attendeeId);
                     }else{
                         channels.join(new ToastStatusListener("Successfully joined channel","Failed to join channel"){
                             @Override
                             public void onSuccess() {
                                 //super.onSuccess();
-                                callActivity(channels,name,type1);
+                                callActivity(channels,name,attendeeId);
                             }
                             @Override
                             public void onError(ErrorInfo errorInfo) {
@@ -269,12 +260,12 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
     }
 
-    public void callActivity(Channel channels1,String name,String type1){
+    public void callActivity(Channel channels1,String userName,String attendeeId){
         Intent intent =new Intent(MainActivity.this, ChatActivity.class);
         intent.putExtra(Constants.EXTRA_ID,channels1.getSid());
         intent.putExtra(Constants.EXTRA_CHANNEL, (Parcelable)channels1);
-        intent.putExtra(Constants.EXTRA_NAME,name);
-        intent.putExtra(Constants.EXTRA_TYPE,type1);
+        intent.putExtra(Constants.EXTRA_NAME,userName);
+        intent.putExtra(Constants.EXTRA_TYPE,attendeeId);
         MainActivity.this.startActivity(intent);
         MainActivity.this.finish();
     }
@@ -313,13 +304,11 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
                 userListAdapter.addItem(userAllLists);
             }
         });
+    }
 
-        if(chatClientManager.getChatClient() == null){
-            chatClientManager =TwilioApplication.get().getChatClientManager();
-        }else{
-            chatClientManager.getChatClient().addListener(chatClientListener);
-        }
-
+    public void addListener(){
+        if(chatClientManager != null)
+        chatClientManager.getChatClient().addListener(chatClientListener);
     }
 
     UserListAdapter userListAdapter;
@@ -341,9 +330,15 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
             mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
             mRecyclerView.setItemViewCacheSize(10);
 
-
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if(chatClientManager.getChatClient() == null){
+            chatClientManager =TwilioApplication.get().getChatClientManager();
+            addListener();
+        }else{
+            addListener();
         }
 
     }
@@ -450,7 +445,6 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
     public void setFCMToken(){
         try {
-
             String fcmToken = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
             TwilioApplication.get().getChatClientManager().setFCMToken(fcmToken);
         } catch (Exception e) {
@@ -611,9 +605,7 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
         try {
             String token = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
-            if(token != null && !token.equals("")){
-                TwilioApplication.get().getChatClientManager().unRegisterFCMToken(token);
-            }
+            TwilioApplication.get().getChatClientManager().unRegisterFCMToken(token);
             SessionManager.getInstance().logoutUser();
             chatClientManager.getChatClient().shutdown();
             deleteAllDb();
@@ -659,7 +651,7 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
         public void onChannelJoined(Channel channel) {
             Logs.d("adapter onChannelJoined ","onChannelJoined"+channel.getSid());
             if(channel != null){
-                userListAdapter.addItemWithChannel(channel,"Invite");
+                userListAdapter.addItemWithChannel(channel,Constants.JOIN);
                 userListAdapter.notifyDataSetChanged();
             }
         }
@@ -668,9 +660,8 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
         public void onChannelInvited(Channel channel) {
             Logs.d("adapter onChannelInvited ","onChannelInvited"+channel.getSid());
             if(channel != null){
-                userListAdapter.addItemWithChannel(channel,"Invite");
+                userListAdapter.addItemWithChannel(channel,Constants.INVITE);
                 userListAdapter.notifyDataSetChanged();
-                //notifyItemChanged(getItemCount(),channel);
             }
         }
 
@@ -688,9 +679,7 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
         public void onChannelDeleted(Channel channel) {
             if(channel != null){
                 Logs.d("adapter onChannelDeleted ","onChannelDeleted"+channel.getSid());
-                userListAdapter.addItemWithChannel(channel,"Delete");
-                //clearChannelDetails(channel);
-
+                userListAdapter.addItemWithChannel(channel,Constants.DELETE);
             }
         }
 

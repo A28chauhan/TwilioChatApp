@@ -88,25 +88,18 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
+        sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
         prefManager =new PrefManager(this);
         prefManager.clearPref();
-        prefManager.setBooleanValue(PrefConstants.SPLASH_ACTIVE_SERVICE,true);
+
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
         deleteDb();
-
-        try {
-            clientManager = TwilioApplication.get().getChatClientManager();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final TextInputLayout textInputEmail=binding.textEmail;
         final TextInputLayout textInputPassword=binding.textPassword;
         final Button loginButton = binding.login;
-        final ProgressBar loadingProgressBar = binding.loading;
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -126,28 +119,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             }
         });
 
-        /*loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-
-                if (loginResult.getErrorMsg() != null) {
-                    showLoginFailed(loginResult.getErrorMsg());
-                }
-
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
-            }
-        });*/
-
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -157,8 +128,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // ignore
-                textInputEmail.setError(null);
-                textInputPassword.setError(null);
+                setDataNull();
             }
 
             @Override
@@ -177,11 +147,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // ignore
-                textInputEmail.setError(null);
-                textInputPassword.setError(null);
-                if(s.length() >= 8){
-                    enableButtonLogin();
-                }
+                setDataNull();
             }
 
             @Override
@@ -221,21 +187,18 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         });
 
         try {
-
             if (checkPlayServices()) {
                 Intent intent = new Intent(this, RegistrationIntentService.class);
                 startService(intent);
             }
-
-            sharedPreferences =  PreferenceManager.getDefaultSharedPreferences(this);
-            String token = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
-            if(token != null && !token.equals("")){
-                TwilioApplication.get().getChatClientManager().unRegisterFCMToken(token);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    public void setDataNull(){
+        binding.textEmail.setError(null);
+        binding.textPassword.setError(null);
     }
 
     public boolean enableButtonLogin(){
@@ -378,13 +341,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     @Override
     protected void onResume() {
-        try {
-            if (TwilioApplication.get().getChatClientManager() != null) {
-                 TwilioApplication.get().getChatClientManager().getChatClient();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         super.onResume();
     }
 
@@ -418,26 +374,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
     PrefManager prefManager;
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        gotoDashboard();
-    }
-
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
-    }
-
-    private void showLoginFailed(String errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
-    }
-
-    private void gotoDashboard(){
-        prefManager.setBooleanValue(PrefConstants.IS_FIRST_TIME_LOGIN,true);
-        Intent intent=new Intent(this, MainActivity.class);
-        startActivity(intent);
-        this.finish();
-    }
-
     String passwordEncrypt=null;
     User user;
     View focusView = null;
@@ -571,27 +507,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     }
 
-    public void getToken(){
-        clientManager.connectClient(new TaskCompletionListener<Void, String>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                //String fcmToken = prefManager.getStringValue(PrefConstants.TN_TOKEN);
-                String fcmToken = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
-                Logs.d("fcmToken ","token :"+fcmToken);
-                SessionManager.getInstance().createLoginSession(USERNAME_FORM_FIELD);
-                TwilioApplication.get().getChatClientManager().setFCMToken(fcmToken);
-                callMain();
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                unloadProgress();
-                Utils.showToast("Please try again. ",LoginActivity.this);
-            }
-        });
-
-    }
-
     public void fetchUser(){
 
         if(Utils.onNetworkChange(this)){
@@ -626,6 +541,31 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
     }
 
+    public void getToken(){
+        try {
+            clientManager = TwilioApplication.get().getChatClientManager();
+
+            clientManager.connectClient(new TaskCompletionListener<Void, String>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    //String fcmToken = prefManager.getStringValue(PrefConstants.TN_TOKEN);
+                    String fcmToken = sharedPreferences.getString(FCMPreferences.TOKEN_NAME,null);
+                    Logs.d("fcmToken ","token :"+fcmToken);
+                    SessionManager.getInstance().createLoginSession(USERNAME_FORM_FIELD);
+                    TwilioApplication.get().getChatClientManager().setFCMToken(fcmToken);
+                    callMain();
+                }
+                @Override
+                public void onError(String errorMessage) {
+                    unloadProgress();
+                    Utils.showToast("Please try again. ",LoginActivity.this);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private static final Logger logger = Logger.getLogger(LoginActivity.class);
     @Override

@@ -22,13 +22,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:gravity="center|left"
-            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/imageBack"
@@ -36,22 +38,32 @@
                 android:layout_height="56dp"
                 android:background="@null"
                 android:scaleType="center"
-                android:src="@drawable/ic_arrow_back_24" />
+                android:src="@drawable/ic_arrow_back_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
             <TextView
                 android:id="@+id/typingIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constrainedWidth="true"
+                android:singleLine="true"
                 android:text=""
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white"
-                android:singleLine="true"
                 android:textStyle="normal"
-                app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
-                app:layout_constraintEnd_toStartOf="@+id/imageBack"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/isOnline"
+                app:layout_constraintEnd_toStartOf="@+id/isOnline"
+                app:layout_constraintStart_toEndOf="@+id/imageBack"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -59,36 +71,41 @@
                 android:id="@+id/isOnline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text=""
-                android:textAppearance="?android:textAppearanceMedium"
                 android:singleLine="true"
+                android:text=""
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white"
                 android:textStyle="normal"
-                app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
-                app:layout_constraintEnd_toStartOf="@+id/recyclerView2"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/typingIndicator"
+                app:layout_constraintStart_toStartOf="@+id/typingIndicator"
+                app:layout_constraintEnd_toEndOf="@+id/action_leave"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/action_leave"
                 app:layout_constraintTop_toTopOf="parent" />
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/action_leave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:gravity="right|center"
+                android:text="Leave"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/white"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/imageBack"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-
-
-
-        <TextView
-            android:id="@+id/action_leave"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".6"
-            android:layout_marginRight="10dp"
-            android:gravity="right|center"
-            android:layout_gravity="right|center"
-            android:text="Leave"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/white"
-            android:textStyle="normal" />
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 
@@ -185,18 +202,18 @@
                 android:background="@drawable/edit_text_background"
                 android:cursorVisible="true"
                 android:ems="10"
+                android:focusableInTouchMode="true"
                 android:gravity="top"
                 android:hint="Enter text"
                 android:imeOptions="actionNext"
                 android:inputType="textShortMessage|textMultiLine"
-                android:windowSoftInputMode="adjustResize"
                 android:isScrollContainer="true"
                 android:maxLines="6"
                 android:padding="@dimen/padding"
-                android:focusableInTouchMode="true"
                 android:scrollbars="vertical"
                 android:textColorHint="@color/select"
                 android:textIsSelectable="true"
+                android:windowSoftInputMode="adjustResize"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

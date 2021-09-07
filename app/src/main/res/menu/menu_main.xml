@@ -21,7 +21,7 @@
         android:id="@+id/action_refresh"
         android:orderInCategory="101"
         android:icon="@drawable/ic_refresh_24"
-        android:visible="true"
+        android:visible="false"
         android:title=""
         app:showAsAction="ifRoom" />
 

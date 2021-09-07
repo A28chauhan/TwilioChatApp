@@ -30,4 +30,9 @@ class Constants {
     public static final int BAD_REQUEST = 400;
     public static final int INTERNAL_SERVER_ERROR = 500;
 
+    /// notification type
+    public static final String JOIN="Join";
+    public static final String INVITE="Invite";
+    public static final String DELETE="Delete";
+
 }

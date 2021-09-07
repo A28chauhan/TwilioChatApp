@@ -96,7 +96,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
         try {
 
             prefManager=new PrefManager(getActivity());
-            prefManager.setStringValue(PrefConstants.WHICH_SCREEN,"chat");
             prefManager.setBooleanValue(PrefConstants.SCREEN,false);
 
             Bundle bundle = getArguments();
@@ -127,7 +126,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             if(roleId.equals("1")){
                 chatFragmentBinding.imageBack.setVisibility(View.GONE);
             }
-            //showKeyboard();
+            showKeyboard();
 
             chatFragmentBinding.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -141,8 +140,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
 
 
             try {
-                loadSetListView();
                 createUiData();
+                loadSetListView();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -235,7 +234,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
             }
 
         });
-
+        setupListView(channel);
         chatFragmentBinding.editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -490,19 +489,29 @@ public class ChatFragment extends Fragment implements View.OnClickListener, Text
     public void createUiData(){
         try {
             chatClientManager = TwilioApplication.get().getChatClientManager();
+
             chatClientManager.getChatClient().removeListener(chatClientListener);
             chatClientManager.getChatClient().addListener(chatClientListener);
 
-            if(channel != null){
-                channel.removeListener(channelListener);
-                channel.addListener(channelListener);
-                setupListView(channel);
-                setupInput();
-                updateBar();
-            }else{
-                Utils.showToast("Channel not found.",getActivity());
-            }
+            Channels channelsObject = chatClientManager.getChatClient().getChannels();
+            channelsObject.getChannel(channel.getSid(), new CallbackListener<Channel>() {
+                @Override
+                public void onSuccess(Channel foundChannel) {
+                    channel = foundChannel;
+                    channel.removeListener(channelListener);
+                    channel.addListener(channelListener);
+                    setupListView(channel);
+                    setupInput();
+                }
 
+                @Override
+                public void onError(ErrorInfo errorInfo) {
+                    super.onError(errorInfo);
+                    Utils.showToast("Channel not found.",getActivity());
+                }
+            });
+
+            updateBar();
 
         } catch (Exception e) {
             e.printStackTrace();

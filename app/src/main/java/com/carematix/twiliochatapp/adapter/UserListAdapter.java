@@ -15,7 +15,6 @@ import com.carematix.twiliochatapp.application.ChatClientManager;
 import com.carematix.twiliochatapp.architecture.table.UserAllList;
 import com.carematix.twiliochatapp.bean.fetchChannel.ChannelDetails;
 import com.carematix.twiliochatapp.databinding.UserListItemBinding;
-import com.carematix.twiliochatapp.fetchchannel.data.FetchInDetails;
 import com.carematix.twiliochatapp.helper.Constants;
 import com.carematix.twiliochatapp.helper.Logs;
 import com.carematix.twiliochatapp.helper.Utils;
@@ -28,8 +27,6 @@ import com.carematix.twiliochatapp.twilio.ToastStatusListener;
 import com.twilio.chat.CallbackListener;
 import com.twilio.chat.Channel;
 import com.twilio.chat.ChannelListener;
-import com.twilio.chat.ChatClient;
-import com.twilio.chat.ChatClientListener;
 import com.twilio.chat.ErrorInfo;
 import com.twilio.chat.Member;
 import com.twilio.chat.Message;
@@ -86,14 +83,18 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
     }
 
     public void addItemWithChannel(Channel channel,String tag){
-        if(channel != null){
-            if(tag.equals("Invite")){
-                notifyDataSetChanged();
-            }else{
-                int position = channelList.get(channel.getSid());
-                channelList.remove(channel.getSid());
-                notifyItemChanged( position);
+        try {
+            if(channel != null){
+                if(tag.equals(Constants.INVITE) || tag.equals(Constants.JOIN)){
+                    notifyDataSetChanged();
+                } else{
+                    int position = channelList.get(channel.getSid());
+                    channelList.remove(channel.getSid());
+                    notifyItemChanged(position);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -233,7 +234,6 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                                 int code = response.code();
                                 if (code == 200) {
                                     if(response.body().getMessage().contains("No active")){}else{
-                                        //FetchInDetails fetchInDetails=new FetchInDetails(String.valueOf(attendeeProgramUserID),response);
                                         updateUiWithUser(response.body().getData().getChannelSid());
                                     }
                                 }else{}
@@ -265,6 +265,7 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
                     getChatClientManager().getChatClient().getChannels().getChannel(channelId, new CallbackListener<Channel>() {
                         @Override
                         public void onSuccess(Channel channels) {
+
                             try {
                                 channels.removeListener(channelListener);
                                 channels.addListener(channelListener);
@@ -463,13 +464,14 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
         }
 
         public void clearChannelDetails(){
-            try {
-                setChannel(null);
-                setMessagesText(Utils.getStringResource(R.string.tap_to_start,context),null,View.VISIBLE,View.VISIBLE);
-                setVisibleText("0",View.INVISIBLE);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            ((MainActivity)context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setChannel(null);
+                    setMessagesText(Utils.getStringResource(R.string.tap_to_start,context),null,View.VISIBLE,View.VISIBLE);
+                    setVisibleText("0",View.INVISIBLE);
+                }
+            });
         }
 
 
@@ -499,12 +501,6 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
 
             @Override
             public void onMemberUpdated(Member member, Member.UpdateReason updateReason) {
-                try {
-                    //Logs.e("adapter onMemberUpdated userListAdapter"," msg : "+member.getChannel().getSid());
-                    //updateView(member.getChannel());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
 
             @Override

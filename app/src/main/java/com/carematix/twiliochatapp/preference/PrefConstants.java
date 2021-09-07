@@ -16,7 +16,6 @@ class PrefConstants {
     public static final String DN_TOKEN ="dn_token";
     public static final String TN_TOKEN ="tn_token";
 
-    public static String WHICH_SCREEN="which_screen";
     public static String SCREEN="screen";
 
     // user details
@@ -52,5 +51,4 @@ class PrefConstants {
     public static final String SET_PASSWORD="setPassword";
 
 
-    public static String SPLASH_ACTIVE_SERVICE="splash_active_call";
 }
