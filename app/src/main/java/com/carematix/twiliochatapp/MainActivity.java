@@ -477,64 +477,6 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
     }
 
 
-    AlertDialog incomingChannelInvite;
-    private void showIncomingInvite(final Channel channel){
-        new Handler().post(new Runnable() {
-            @Override
-            public void run()
-            {
-                if (incomingChannelInvite == null) {
-                    incomingChannelInvite =
-                            new AlertDialog.Builder(MainActivity.this)
-                                    .setTitle(R.string.channel_invite)
-                                    .setMessage(R.string.channel_invite_message)
-                                    .setPositiveButton(
-                                            R.string.join,
-                                            new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which)
-                                                {
-                                                    channel.join(new ToastStatusListener(
-                                                            "Successfully joined channel",
-                                                            "Failed to join channel") {
-                                                        @Override
-                                                        public void onSuccess()
-                                                        {
-                                                            super.onSuccess();
-                                                            //channels.put(channel.getSid(), new ChannelModel(channel));
-                                                            //refreshChannel(channel);
-                                                        }
-                                                    });
-                                                    incomingChannelInvite = null;
-                                                }
-                                            })
-                                    .setNegativeButton(
-                                            R.string.decline,
-                                            new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which)
-                                                {
-                                                    channel.declineInvitation(new ToastStatusListener(
-                                                            "Successfully declined channel invite",
-                                                            "Failed to decline channel invite") {
-                                                        @Override
-                                                        public void onSuccess()
-                                                        {
-                                                            super.onSuccess();
-                                                        }
-                                                    });
-                                                    incomingChannelInvite = null;
-                                                }
-                                            })
-                                    .create();
-                }
-                incomingChannelInvite.show();
-            }
-        });
-    }
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

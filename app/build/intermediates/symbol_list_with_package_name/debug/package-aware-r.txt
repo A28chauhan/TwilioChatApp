@@ -2342,13 +2342,10 @@ id textTop
 id textUnconsumedMessageCount
 id textView
 id text_Name
-id text_dashboard
 id text_email
-id text_home
 id text_input_end_icon
 id text_input_error_icon
 id text_input_start_icon
-id text_notifications
 id text_password
 id text_time_left
 id text_time_right
@@ -2493,9 +2490,6 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
-layout fragment_dashboard
-layout fragment_home
-layout fragment_notifications
 layout image
 layout left_chat_item
 layout material_chip_input_combo

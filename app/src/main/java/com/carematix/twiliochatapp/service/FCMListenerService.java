@@ -31,13 +31,14 @@ class FCMListenerService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        Logs.d("onMessageReceived","onMessageReceived");
         if (remoteMessage.getData().size() > 0) {
 
             String title = null;
             try {
                 NotificationPayload payload = new NotificationPayload(remoteMessage.getData());
 
-                Logs.d("onMessageReceived","onMessageReceived");
+                Logs.d("onMessageReceived","onMessageReceived"+remoteMessage.getData());
                 ChatClient client = TwilioApplication.get().getChatClientManager().getChatClient();
                 if (client != null) {
                     client.handleNotification(payload);
@@ -47,25 +48,27 @@ class FCMListenerService extends FirebaseMessagingService {
 
                 if (type == NotificationPayload.Type.UNKNOWN) return; // Ignore everything we don't support
 
-                title = "Twilio Notification";
+                title = "New Notification";
 
                 if (type == NotificationPayload.Type.NEW_MESSAGE)
-                    title = "Twilio: New Message";
+                    title = "New Message";
                 if (type == NotificationPayload.Type.ADDED_TO_CHANNEL)
-                    title = "Twilio: Added to Channel";
+                    title = "Added to Channel";
                 if (type == NotificationPayload.Type.INVITED_TO_CHANNEL)
-                    title = "Twilio: Invited to Channel";
+                    title = "Invited to Channel";
                 if (type == NotificationPayload.Type.REMOVED_FROM_CHANNEL)
-                    title = "Twilio: Removed from Channel";
+                    title = "Removed from Channel";
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             String body = remoteMessage.getData().get("twi_body");
-            title = remoteMessage.getData().get("author");
+            String title1 = remoteMessage.getData().get("author");
             String chId = remoteMessage.getData().get("channel_id");
-            handleNotification(remoteMessage.getData().values().toString(),body,title,chId);
+            if(title1 == null){
+                title1 = title;
+            }
+            handleNotification(body,title1);
 
         }
 
@@ -77,7 +80,7 @@ class FCMListenerService extends FirebaseMessagingService {
     }
 
     //onDialogInterfaceListener onDialogInterfaceListener;
-    public void handleNotification(String msg,String body,String title,String chId){
+    public void handleNotification(String body,String title){
         try {
             PrefManager prefManager = new PrefManager(FCMListenerService.this);
             boolean isAppBackGround = Utils.isAppIsInBackground(getApplicationContext());
@@ -136,8 +139,7 @@ class FCMListenerService extends FirebaseMessagingService {
                         .setContentTitle(title)
                         .setContentText(msg1)
                         .setAutoCancel(true)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(""))
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(""))
                         .setContentIntent(pendingIntent)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 

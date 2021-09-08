@@ -2341,13 +2341,10 @@ int id textTop 0x7f0a01c6
 int id textUnconsumedMessageCount 0x7f0a01c7
 int id textView 0x7f0a01c8
 int id text_Name 0x7f0a01c9
-int id text_dashboard 0x7f0a01ca
 int id text_email 0x7f0a01cb
-int id text_home 0x7f0a01cc
 int id text_input_end_icon 0x7f0a01cd
 int id text_input_error_icon 0x7f0a01ce
 int id text_input_start_icon 0x7f0a01cf
-int id text_notifications 0x7f0a01d0
 int id text_password 0x7f0a01d1
 int id text_time_left 0x7f0a01d2
 int id text_time_right 0x7f0a01d3
@@ -2492,9 +2489,6 @@ int layout design_navigation_menu 0x7f0d0035
 int layout design_navigation_menu_item 0x7f0d0036
 int layout design_text_input_end_icon 0x7f0d0037
 int layout design_text_input_start_icon 0x7f0d0038
-int layout fragment_dashboard 0x7f0d0039
-int layout fragment_home 0x7f0d003a
-int layout fragment_notifications 0x7f0d003b
 int layout image 0x7f0d003c
 int layout left_chat_item 0x7f0d003d
 int layout material_chip_input_combo 0x7f0d003e

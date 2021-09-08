@@ -96,7 +96,6 @@ class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder>{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
  //onBindViewHolder onCreateViewHolder getItemViewType

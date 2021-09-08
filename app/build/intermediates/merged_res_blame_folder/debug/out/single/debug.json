@@ -76,10 +76,6 @@
         "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\ic_launcher_background.xml"
     },
     {
-        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_fragment_home.xml.flat",
-        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\fragment_home.xml"
-    },
-    {
         "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable_my_message.xml.flat",
         "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable\\my_message.xml"
     },
@@ -114,10 +110,6 @@
     {
         "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\drawable-v24_ic_launcher_foreground.xml.flat",
         "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\drawable-v24\\ic_launcher_foreground.xml"
-    },
-    {
-        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_fragment_notifications.xml.flat",
-        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\fragment_notifications.xml"
     },
     {
         "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_right_chat_item.xml.flat",
@@ -166,10 +158,6 @@
     {
         "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_activity_chat.xml.flat",
         "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\activity_chat.xml"
-    },
-    {
-        "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\layout_fragment_dashboard.xml.flat",
-        "source": "F:\\Android_Project\\TwilioChatApp\\app\\src\\main\\res\\layout\\fragment_dashboard.xml"
     },
     {
         "merged": "F:\\Android_Project\\TwilioChatApp\\app\\build\\intermediates\\merged_res\\debug\\menu_menu_main.xml.flat",

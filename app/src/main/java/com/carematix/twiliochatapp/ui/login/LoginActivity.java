@@ -235,6 +235,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
         if(Utils.onNetworkChange(this)){
             binding.loading.setVisibility(View.VISIBLE);
+            hideKeyboard();
             apiService =null;
             String email =binding.username.getText().toString();
             String password = binding.password.getText().toString();
@@ -245,42 +246,30 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                 public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                     try {
                         int code = response.raw().code();
-                        if (code<= Constants.BAD_REQUEST) {
-                            if(code == 200){
-                                try {
-                                    int code1 =response.body().getCode();
-                                    if(code1 >= Constants.BAD_REQUEST){
+                        if (code == Constants.OK) {
+                            UserResult userResult = response.body();
+                            if (userResult != null){
+                                if(userResult.getProgramUserId() != 0){
+                                    userResultData(userResult);
+                                }else{
+                                    try {
                                         unloadProgress();
                                         Utils.showToast("User Not found ",LoginActivity.this);
-                                    }
-                                } catch (Exception e1) {
-                                    e1.printStackTrace();
-
-                                    if(response.body() != null){
-                                        UserResult userResult = response.body();
-                                        if (userResult != null) {
-                                            userResultData(userResult);
-                                        }
-                                    }else{
                                         try {
-                                            unloadProgress();
-                                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                            JSONObject jObjError = new JSONObject(response.body().toString());
                                             String message = jObjError.getString("message");
-                                            try {
-                                                if(message.equals("Invalid username/password")){
-                                                    // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD);
-                                                }else if(message.contains("Invalid username/password. Your")){
-                                                    // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD_ACCOUNT_LOCK);
-                                                }else if(message.contains("User Account Locked")){
-                                                    // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_LOCKED);
-                                                }else if(message.contains("User Account Disabled")){
-                                                    // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_DISABLED);
-                                                }else{
-                                                    // message =message;
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
+                                            if(message.equals("Invalid username/password")){
+                                                // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD);
+                                            }else if(message.contains("Invalid username/password. Your")){
+                                                // message =prefManager.getStringValue(DAOConstant.INVALID_USER_PASSWORD_ACCOUNT_LOCK);
+                                            }else if(message.contains("User Account Locked")){
+                                                // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_LOCKED);
+                                            }else if(message.contains("User Account Disabled")){
+                                                // message =prefManager.getStringValue(DAOConstant.USER_ACCOUNT_DISABLED);
+                                            }else{
+                                                // message =message;
                                             }
+
                                             binding.textPassword.setError(message);
                                             focusView = binding.textPassword;
                                             cancel = true;
@@ -288,9 +277,14 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
-                                    }
 
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
+                            }else{
+                                unloadProgress();
+                                Utils.showToast("User Not found ",LoginActivity.this);
                             }
 
                         }else if(code == Constants.INTERNAL_SERVER_ERROR){
@@ -379,7 +373,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     View focusView = null;
     ApiInterface apiService= null,apiService1=null;
     boolean cancel=false;
-    public void attemptLogin(){
+    /*public void attemptLogin(){
         hideKeyboard();
         apiService= null;apiService1=null;
         String password = binding.password.getText().toString();
@@ -469,7 +463,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
                 Utils.showToast(t.getMessage(),LoginActivity.this);
             }
         });
-    }
+    }*/
 
     private void hideKeyboard(){
         try {
